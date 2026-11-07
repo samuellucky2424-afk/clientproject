@@ -1,0 +1,683 @@
+/* ===========================
+   LAYOUT WRAPPER
+=========================== */
+.layout{
+    display:flex;
+    min-height:100vh;
+}
+/* ===========================
+   SIDEBAR
+=========================== */
+.sidebar{
+    width:280px;
+    flex-shrink:0;
+    height:100vh;
+    background:#fff;
+    border-right:1px solid #eef0f3;
+    display:flex;
+    flex-direction:column;
+    padding:20px 16px;
+    box-sizing:border-box;
+    overflow:hidden;
+    transition:width .3s ease;
+    position:sticky;
+    top:0;
+}
+.sidebar.collapsed{
+    width:84px;
+}
+.sidebar.collapsed .nav-item,
+.sidebar.collapsed .logout-btn,
+.sidebar.collapsed .user-card{
+    justify-content:center;
+}
+
+/* ===== HEADER ===== */
+.sidebar-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:24px;
+}
+.logo-group{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:0;
+}
+.logo-icon{
+    width:48px;
+    height:48px;
+    border-radius:12px;
+    background:#ffffff;
+    overflow:hidden;
+    padding:4px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+.logo-icon img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+}
+body.dark-mode .logo-icon{
+    background:#ffffff;
+}
+.logo-text{
+    font-size:17px;
+    font-weight:800;
+    letter-spacing:-0.5px;
+    white-space:nowrap;
+    overflow:hidden;
+    max-width:160px;
+    opacity:1;
+    transition:max-width .3s ease, opacity .2s ease;
+    line-height:1;
+}
+.logo-musky{
+    color:#2563eb;
+}
+.logo-send{
+    color:#0f172a;
+}
+body.dark-mode .logo-send{
+    color:#f1f5f9;
+}
+body.dark-mode .logo-musky{
+    color:#3b82f6;
+}
+.sidebar.collapsed .logo-text{
+    max-width:0;
+    opacity:0;
+}
+.sidebar.collapsed .logo-icon{
+    width:42px;
+    height:42px;
+}
+.collapse-btn{
+    width:30px;
+    height:30px;
+    border:none;
+    background:#f1f5f9;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    color:#334155;
+    flex-shrink:0;
+    transition:.2s;
+}
+.collapse-btn:hover{
+    background:#e2e8f0;
+}
+.collapse-btn i{
+    font-size:16px;
+    transition:transform .25s ease;
+}
+.sidebar.collapsed .collapse-btn i{
+    transform:rotate(180deg);
+}
+
+/* ===== USER CARD ===== */
+.user-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding-bottom:20px;
+    margin-bottom:12px;
+    border-bottom:1px solid #eef0f3;
+}
+.user-avatar{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#1d9bf0;
+    color:#fff;
+    font-size:14px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+}
+.user-info{
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+    overflow:hidden;
+    max-width:180px;
+    opacity:1;
+    transition:max-width .3s ease, opacity .2s ease;
+}
+.sidebar.collapsed .user-info{
+    max-width:0;
+    opacity:0;
+}
+.user-name{
+    font-size:15px;
+    font-weight:700;
+    color:#0f172a;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.user-email{
+    font-size:13px;
+    color:#94a3b8;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+/* ===== NAV ===== */
+.sidebar-nav{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    flex:1;
+    overflow-y:auto;
+}
+.nav-item{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:22px 14px;
+    border-radius:12px;
+    text-decoration:none;
+    color:#64748b;
+    font-size:15px;
+    font-weight:500;
+    transition:.2s;
+    white-space:nowrap;
+    overflow:hidden;
+}
+.nav-item i{
+    font-size:20px;
+    flex-shrink:0;
+}
+.nav-text{
+    overflow:hidden;
+    max-width:200px;
+    opacity:1;
+    transition:max-width .3s ease, opacity .2s ease;
+}
+.sidebar.collapsed .nav-text{
+    max-width:0;
+    opacity:0;
+}
+.nav-item:hover{
+    background:#f8fafc;
+    color:#334155;
+}
+.nav-item.active{
+    background:#fff;
+    color:#0f172a;
+    font-weight:700;
+    box-shadow:0 0 0 1px #e2e8f0, 0 2px 6px rgba(0,0,0,.05);
+}
+.nav-item.active i{
+    color:#1d9bf0;
+}
+
+/* ===== FOOTER / LOGOUT ===== */
+.sidebar-footer{
+    margin-top:16px;
+    padding-top:16px;
+    border-top:1px solid #eef0f3;
+}
+.logout-btn{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:12px 14px;
+    border:1px solid #fecaca;
+    border-radius:12px;
+    text-decoration:none;
+    color:#ef4444;
+    font-size:15px;
+    font-weight:700;
+    transition:.2s;
+    white-space:nowrap;
+}
+.logout-btn i{
+    font-size:19px;
+}
+.logout-btn:hover{
+    background:#fef2f2;
+}
+
+/* ===========================
+   MAIN CONTENT AREA
+=========================== */
+.main-content{
+    flex:1;
+    padding:30px 40px;
+    min-width:0;
+    max-width:100%;
+    overflow-x:clip;
+    box-sizing:border-box;
+}
+
+/* ===========================
+   MOBILE HEADER + OVERLAY
+=========================== */
+.mobile-header{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    height:60px;
+    background:#fff;
+    align-items:center;
+    gap:15px;
+    padding:0 20px;
+    z-index:1200;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+.mobile-header h3{
+    margin:0;
+    font-size:18px;
+    color:#0f172a;
+}
+.mobile-header button{
+    border:none;
+    background:none;
+    font-size:24px;
+    cursor:pointer;
+    color:#334155;
+    display:flex;
+    align-items:center;
+}
+
+#overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.55);
+    z-index:998;
+    display:none;
+}
+.show-overlay{
+    display:block !important;
+}
+
+/* ===========================
+   MOBILE SIDEBAR BEHAVIOR
+=========================== */
+@media (max-width:900px){
+    .mobile-header{
+        display:flex;
+    }
+    .layout{
+        display:block;
+    }
+    .sidebar{
+        position:fixed;
+        top:0;
+        left:-300px;
+        width:260px;
+        height:100vh;
+        z-index:999;
+        transition:.3s;
+    }
+    .sidebar.show-sidebar{
+        left:0;
+    }
+    .collapse-btn{
+        display:none;
+    }
+    .main-content{
+        padding:80px 16px 20px;
+    }
+}
+/* ===========================
+   TOPBAR
+=========================== */
+.topbar{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:14px;
+    margin-bottom:24px;
+    background:#fff;
+    padding:14px 20px;
+    border-radius:16px;
+    box-shadow:0 2px 10px rgba(0,0,0,.04);
+    position:sticky;
+    top:10px;
+    z-index:500;
+}
+body.dark-mode .topbar{
+    background:#0f1729;
+    box-shadow:0 2px 10px rgba(0,0,0,.3);
+}
+body.dark-mode .topbar .topbar-balance{
+    color:#f1f5f9;
+}
+.topbar-balance{
+    font-size:16px;
+    font-weight:700;
+    color:#0f172a;
+}
+.topbar-topup{
+    background:#1d9bf0;
+    color:#fff;
+    padding:8px 18px;
+    border-radius:8px;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:700;
+}
+.topbar-topup:hover{
+    background:#0d6efd;
+}
+.topbar-theme-btn{
+    width:36px;
+    height:36px;
+    border:1px solid #e2e8f0;
+    background:#fff;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    color:#334155;
+    font-size:16px;
+    transition:.2s;
+}
+.topbar-theme-btn:hover{
+    background:#f1f5f9;
+}
+
+/* ===========================
+   DARK MODE — sidebar, topbar, main content
+=========================== */
+body.dark-mode .sidebar{
+    background:#0f1729;
+    border-right:1px solid #1e293b;
+}
+body.dark-mode .user-name{
+    color:#f1f5f9;
+}
+body.dark-mode .logo-musky{
+    color:#3b82f6; /* keep blue visible in dark mode */
+}
+body.dark-mode .logo-send{
+    color:#f1f5f9;
+}
+body.dark-mode .user-email{
+    color:#94a3b8;
+}
+body.dark-mode .user-card{
+    border-bottom:1px solid #1e293b;
+}
+body.dark-mode .nav-item{
+    color:#94a3b8;
+}
+body.dark-mode .nav-item:hover{
+    background:#1a2436;
+    color:#e2e8f0;
+}
+body.dark-mode .nav-item.active{
+    background:#16213a;
+    color:#f1f5f9;
+    box-shadow:0 0 0 1px #1e293b;
+}
+body.dark-mode .collapse-btn{
+    background:#1a2436;
+    color:#cbd5e1;
+}
+body.dark-mode .sidebar-footer{
+    border-top:1px solid #1e293b;
+}
+body.dark-mode .logout-btn{
+    border-color:#7f1d1d;
+    color:#f87171;
+}
+body.dark-mode .logout-btn:hover{
+    background:#1c1017;
+}
+body.dark-mode .mobile-header{
+    background:#0f1729;
+    box-shadow:0 2px 10px rgba(0,0,0,.3);
+}
+body.dark-mode .mobile-header h3{
+    color:#f1f5f9;
+}
+body.dark-mode .topbar-theme-btn{
+    background:#1a2436;
+    border-color:#1e293b;
+    color:#e2e8f0;
+}
+body.dark-mode .topbar-theme-btn:hover{
+    background:#242f47;
+}
+
+/* Mobile: pin the topbar below the fixed 60px mobile header.
+   MUST stay at the very bottom of this file — the base .topbar
+   rule above would otherwise override it. */
+@media (max-width:900px){
+    .topbar{
+        top:72px;
+    }
+}
+
+
+/* ===== NAV SPACING + HIDDEN SCROLLBAR ===== */
+.sidebar.collapsed .nav-item{
+    padding:20px 0;
+}
+
+/* hide the sidebar scrollbar line while keeping it scrollable */
+.sidebar-nav{
+    scrollbar-width:none;          /* Firefox */
+    -ms-overflow-style:none;       /* old Edge/IE */
+}
+.sidebar-nav::-webkit-scrollbar{   /* Chrome, Safari, Opera */
+    width:0;
+    height:0;
+    display:none;
+}
+/* mobile top-bar wordmark — exact brand image */
+.mh-logo{
+    height:32px;
+    width:auto;
+    max-width:200px;
+    object-fit:contain;
+    display:block;
+}
+
+@media (max-width:900px){
+    .mobile-header{
+        display:flex !important;
+        align-items:center !important;
+        gap:12px !important;
+        overflow:hidden !important;
+    }
+}
+/* ============================================================
+   MOBILE FIXES — sidebar header visibility + bigger wordmark
+   The fixed .mobile-header (z-index 1200) was covering the top
+   60px of the open sidebar (z-index 999), hiding its logo row.
+   Raise the sidebar above it so its own header shows.
+============================================================ */
+@media (max-width:900px){
+    .sidebar{
+        z-index:1300 !important;
+    }
+    #overlay{
+        z-index:1250 !important;
+    }
+    /* exact brand wordmark image on mobile header */
+    .mobile-header .mh-logo{
+        height:36px !important;
+        width:auto !important;
+        max-width:220px !important;
+        object-fit:contain !important;
+        display:block !important;
+    }
+    /* keep the sidebar's own logo row comfortable on mobile */
+    .sidebar-header{
+        padding-bottom:4px;
+    }
+    .logo-text{
+        font-size:18px !important;
+        max-width:160px !important;
+    }
+}
+
+/* ============================================================
+   MOBILE CLOSE BUTTON
+   On mobile the collapse button becomes a close (X) button,
+   matching the reference layout.
+============================================================ */
+@media (max-width:900px){
+    .collapse-btn{
+        display:flex !important;
+        width:34px;
+        height:34px;
+        border-radius:9px;
+        align-items:center;
+        justify-content:center;
+    }
+    /* keep the chevron arrow icon on mobile */
+    .collapse-btn i{
+        display:block;
+        font-size:16px;
+    }
+}
+
+/* ============================================================
+   BIG LOGO LAYOUT (text-only wordmark)
+============================================================ */
+.sidebar-header{
+    gap:10px;
+    margin-bottom:12px;
+    padding-bottom:14px;
+    border-bottom:1px solid #eef0f3;
+}
+.logo-group{
+    flex:1;
+    min-width:0;
+    gap:10px;
+}
+.logo-text{
+    flex:1;
+    min-width:0;
+    max-width:none !important;
+    font-size:18px;
+    line-height:1.2;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.collapse-btn{
+    flex-shrink:0;
+}
+
+/* logo and user sections sit close, separated by one line */
+.user-card{
+    padding-top:0 !important;
+    padding-bottom:14px !important;
+    margin-bottom:12px !important;
+    border-bottom:1px solid #eef0f3;
+}
+body.dark-mode .sidebar-header,
+body.dark-mode .user-card{
+    border-bottom-color:#1e293b;
+}
+@media (max-width:900px){
+    .mobile-header{
+        display:flex;
+    }
+    .layout{
+        display:block;
+    }
+    .sidebar{
+        position:fixed;
+        top:0;
+        left:-300px;
+        width:260px;
+        height:100vh;
+        z-index:999;
+        transition:.3s;
+    }
+    .sidebar.show-sidebar{
+        left:0;
+    }
+    .collapse-btn{
+        display:none;
+    }
+    .main-content{
+        padding:80px 16px 20px;
+    }
+
+    /* ===== FIX: stop the thin icon-only sidebar on mobile ===== */
+    .sidebar.collapsed{
+        width:260px !important;   /* full mobile width */
+        left:-300px;              /* stay hidden until opened */
+    }
+    .sidebar.collapsed.show-sidebar{
+        left:0 !important;
+    }
+    .sidebar.collapsed .logo-text,
+    .sidebar.collapsed .nav-text{
+        max-width:200px !important;
+        opacity:1 !important;
+    }
+}
+/* ===== Mobile: make logout always reachable ===== */
+@media (max-width:900px){
+
+    .sidebar{
+        display:flex !important;
+        flex-direction:column !important;
+        height:100vh !important;
+        height:100dvh !important;   /* better on iPhone */
+        overflow:hidden !important;
+        padding-bottom:0 !important;
+    }
+
+    .sidebar-nav{
+        flex:1 1 auto !important;
+        overflow-y:auto !important;
+        -webkit-overflow-scrolling:touch;
+        min-height:0 !important;    /* allows flex child to scroll */
+        padding-bottom:12px;
+    }
+
+    .sidebar-footer{
+        flex-shrink:0 !important;
+        margin-top:auto !important;
+        padding:12px 0 20px !important;
+        border-top:1px solid #eef0f3;
+        background:inherit;
+    }
+
+    .logout-btn{
+        display:flex !important;
+        width:100% !important;
+        justify-content:flex-start !important;
+        visibility:visible !important;
+        opacity:1 !important;
+    }
+
+    /* if collapsed class is still on, still show logout text */
+    .sidebar.collapsed .logout-btn .nav-text,
+    .sidebar.collapsed .nav-text{
+        max-width:200px !important;
+        opacity:1 !important;
+    }
+}
+
+body.dark-mode .sidebar-footer{
+    border-top-color:#1e293b;
+}

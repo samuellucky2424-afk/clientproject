@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "cleanUrls": true,
+  "crons": [
+    { "path": "/api/jobs/email", "schedule": "* * * * *" }
+  ],
+  "functions": {
+    "api/[...path].mjs": {
+      "maxDuration": 60,
+      "includeFiles": "flashlab-homepage/assets/logos/**"
+    }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7faff">
+  <title>Dashboard Preview — 2winprankz</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <header>
+    <a class="brand" href="/">2winprankz<span aria-hidden="true">✳</span></a>
+    <div class="header-right">
+      <a class="home" href="/">Home</a>
+      <button class="home" type="button" id="signOut">Sign out</button><span class="avatar" aria-label="Guest account">G</span>
+    </div>
+  </header>
+
+  <main>
+<p id="walletMessage" role="status"></p><button id="retryDeposit" type="button" hidden>Retry payment verification</button>
+    <section class="balance-card" aria-label="Wallet balance">
+      <div>
+        <span class="balance-label">Wallet balance</span>
+        <strong id="walletBalance">$0.00</strong>
+      </div>
+      <button class="top-up" id="topUp" type="button">Top-up</button>
+    </section>
+
+    <section class="intro" aria-labelledby="pageTitle">
+      <div>
+        <div class="eyebrow"><span class="live-dot" aria-hidden="true"></span> YOUR PRANK STUDIO</div>
+        <h1 id="pageTitle">Big reactions.<br><span>Just for fun.</span></h1>
+        <p>Explore fictional prank previews made for entertainment. Nothing here sends money or contacts anyone.</p>
+      </div>
+      <button class="motion" id="motion" type="button" aria-pressed="false">Ⅱ Pause reactions</button>
+    </section>
+
+    <section class="reaction-stage" aria-label="Fictional reaction preview">
+      <div class="stage-grid" aria-hidden="true"></div>
+      <div class="stage-label">
+        <strong>REACTION PREVIEW</strong>
+        <span>FICTIONAL · FOR ENTERTAINMENT</span>
+      </div>
+      <div class="stage-center" aria-hidden="true">
+        <span class="spark">✳</span>
+        <strong>Imagine the<br><em>reaction</em></strong>
+        <span class="sub">A LITTLE SURPRISE GOES A LONG WAY</span>
+      </div>
+      <div class="reactions" id="reactions" aria-hidden="true"></div>
+      <div class="stage-bottom">
+        <span>FICTIONAL REACTIONS</span>
+        <span>NO REAL TRANSFERS · NO MESSAGES SENT</span>
+      </div>
+    </section>
+
+    <div class="section-heading">
+      <h2>Choose a preview</h2>
+      <span>MADE FOR ENTERTAINMENT</span>
+    </div>
+    <section class="cards" aria-label="Prank previews">
+      <button class="prank-card" type="button" data-kind="video">
+        <span class="card-top">
+          <span class="letter">V<span aria-hidden="true">✳</span></span>
+          <span class="tag">FICTIONAL SCENARIO</span>
+        </span>
+        <span class="card-art" aria-hidden="true">
+          <span class="call-window">
+            <span class="call-dot"></span>Incoming surprise call
+            <span class="face">😲</span>
+            <span class="call-actions"><i>•••</i><i>●</i></span>
+          </span>
+          <span class="art-sticker">JUST FOR FUN</span>
+        </span>
+        <h3>Video prank</h3>
+        <p>Dream up a fictional surprise call and share a laugh. No calls are made.</p>
+        <span class="chips"><span>Surprise</span><span>For entertainment</span></span>
+        <span class="card-footer">Explore video preview <span aria-hidden="true">→</span></span>
+      </button>
+
+      <button class="prank-card crypto" type="button" data-kind="crypto">
+        <span class="card-top">
+          <span class="letter">C<span aria-hidden="true">✳</span></span>
+          <span class="tag">FICTIONAL PREVIEW</span>
+        </span>
+        <span class="card-art" aria-hidden="true">
+          <span class="coin one">₮</span>
+          <span class="coin two">₮</span>
+          <span class="reward">
+            <small>FICTIONAL PREVIEW</small>
+            <strong>0.00 <span>USDT</span></strong>
+            <span>NO CRYPTO SENT</span>
+          </span>
+          <span class="art-sticker">NOT A PAYMENT</span>
+        </span>
+        <h3>Crypto scenario</h3>
+        <p>Create a clearly labelled fictional transfer preview. No wallet is connected and no funds move.</p>
+        <span class="card-footer">Try now <span aria-hidden="true">→</span></span>
+      </button>
+    </section>
+
+    <section class="wallet-history" aria-labelledby="historyTitle"><div class="section-heading"><h2 id="historyTitle">Wallet activity</h2><button id="refreshHistory" class="motion" type="button">Refresh</button></div><p id="historyMessage" role="status"></p><div id="walletHistory"></div></section>
+  </main>
+
+  <dialog id="choice" aria-labelledby="choiceTitle">
+    <button class="close" type="button" aria-label="Close dialog">×</button>
+    <h2 id="choiceTitle">Preview</h2>
+    <p id="choiceText"></p>
+    <button class="dialog-done" type="button">Got it</button>
+  </dialog>
+
+  <dialog id="topUpDialog" aria-labelledby="topUpTitle">
+    <button class="close" type="button" aria-label="Close dialog">×</button>
+    <h2 id="topUpTitle">Fund your wallet</h2>
+    <p>Pay securely through Flutterwave. Your wallet is credited after payment verification.</p>
+    <form id="topUpForm">
+      <label for="topUpAmount">Deposit amount (NGN)</label>
+      <input id="topUpAmount" type="number" min="100" max="1000000" step="0.01" placeholder="0.00" required>
+      <button class="dialog-done" type="submit">Review deposit</button>
+    <p id="depositMessage" role="status"></p><div id="depositQuote" hidden><p id="depositQuoteText"></p><button class="dialog-done" id="depositCheckout" type="button">Pay with Flutterwave</button></div><p class="hint"><a href="https://www.exchangerate-api.com" target="_blank" rel="noopener">Rates By Exchange Rate API</a></p></form>
+  </dialog>
+
+  <script type="module" src="dashboard.js"></script>
+</body>
+</html>

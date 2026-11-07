@@ -1,0 +1,29 @@
+﻿.branded-mail{--mail-accent:#f0b90b;--mail-ink:#191b20;--mail-button-ink:#16181c;background:#212227;border:1px solid #383a40;border-radius:5px;color:#eee;max-width:440px;margin:26px auto 0;font-family:"Segoe UI",Arial,sans-serif;box-shadow:0 10px 30px #0002}
+.branded-mail[data-platform="coinbase"]{--mail-accent:#0879ed;--mail-button-ink:#fff}
+.branded-mail[data-platform="trust-wallet"]{--mail-accent:#3375ee;--mail-button-ink:#fff}
+.branded-mail[data-platform="bybit"]{--mail-accent:#f7a600;--mail-ink:#17191f}
+.branded-mail .mail-toolbar{display:flex;justify-content:space-between;align-items:center;padding:12px 17px 6px;color:#d8dae0;font-size:23px}
+.branded-mail .mail-subject{font-size:23px;font-weight:400;line-height:1.4;color:#f2f2f4;margin:18px 17px 6px;letter-spacing:0}
+.branded-mail .mail-inbox{display:inline-block;font-size:10px;color:#b7b9c0;border:1px solid #62646e;border-radius:3px;padding:2px 4px;margin-left:17px}
+.branded-mail .mail-sender{display:flex;align-items:center;gap:12px;margin:25px 17px 17px}
+.branded-mail .mail-sender>img{width:39px;height:39px;border-radius:50%;background:white;object-fit:contain;padding:6px}
+.branded-mail .mail-sender strong{font-size:14px;color:#f4f4f6}
+.branded-mail .mail-sender small{display:block;font-size:10px;color:#a9acb6;margin-top:5px;overflow-wrap:anywhere}
+.branded-mail .mail-brand-frame{background:var(--mail-accent);margin:0 16px 16px;padding:24px 15px 15px}
+.branded-mail .mail-brand-heading{display:flex;align-items:center;justify-content:center;gap:10px;padding:0 0 27px;color:var(--mail-button-ink)}
+.branded-mail .mail-brand-heading img{height:36px;width:36px;object-fit:contain;border-radius:8px;background:white;padding:5px}
+.branded-mail .mail-brand-heading strong{font-size:29px;letter-spacing:-1px;font-weight:600}
+.branded-mail .mail-deposit-card{background:#212227;border-radius:5px;padding:18px 20px 25px;text-align:center;box-shadow:0 2px 12px #0002}
+.branded-mail .mail-preview-label{font-size:9px;letter-spacing:.8px;color:var(--mail-accent);border:1px solid var(--mail-accent);border-radius:3px;padding:7px 4px;line-height:1.5;font-weight:700}
+.branded-mail .mail-success{width:82px;height:82px;display:block;color:var(--mail-accent);margin:26px auto 22px}
+.branded-mail .mail-deposit-card h3{font-size:22px;font-weight:400;letter-spacing:0;margin:0 0 9px;color:#f3f3f6}
+.branded-mail .mail-deposit-amount{font-size:17px;line-height:1.5;color:#c5c7ce;overflow-wrap:anywhere}
+.branded-mail hr{border:0;border-top:1px solid #373940;margin:25px 0}
+.branded-mail .mail-deposit-copy{font-size:16px;color:#e6e7ed;line-height:1.65;margin:0 0 25px}
+.branded-mail .mail-view-button{width:100%;border:0;border-radius:4px;background:var(--mail-accent);color:var(--mail-button-ink);padding:13px 10px;font:inherit;font-size:12px;opacity:1}
+.branded-mail .mail-details{margin:24px 0 0;text-align:left;font-size:11px}
+.branded-mail .mail-details>div{padding:10px 0;border-bottom:1px solid #373940}
+.branded-mail .mail-details dt{color:#9499a6;margin:0 0 5px;font-weight:400}
+.branded-mail .mail-details dd{margin:0;color:#d9dce5;line-height:1.5;overflow-wrap:anywhere}
+.branded-mail .mail-disclaimer{font-size:10px;line-height:1.7;margin:15px 2px 0;color:var(--mail-button-ink);text-align:center}
+@media(max-width:400px){.branded-mail .mail-brand-frame{margin:0 9px 9px;padding:20px 9px 12px}.branded-mail .mail-deposit-card{padding:14px}.branded-mail .mail-subject{font-size:20px}.branded-mail .mail-brand-heading strong{font-size:25px}.branded-mail .mail-deposit-copy{font-size:14px}}

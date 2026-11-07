@@ -1,0 +1,1109 @@
+/* ============================================================
+   AURORA GLASS THEME — loads after all other stylesheets.
+   Gradient backgrounds, frosted-glass cards, indigo→purple accents.
+   Light + dark mode. Remove this one file to restore the old look.
+============================================================ */
+
+/* ---------- PAGE BACKGROUNDS ---------- */
+body{
+    background:#ffffff !important;
+    background-attachment:fixed !important;
+    color:#0f172a;
+}
+body.dark-mode{
+    background:linear-gradient(135deg,#020a1a 0%,#04122e 55%,#030d22 100%) !important;
+    background-attachment:fixed !important;
+    color:#e2e8f0;
+}
+body.dark-mode .main-content{
+    background:transparent !important;
+}
+
+/* ---------- GLASS CARD TREATMENT ---------- */
+.sidebar,
+.topbar,
+.mobile-header,
+.card,
+.service-box,
+.preview-box,
+.info-box,
+.request-box,
+.request-card,
+.wallet-card,
+.modal-content,
+.deposits-header-card,
+.deposit-history-card,
+.empty{
+    background:#ffffff !important;
+    border:1px solid #cbdcef !important;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 6px 24px rgba(15,23,42,.12), 0 2px 6px rgba(15,23,42,.08) !important;
+}
+.card, .service-box, .preview-box, .info-box, .request-box,
+.wallet-card, .deposits-header-card, .deposit-history-card{
+    border-radius:18px !important;
+}
+
+body.dark-mode .sidebar,
+body.dark-mode .topbar,
+body.dark-mode .mobile-header,
+body.dark-mode .card,
+body.dark-mode .service-box,
+body.dark-mode .preview-box,
+body.dark-mode .info-box,
+body.dark-mode .request-box,
+body.dark-mode .request-card,
+body.dark-mode .wallet-card,
+body.dark-mode .modal-content,
+body.dark-mode .deposits-header-card,
+body.dark-mode .deposit-history-card,
+body.dark-mode .empty{
+    background:rgba(255,255,255,.07) !important;
+    border:1px solid rgba(255,255,255,.13) !important;
+    box-shadow:0 8px 32px rgba(0,0,0,.35) !important;
+}
+
+/* Inner surfaces (slightly more solid than cards) */
+.service-fee, .amount-input-box, .ngn-preview, .bank-details-box,
+.payment-tabs, .tabs, .upload-box, .extra-card, .deposit-reference-box,
+.modal-header{
+    background:#f7fafd !important;
+    border-color:#dde7f2 !important;
+}
+body.dark-mode .service-fee,
+body.dark-mode .amount-input-box,
+body.dark-mode .ngn-preview,
+body.dark-mode .bank-details-box,
+body.dark-mode .payment-tabs,
+body.dark-mode .tabs,
+body.dark-mode .upload-box,
+body.dark-mode .extra-card,
+body.dark-mode .deposit-reference-box,
+body.dark-mode .modal-header{
+    background:rgba(255,255,255,.05) !important;
+    border-color:rgba(255,255,255,.12) !important;
+}
+
+/* ---------- SIDEBAR ---------- */
+.nav-item.active{
+    background:rgba(2,132,199,.12) !important;
+    box-shadow:none !important;
+    color:#1d5fa8 !important;
+}
+.nav-item.active i{ color:#0ea5e9 !important; }
+.nav-item:hover{ background:rgba(2,132,199,.08) !important; }
+.user-avatar{
+    background:linear-gradient(135deg,#0284c7,#2563eb) !important;
+}
+/* logo tile: no background — show the logo image itself */
+.logo-icon{
+    background:none !important;
+    background-color:transparent !important;
+    box-shadow:none !important;
+    padding:0 !important;
+}
+.logo-icon img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+body.dark-mode .nav-item.active{
+    background:rgba(56,189,248,.14) !important;
+    color:#bae0fd !important;
+}
+body.dark-mode .nav-item.active i{ color:#7dd3fc !important; }
+body.dark-mode .nav-item:hover{ background:rgba(56,189,248,.08) !important; }
+
+/* ---------- TEXT ---------- */
+h1, h2, h3, h4, .logo-text, .user-name,
+.fee-price, .deposit-amount, .topbar-balance{ color:#0f172a; }
+.subtitle, .user-email, .upload-content p, .support-text,
+.min-deposit-note, .deposit-date{ color:#64748b !important; }
+
+body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4,
+body.dark-mode p, body.dark-mode label,
+body.dark-mode .logo-text, body.dark-mode .user-name,
+body.dark-mode .fee-price, body.dark-mode .deposit-amount,
+body.dark-mode .topbar-balance, body.dark-mode .modal-body td,
+body.dark-mode .check-list li, body.dark-mode .fee-left,
+body.dark-mode .extra-card .name, body.dark-mode .amount-heading,
+body.dark-mode .dollar-sign, body.dark-mode .amount-input-box input,
+body.dark-mode .ngn-preview strong, body.dark-mode .bank-row strong,
+body.dark-mode .user-name, body.dark-mode .request-card h3,
+body.dark-mode .empty h3{
+    color:#f1f5f9 !important;
+}
+body.dark-mode .subtitle, body.dark-mode .user-email,
+body.dark-mode .upload-content p, body.dark-mode .support-text,
+body.dark-mode .min-deposit-note, body.dark-mode .deposit-date,
+body.dark-mode .ngn-preview, body.dark-mode .bank-row,
+body.dark-mode .nav-item, body.dark-mode .deposit-method{
+    color:#94a3b8 !important;
+}
+
+/* Accent-colored headings */
+.service-box h2, .upload-content h3{
+    background:linear-gradient(90deg,#0284c7,#2563eb);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent !important;
+}
+body.dark-mode .service-box h2, body.dark-mode .upload-content h3{
+    background:linear-gradient(90deg,#7dd3fc,#93c5fd);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent !important;
+}
+
+/* ---------- BUTTONS ---------- */
+.create-btn, .confirm-btn, .proceed-btn, .topbar-topup,
+.payment-tab.active, .btn-primary, .upload-icon{
+    background:linear-gradient(90deg,#0284c7,#2563eb) !important;
+    color:#ffffff !important;
+    border:none !important;
+}
+.create-btn:hover, .confirm-btn:hover, .proceed-btn:not(:disabled):hover,
+.topbar-topup:hover{
+    filter:brightness(1.08);
+}
+.proceed-btn:disabled{
+    background:linear-gradient(90deg,#7dd3fc,#93c5fd) !important;
+    color:#ffffff !important;
+}
+body.dark-mode .create-btn, body.dark-mode .confirm-btn,
+body.dark-mode .proceed-btn, body.dark-mode .topbar-topup,
+body.dark-mode .payment-tab.active{
+    background:linear-gradient(90deg,#38bdf8,#60a5fa) !important;
+    color:#0b1f3f !important;
+}
+
+/* keep the insufficient-funds state amber and readable */
+.confirm-btn.insufficient{
+    background:linear-gradient(90deg,#f59e0b,#f97316) !important;
+    color:#fff !important;
+}
+body.dark-mode .confirm-btn.insufficient{
+    color:#3b1c05 !important;
+}
+
+/* secondary buttons */
+.view-btn, .refresh-btn, .topbar-theme-btn, .collapse-btn{
+    background:rgba(2,132,199,.10) !important;
+    border:1px solid rgba(2,132,199,.22) !important;
+    color:#1d5fa8 !important;
+}
+body.dark-mode .view-btn, body.dark-mode .refresh-btn,
+body.dark-mode .topbar-theme-btn, body.dark-mode .collapse-btn{
+    background:rgba(56,189,248,.12) !important;
+    border:1px solid rgba(56,189,248,.25) !important;
+    color:#bae0fd !important;
+}
+
+/* ---------- ACCENTS & DETAILS ---------- */
+.upload-box{ border-style:dashed !important; }
+.extra-card:has(input[type="checkbox"]:checked){
+    border-color:#0284c7 !important;
+    background:rgba(2,132,199,.10) !important;
+}
+.extra-card input[type="checkbox"]:checked ~ .check{
+    background:#0284c7 !important;
+    border-color:#0284c7 !important;
+}
+.extra-card .price{ color:#0ea5e9 !important; }
+body.dark-mode .extra-card .price{ color:#7dd3fc !important; }
+
+.form-group input:focus, .form-group textarea:focus{
+    border-color:#0284c7 !important;
+    box-shadow:0 0 0 3px rgba(2,132,199,.15);
+}
+body.dark-mode input, body.dark-mode textarea, body.dark-mode select{
+    background:rgba(255,255,255,.07) !important;
+    border-color:rgba(255,255,255,.15) !important;
+    color:#f1f5f9 !important;
+}
+
+.deposits-total{
+    background:linear-gradient(90deg,#0284c7,#2563eb);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent !important;
+}
+body.dark-mode .deposits-total{
+    background:linear-gradient(90deg,#7dd3fc,#93c5fd);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent !important;
+}
+
+.check-list li i{ color:#16a34a !important; }
+body.dark-mode .check-list li i{ color:#4ade80 !important; }
+
+.proof-upload:hover{ border-color:#0284c7 !important; }
+.proof-upload i, .proof-text{ color:#0ea5e9 !important; }
+body.dark-mode .proof-upload i, body.dark-mode .proof-text{ color:#7dd3fc !important; }
+.proof-upload.has-file i, .proof-upload.has-file .proof-text{ color:#16a34a !important; }
+
+/* ---------- MARKETPLACE (Aurora treatment) ---------- */
+.market-header-card,
+.suggestions-box,
+.suggestion-item{
+    background:#ffffff !important;
+    border:1px solid #cbdcef !important;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 6px 24px rgba(15,23,42,.12), 0 2px 6px rgba(15,23,42,.08) !important;
+}
+body.dark-mode .market-header-card,
+body.dark-mode .suggestions-box,
+body.dark-mode .suggestion-item{
+    background:rgba(255,255,255,.07) !important;
+    border:1px solid rgba(255,255,255,.13) !important;
+    box-shadow:0 8px 32px rgba(0,0,0,.35) !important;
+}
+
+/* product rows — glass instead of flat dark */
+/* product-row styling handled in marketplace.css (deep purple #12456e) */
+
+/* category chips — glass with violet active state */
+.cat-chip,
+body.dark-mode .cat-chip{
+    background:#12456e !important;
+    color:#dbeafe !important;
+    border:1px solid #1e293b !important;
+    backdrop-filter:none !important;
+}
+.cat-chip i,
+body.dark-mode .cat-chip i{ color:#7dd3fc !important; }
+.cat-chip.active,
+body.dark-mode .cat-chip.active{
+    background:linear-gradient(90deg,#0284c7,#2563eb) !important;
+    color:#fff !important;
+    border-color:transparent !important;
+    box-shadow:0 6px 16px rgba(2,132,199,.35) !important;
+}
+.cat-chip.active i,
+body.dark-mode .cat-chip.active i{ color:#fff !important; }
+
+/* buy button — gradient */
+.buy-btn{
+    background:linear-gradient(90deg,#0284c7,#2563eb) !important;
+    color:#fff !important;
+}
+.buy-btn:hover{ filter:brightness(1.08); }
+.buy-btn.disabled{
+    background:rgba(148,163,184,.3) !important;
+    color:#94a3b8 !important;
+}
+
+/* accent-colored numbers */
+.market-balance,
+.product-price,
+.suggestion-price{
+    background:linear-gradient(90deg,#0284c7,#2563eb);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent !important;
+}
+body.dark-mode .market-balance,
+body.dark-mode .product-price,
+body.dark-mode .suggestion-price{
+    background:linear-gradient(90deg,#7dd3fc,#93c5fd);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent !important;
+}
+.suggestions-title{ color:#0ea5e9 !important; }
+body.dark-mode .suggestions-title{ color:#7dd3fc !important; }
+.suggestion-name{ color:#0f172a !important; }
+body.dark-mode .suggestion-name{ color:#f1f5f9 !important; }
+
+/* ---------- WEBSITES CATALOG (Aurora glass) ---------- */
+.web-card,
+.web-tabs{
+    background:#ffffff !important;
+    border:1px solid #cbdcef !important;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 6px 24px rgba(15,23,42,.12), 0 2px 6px rgba(15,23,42,.08) !important;
+}
+body.dark-mode .web-card,
+body.dark-mode .web-tabs{
+    background:rgba(255,255,255,.07) !important;
+    border:1px solid rgba(255,255,255,.13) !important;
+    box-shadow:0 8px 32px rgba(0,0,0,.35) !important;
+}
+.web-card-body h3{ color:#0f172a !important; }
+body.dark-mode .web-card-body h3{ color:#f1f5f9 !important; }
+.web-price{
+    background:linear-gradient(90deg,#0284c7,#2563eb);
+    -webkit-background-clip:text; background-clip:text; color:transparent !important;
+}
+body.dark-mode .web-price{
+    background:linear-gradient(90deg,#7dd3fc,#93c5fd);
+    -webkit-background-clip:text; background-clip:text; color:transparent !important;
+}
+.web-tab.active{ color:#0284c7 !important; }
+body.dark-mode .web-tab.active{ background:rgba(56,189,248,.14) !important; color:#bae0fd !important; }
+
+/* ============================================================
+   AMBIENT BLUE GLOW ORBS + CARD SHINE
+   Large blurred azure orbs drift slowly behind the layout,
+   and cards catch a light sweep on hover.
+============================================================ */
+body{
+    position:relative;
+    overflow-x:hidden;
+}
+body::before{
+    content:"";
+    position:fixed;
+    width:700px;
+    height:700px;
+    top:-260px;
+    left:-240px;
+    background:radial-gradient(circle, rgba(14,165,233,.14), transparent 70%);
+    filter:blur(120px);
+    z-index:-2;
+    pointer-events:none;
+    animation:orbDriftA 18s ease-in-out infinite alternate;
+}
+body::after{
+    content:"";
+    position:fixed;
+    width:650px;
+    height:650px;
+    right:-220px;
+    bottom:-220px;
+    background:radial-gradient(circle, rgba(37,99,235,.12), transparent 70%);
+    filter:blur(120px);
+    z-index:-2;
+    pointer-events:none;
+    animation:orbDriftB 22s ease-in-out infinite alternate;
+}
+@keyframes orbDriftA{
+    0%   { transform:translate(0,0) scale(1); }
+    100% { transform:translate(120px,90px) scale(1.15); }
+}
+@keyframes orbDriftB{
+    0%   { transform:translate(0,0) scale(1.1); }
+    100% { transform:translate(-110px,-80px) scale(1); }
+}
+body.dark-mode::before{
+    background:radial-gradient(circle, rgba(56,189,248,.42), transparent 70%);
+}
+body.dark-mode::after{
+    background:radial-gradient(circle, rgba(59,130,246,.38), transparent 70%);
+}
+
+/* --- card shine sweep on hover --- */
+.card,
+.market-header-card,
+.web-card,
+.product-card,
+.wallet-card,
+.deposit-history-card{
+    position:relative;
+    overflow:hidden;
+}
+.card::before,
+.market-header-card::before,
+.web-card::before,
+.product-card::before,
+.wallet-card::before,
+.deposit-history-card::before{
+    content:"";
+    position:absolute;
+    top:-120%;
+    left:-60%;
+    width:70%;
+    height:300%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
+    transform:rotate(20deg);
+    transition:left 1s ease;
+    pointer-events:none;
+    z-index:1;
+}
+.card:hover::before,
+.market-header-card:hover::before,
+.web-card:hover::before,
+.product-card:hover::before,
+.wallet-card:hover::before,
+.deposit-history-card:hover::before{
+    left:150%;
+}
+body.dark-mode .card::before,
+body.dark-mode .market-header-card::before,
+body.dark-mode .web-card::before,
+body.dark-mode .product-card::before,
+body.dark-mode .wallet-card::before,
+body.dark-mode .deposit-history-card::before{
+    background:linear-gradient(90deg, transparent, rgba(125,211,252,.18), transparent);
+}
+
+/* ============================================================
+   MOBILE BOTTOM GAP FIX
+   background-attachment:fixed is unreliable on mobile browsers,
+   and anything below <body> falls through to the browser's
+   default white. Painting <html> too closes the gap.
+============================================================ */
+html{
+    background:#ffffff;
+    min-height:100%;
+}
+html.dark-mode,
+body.dark-mode{
+    background-color:#04122e;
+}
+body{
+    min-height:100vh;
+    background-color:#ffffff;
+}
+body.dark-mode{
+    background-color:#04122e !important;
+}
+
+/* On mobile, drop fixed attachment (buggy) and let the colour
+   underneath carry the full scroll height instead. */
+@media (max-width:900px){
+    body,
+    body.dark-mode{
+        background-attachment:scroll !important;
+    }
+    body.dark-mode{
+        background:#04122e !important;
+    }
+    body:not(.dark-mode){
+        background:#ffffff !important;
+    }
+    /* stop the iOS rubber-band bounce revealing white */
+   html, body{
+        overscroll-behavior-y:auto;
+    }
+}
+
+/* ============================================================
+   SHARED PAGE HEADER CARD (title + balance + view wallet)
+   Rendered by includes/header.php on every page that sets
+   $pageHeading. Keeps the balance visible site-wide.
+============================================================ */
+.page-header-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+    background:#ffffff;
+    border:1px solid #cbdcef;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 6px 24px rgba(15,23,42,.12), 0 2px 6px rgba(15,23,42,.08);
+    border-radius:18px;
+    padding:24px 30px;
+    margin-bottom:24px;
+}
+.page-header-left h1{
+    margin:0 0 6px;
+    font-size:24px;
+    font-weight:800;
+    color:#12456e;
+}
+.page-header-left p{
+    margin:0;
+    color:#64748b;
+    font-size:15px;
+}
+.page-header-right{
+    text-align:right;
+    flex-shrink:0;
+}
+.page-header-balance{
+    font-size:26px;
+    font-weight:800;
+    background:linear-gradient(90deg,#0284c7,#2563eb);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    line-height:1.2;
+}
+.page-header-link{
+    font-size:13px;
+    color:#64748b;
+    text-decoration:none;
+}
+.page-header-link:hover{ text-decoration:underline; }
+
+body.dark-mode .page-header-card{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.13);
+    box-shadow:0 8px 32px rgba(0,0,0,.35);
+}
+body.dark-mode .page-header-left h1{ color:#f1f5f9; }
+body.dark-mode .page-header-left p{ color:#94a3b8; }
+body.dark-mode .page-header-balance{
+    background:linear-gradient(90deg,#38bdf8,#60a5fa);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+body.dark-mode .page-header-link{ color:#94a3b8; }
+
+@media(max-width:640px){
+    /* keep title left / balance right on one row instead of wrapping */
+    .page-header-card{
+        flex-wrap:nowrap;
+        align-items:center;
+        gap:14px;
+        padding:18px 20px;
+    }
+    .page-header-left{
+        flex:1;
+        min-width:0;
+    }
+    .page-header-left h1{
+        font-size:18px;
+        margin-bottom:4px;
+    }
+    .page-header-left p{
+        font-size:13px;
+        line-height:1.4;
+    }
+    .page-header-right{
+        text-align:right;
+        flex-shrink:0;
+    }
+    .page-header-balance{ font-size:20px; }
+    .page-header-link{ font-size:12px; }
+}
+/* ============================================================
+   COMPACT CATEGORY CHIPS (marketplace)
+============================================================ */
+.category-bar{
+    gap:8px !important;
+}
+.cat-chip{
+    padding:9px 14px !important;
+    font-size:13px !important;
+    border-radius:9px !important;
+    gap:7px !important;
+}
+.cat-chip i{
+    font-size:14px !important;
+}
+.cat-logo{
+    width:16px !important;
+    height:16px !important;
+}
+@media(max-width:640px){
+    .cat-chip{
+        padding:8px 12px !important;
+        font-size:12px !important;
+    }
+    .cat-chip i{ font-size:13px !important; }
+}
+/* ============================================================
+   ROUNDED LOGOS (modern circular style)
+============================================================ */
+.cat-logo{
+    border-radius:50% !important;
+    object-fit:cover !important;
+    width:18px !important;
+    height:18px !important;
+}
+.card-logo{
+    border-radius:50% !important;
+    overflow:hidden !important;
+    background:#f1f5f9 !important;
+}
+.card-logo img{
+    width:100% !important;
+    height:100% !important;
+    object-fit:cover !important;
+}
+.group-logo{
+    border-radius:50% !important;
+    overflow:hidden !important;
+}
+.group-logo img{
+    width:100% !important;
+    height:100% !important;
+    object-fit:cover !important;
+}
+.buy-modal-icon{
+    border-radius:50% !important;
+    overflow:hidden !important;
+    padding:0 !important;
+}
+.buy-modal-icon img{
+    width:100% !important;
+    height:100% !important;
+    object-fit:cover !important;
+}
+
+/* ============================================================
+   CONSIGNMENT PAGE — tighter card, clearer card separation
+============================================================ */
+.service-box{
+    padding:24px 26px !important;
+}
+.service-box h2{
+    margin-bottom:10px !important;
+    line-height:1.25 !important;
+}
+.service-box > p{
+    margin-bottom:16px !important;
+    line-height:1.5 !important;
+}
+.check-list{
+    margin:0 !important;
+    padding:0 !important;
+    list-style:none !important;
+}
+.check-list li{
+    display:flex !important;
+    align-items:center !important;
+    gap:10px !important;
+    padding:7px 0 !important;
+    margin:0 !important;
+    line-height:1.35 !important;
+}
+.check-list li i{
+    font-size:17px !important;
+    flex-shrink:0 !important;
+}
+
+/* clear gap between stacked cards so they don't look joined */
+.service-box,
+.request-box,
+.preview-box,
+.info-box,
+.card{
+    margin-bottom:26px !important;
+}
+.create-btn{
+    margin-top:6px !important;
+}
+/* ============================================================
+   VIDEO PLAYBACK PERFORMANCE
+   Blur effects (glow orbs + frosted cards) force the GPU to
+   recomposite every frame while video plays, which freezes
+   scrolling. Suspend them during playback.
+============================================================ */
+body.video-playing::before,
+body.video-playing::after{
+    animation:none !important;
+    filter:blur(60px) !important;
+    opacity:.5 !important;
+}
+body.video-playing .card,
+body.video-playing .service-box,
+body.video-playing .preview-box,
+body.video-playing .info-box,
+body.video-playing .request-box,
+body.video-playing .wallet-card,
+body.video-playing .sidebar,
+body.video-playing .topbar,
+body.video-playing .modal-content,
+body.video-playing .page-header-card,
+body.video-playing .market-header-card,
+body.video-playing .web-card{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+}
+
+/* video itself gets its own layer so it doesn't repaint the page */
+video{
+    transform:translateZ(0);
+    max-width:100%;
+}
+/* ============================================================
+   PERFORMANCE FIX — orbs without blur filter, video-safe cards
+   radial-gradient is already soft; filter:blur(120px) on a
+   fixed 700px layer is what was stalling the compositor.
+============================================================ */
+body::before,
+body::after{
+    filter:none !important;
+    animation:none !important;
+    will-change:auto !important;
+}
+body::before{
+    width:900px !important;
+    height:900px !important;
+    background:radial-gradient(circle, rgba(14,165,233,.30), transparent 65%) !important;
+}
+body::after{
+    width:850px !important;
+    height:850px !important;
+    background:radial-gradient(circle, rgba(37,99,235,.26), transparent 65%) !important;
+}
+body.dark-mode::before{
+    background:radial-gradient(circle, rgba(56,189,248,.26), transparent 65%) !important;
+}
+body.dark-mode::after{
+    background:radial-gradient(circle, rgba(59,130,246,.24), transparent 65%) !important;
+}
+
+/* the card holding the video must never have backdrop blur */
+.preview-box{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+}
+
+/* video: own layer, no paint containment */
+video{
+    contain:none !important;
+    max-width:100%;
+    height:auto;
+}
+/* ============================================================
+   COMPLETED VIDEO — watch + download buttons
+============================================================ */
+.video-actions{
+    display:flex;
+    gap:10px;
+    margin-top:14px;
+    flex-wrap:wrap;
+}
+.watch-btn,
+.download-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:10px 18px;
+    border-radius:10px;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:700;
+    transition:.2s;
+}
+.watch-btn{
+    background:rgba(2,132,199,.10);
+    color:#0284c7;
+    border:1px solid rgba(2,132,199,.25);
+}
+.watch-btn:hover{ background:rgba(2,132,199,.18); }
+.download-btn{
+    background:linear-gradient(90deg,#0284c7,#2563eb);
+    color:#fff;
+    border:1px solid transparent;
+}
+.download-btn:hover{ filter:brightness(1.08); }
+
+body.dark-mode .watch-btn{
+    background:rgba(56,189,248,.12);
+    color:#7dd3fc;
+    border-color:rgba(56,189,248,.28);
+}/* let the page background + glow orbs show through the content area */
+.main-content{
+    background:transparent !important;
+}
+body:not(.dark-mode) .main-content{
+    background:transparent !important;
+}
+body.dark-mode .main-content{
+    background:transparent !important;
+}
+/* let the page background + glow orbs show through the content area */
+.main-content{
+    background:transparent !important;
+}
+body:not(.dark-mode) .main-content{
+    background:transparent !important;
+}
+body.dark-mode .main-content{
+    background:transparent !important;
+}
+/* ============================================================
+   CARD SHINE — extend to new pages (tools, esim, consignment)
+============================================================ */
+.soon-wrap,
+.tip-card,
+.tool-video-card,
+.service-box,
+.info-box,
+.preview-box,
+.request-box{
+    position:relative;
+    overflow:hidden;
+}
+.soon-wrap::before,
+.tip-card::before,
+.tool-video-card::before,
+.service-box::before,
+.info-box::before,
+.preview-box::before,
+.request-box::before{
+    content:"";
+    position:absolute;
+    top:-120%;
+    left:-60%;
+    width:70%;
+    height:300%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
+    transform:rotate(20deg);
+    transition:left 1s ease;
+    pointer-events:none;
+    z-index:2;
+}
+.soon-wrap:hover::before,
+.tip-card:hover::before,
+.tool-video-card:hover::before,
+.service-box:hover::before,
+.info-box:hover::before,
+.preview-box:hover::before,
+.request-box:hover::before{
+    left:150%;
+}
+body.dark-mode .soon-wrap::before,
+body.dark-mode .tip-card::before,
+body.dark-mode .tool-video-card::before,
+body.dark-mode .service-box::before,
+body.dark-mode .info-box::before,
+body.dark-mode .preview-box::before,
+body.dark-mode .request-box::before{
+    background:linear-gradient(90deg, transparent, rgba(125,211,252,.18), transparent);
+}
+
+/* ============================================================
+   THEME TOGGLE SMOOTHING
+   Both <html> and <body> now flip together (see footer.php),
+   and a short transition prevents the half-painted flash.
+============================================================ */
+html, body,
+.sidebar, .topbar, .card, .home-card, .page-header-card,
+.market-header-card, .web-card, .service-box, .info-box,
+.preview-box, .request-box, .soon-wrap, .tip-card, .tool-video-card{
+    transition:background-color .25s ease, border-color .25s ease, color .25s ease;
+}
+
+/* ============================================================
+   HERO CARD — keeps a gradient background with white text.
+   (It must NOT get the white glass-card treatment, or the
+   white text becomes invisible in light mode.)
+============================================================ */
+.hero-card{
+    background:linear-gradient(135deg,#0284c7,#2563eb,#38bdf8) !important;
+    border:none !important;
+    color:#ffffff !important;
+    box-shadow:0 12px 30px rgba(2,132,199,.28) !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+}
+.hero-card h1,
+.hero-card h2,
+.hero-card p,
+.hero-card .badge{
+    color:#ffffff !important;
+    background:none;
+    -webkit-text-fill-color:#ffffff;
+}
+.hero-card .badge{
+    background:rgba(255,255,255,.18) !important;
+    display:inline-block;
+    padding:7px 16px;
+    border-radius:30px;
+}
+body.dark-mode .hero-card{
+    background:linear-gradient(135deg,#0b3a6b,#12356e,#0a2a55) !important;
+}
+
+/* The "Create Account" / "Go to Dashboard" button was using the same
+   blue gradient as the hero card's own background, so it was nearly
+   invisible in light mode. Give it a white pill instead so it stands
+   out against the gradient, without touching .btn-primary elsewhere. */
+.hero-buttons .btn-primary{
+    background:#ffffff !important;
+    color:#0284c7 !important;
+}
+.hero-buttons .btn-primary:hover{
+    background:#f0f9ff !important;
+    filter:none;
+}
+body.dark-mode .hero-buttons .btn-primary{
+    background:#ffffff !important;
+    color:#0b3a6b !important;
+}
+body.dark-mode .hero-buttons .btn-primary:hover{
+    background:#dbeafe !important;
+}
+
+/* ============================================================
+   FLOATING HELP WIDGET (bottom-right, all pages)
+============================================================ */
+.fab-container{
+    position:fixed;
+    bottom:30px;
+    right:30px;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:14px;
+    z-index:1500;
+}
+
+.fab-hint{
+    background:#fff;
+    color:#0284c7;
+    font-weight:700;
+    font-size:15px;
+    padding:10px 18px;
+    border-radius:999px;
+    box-shadow:0 4px 14px rgba(0,0,0,.12);
+    cursor:pointer;
+    white-space:nowrap;
+    transition:opacity .2s ease, transform .2s ease;
+}
+.fab-hint.hidden{ opacity:0; transform:translateX(10px); pointer-events:none; }
+body.dark-mode .fab-hint{ background:#0b1f3f; color:#7dd3fc; }
+
+.fab-menu{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:12px;
+    transform:translateY(10px);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+}
+.fab-menu.open{ opacity:1; transform:translateY(0); pointer-events:auto; }
+
+.fab-menu-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+    color:#fff;
+    font-weight:700;
+    font-size:15px;
+    padding:12px 22px;
+    border-radius:999px;
+    box-shadow:0 4px 14px rgba(0,0,0,.15);
+    border:none;
+    cursor:pointer;
+    transition:transform .15s ease, filter .15s ease;
+}
+.fab-menu-item:hover{ transform:translateY(-2px); filter:brightness(1.05); }
+.fab-menu-item svg{ width:20px; height:20px; flex-shrink:0; }
+.fab-telegram{ background:#229ED9; }
+.fab-support{ background:#0b1f3f; }
+
+/* widget labels stay white in dark mode (beats the global .dark-mode a rule) */
+body.dark-mode .fab-menu-item,
+body.dark-mode a.fab-menu-item,
+body.dark-mode .fab-menu-item:visited{
+    color:#ffffff !important;
+}
+
+.fab-button{
+    width:60px; height:60px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#0284c7,#2563eb);
+    box-shadow:0 6px 18px rgba(2,132,199,.45);
+    border:none;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    transition:transform .2s ease;
+}
+.fab-button:hover{ transform:scale(1.05); }
+.fab-button::before{
+    content:"";
+    position:absolute;
+    width:92px; height:92px;
+    border-radius:50%;
+    background:rgba(2,132,199,.15);
+    z-index:-1;
+    animation:fabRingPulse 2s infinite;
+}
+@keyframes fabRingPulse{
+    0%{ transform:scale(.85); opacity:.9; }
+    70%{ transform:scale(1.25); opacity:0; }
+    100%{ transform:scale(.85); opacity:0; }
+}
+.fab-button::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    box-shadow:0 0 0 0 rgba(2,132,199,.55);
+    animation:fabBtnPulse 2s infinite;
+}
+@keyframes fabBtnPulse{
+    0%{ box-shadow:0 0 0 0 rgba(2,132,199,.55); }
+    70%{ box-shadow:0 0 0 14px rgba(2,132,199,0); }
+    100%{ box-shadow:0 0 0 0 rgba(2,132,199,0); }
+}
+.fab-button.open::before,
+.fab-button.open::after{ animation:none; box-shadow:none; opacity:0; }
+
+.fab-icon{
+    width:26px; height:26px;
+    color:#fff;
+    position:absolute;
+    transition:opacity .15s ease, transform .15s ease;
+}
+.fab-icon.chat{ opacity:1; transform:rotate(0deg); }
+.fab-icon.close{ opacity:0; transform:rotate(-90deg); }
+.fab-button.open .fab-icon.chat{ opacity:0; transform:rotate(90deg); }
+.fab-button.open .fab-icon.close{ opacity:1; transform:rotate(0deg); }
+
+.live-dot{
+    position:relative;
+    width:10px; height:10px;
+    border-radius:50%;
+    background:#2ecc71;
+    flex-shrink:0;
+    animation:livePulse 1.6s infinite;
+}
+@keyframes livePulse{
+    0%{ box-shadow:0 0 0 0 rgba(46,204,113,.6); }
+    70%{ box-shadow:0 0 0 8px rgba(46,204,113,0); }
+    100%{ box-shadow:0 0 0 0 rgba(46,204,113,0); }
+}
+.live-dot::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    background:#2ecc71;
+    animation:liveBlink 1.6s infinite;
+}
+@keyframes liveBlink{
+    0%,100%{ opacity:1; }
+    50%{ opacity:.3; }
+}
+
+@media(max-width:640px){
+    .fab-container{ bottom:18px; right:16px; gap:10px; }
+    .fab-button{ width:54px; height:54px; }
+    .fab-hint{ font-size:13px; padding:8px 14px; }
+    .fab-menu-item{ font-size:14px; padding:11px 18px; }
+}
+
+body.video-playing .fab-button::before,
+body.video-playing .fab-button::after,
+body.video-playing .live-dot,
+body.video-playing .live-dot::after{
+    animation:none !important;
+}
+
+/* ============================================================
+   HELP WIDGET — "Need Help?" beside the button (paste at the
+   BOTTOM of assets/css/aurora.css)
+============================================================ */
+.fab-container{
+    flex-direction:row;
+    align-items:center;
+    gap:12px;
+}
+.fab-menu{
+    position:absolute;
+    bottom:calc(100% + 12px);
+    right:0;
+    z-index:2;
+}
+.fab-button{ flex-shrink:0; }

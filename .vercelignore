@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+.git
+.vercel
+node_modules
+dist
+database
+server/*.test.mjs
+server/schema-check.mjs
+*.md

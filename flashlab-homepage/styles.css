@@ -1,0 +1,101 @@
+/* Add or modify CSS rules to style the receipt elements */
+.receipt-panel {
+  /* Layout and typography styles */
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #333;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  margin-top: 20px;
+  max-width: 400px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.receipt-header {
+  background-color: #333;
+  padding: 10px 0;
+  margin-bottom: 20px;
+}
+
+.binance-logo {
+  width: 50px;
+  height: 50px;
+  vertical-align: middle;
+}
+
+.binance-wordmark {
+  color: #ffc107;
+  font-size: 24px;
+  font-weight: bold;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+.receipt-details {
+  margin-bottom: 20px;
+}
+
+.order-details, .participant-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.participant-details .column {
+  width: 45%;
+}
+
+.receipt-section {
+  margin-bottom: 20px;
+}
+
+.receipt-section h3 {
+  color: #777;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.receipt-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+}
+
+.receipt-section table, th, td {
+  border: 1px solid #ddd;
+  padding: 5px;
+  text-align: left;
+}
+
+.receipt-section th {
+  background-color: #f2f2f2;
+  color: #777;
+}
+
+.receipt-signature {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.receipt-signature .binance-logo {
+  width: 60px;
+  height: 60px;
+  margin-right: 20px;
+}
+
+.signature-metadata p {
+  margin: 5px 0;
+  color: #777;
+  font-size: 12px;
+}
+
+.receipt-footer p {
+  color: #999;
+  font-size: 12px;
+  margin-top: 20px;
+}

@@ -1,0 +1,22 @@
+{
+  "name": "2winprankz",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite flashlab-homepage --config vite.config.mjs --host 127.0.0.1 --strictPort",
+    "build": "vite build flashlab-homepage --config vite.config.mjs",
+    "start": "node server/main.mjs",
+    "test": "node --test server/*.test.mjs"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.15",
+    "vite": "^7.1.12"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.119.0",
+    "@vercel/functions": "3.11.0"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}
