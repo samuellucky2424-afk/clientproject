@@ -1,4 +1,4 @@
-const pages={ '/':'index', '/auth':'auth', '/dashboard':'dashboard', '/crypto':'crypto', '/terms':'terms' };
+const pages={ '/':'index', '/auth':'auth', '/dashboard':'dashboard', '/crypto':'crypto', '/terms':'terms', '/admin':'admin' };
 
 // Keep the browser URL clean while serving the existing HTML build files.
 export function pageRoutes(req,res,next){

@@ -94,3 +94,27 @@ npm.cmd run build
 Tests use the real SQL schema in PGlite and HTTP handlers with mocked providers. They cover account isolation, direct-write denial, payment mismatches, duplicate credits/debits, pricing, email retries, and refunds. A live morphly deposit replay check ran in a rolled-back transaction. No real payments were taken or recipient emails sent. Hosted checkout → webhook → credit → Resend still needs a sandbox test after private credentials are supplied. Browser automation was unavailable; local page/API delivery was checked over HTTP.
 
 References: [Flutterwave Standard](https://developer.flutterwave.com/docs/flutterwave-standard-1), [verification](https://developer.flutterwave.com/docs/transaction-verification), [webhooks](https://developer.flutterwave.com/docs/webhooks), [ExchangeRate-API](https://www.exchangerate-api.com/docs/free), [Supabase Auth](https://supabase.com/docs/reference/javascript/auth-getuser), [Resend idempotency](https://resend.com/docs/dashboard/emails/idempotency-keys).
+
+
+## Admin dashboard and V2V requests
+
+Apply `database/admin.sql` after the base `database/schema.sql` to add requests, referrals and admin reporting functions. Open `/admin` after signing in. Access requires either a server-managed `app_metadata.role` of `admin` or a user UUID in the server-only `ADMIN_USER_IDS` environment variable. Never grant access through user metadata. Set this variable in your deployment environment as well as locally.
+
+The dashboard reports all-time user wallet balances, verified deposits, net service-fee revenue (fees less refunds), confirmed fictional transfer counts, referred registrations, and users signed in within 30 days. User and activity lists paginate in groups of 50. Request notes are visible to the request owner. Referrals track registrations via a shareable signup link; no referral payouts are implemented.
+
+When a transfer fee exceeds wallet credit, the user reviews a server-priced NGN payment for the shortfall (minimum NGN 100). Verified payment credits the wallet once. The dashboard offers a link to restore transfer details; the user reviews a fresh quote and confirms. A payment alone never sends a preview email. These transfers remain fictional entertainment previews; cryptocurrency is not moved.
+
+CoreUI styling is adapted from the supplied React admin template using CoreUI's CSS in the existing Vite application. Its license is retained in `licenses/CoreUI-LICENSE.txt`.
+
+
+Apply `database/admin-controls.sql` after `admin.sql` for account moderation and administrator wallet credits. Admins can suspend, block and restore another user's access from the users table. Restrictions are checked on every authenticated application API call, including existing sessions. Both suspended and blocked accounts remain restricted until restored; this does not delete their Supabase identity. Verified payment webhooks still credit completed payments. Admins cannot restrict or credit themselves. Admin wallet credits require a USD amount and a reason, use an idempotent database transaction, appear in the wallet ledger and admin activity, and never inflate deposit or revenue totals. Credits cannot be subtracted through this control.
+
+
+## Feature menu and V2V pricing
+
+Apply `database/features.sql` after `admin-controls.sql`. The Features & V2V fee screen in `/admin` controls database-backed dashboard cards and the slide-out user menu. Built-in features are Crypto prank, New phone, and Video calling. Admins can add custom feature details or safe internal/HTTPS links, edit descriptions, change display order, and hide features. Custom feature listings do not create a checkout or third-party service integration automatically.
+
+Set the Video calling fee in USD before accepting new requests; it starts unset to avoid inventing a price. Users must provide full name, email and an international WhatsApp number. The displayed fee is checked against the database at submission and debited atomically with the new request and ledger entry. Retries do not charge again. Insufficient funds create no request and cause no debit; users can top up from the form. Fees are charged on submission, appear in wallet history and net revenue, and remain recorded on the request if pricing later changes. Existing requests remain available without retrospective charges. Hiding the video feature pauses new requests as well.
+
+
+Apply `database/admin-reporting-permissions.sql` after the admin schema to grant the server role read access to the specific Auth user columns used by admin reports. No Auth write access is granted. Restart the preview server after updating `.env`.

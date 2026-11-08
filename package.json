@@ -13,6 +13,7 @@
     "vite": "^7.1.12"
   },
   "dependencies": {
+    "@coreui/coreui": "5.9.1",
     "@supabase/supabase-js": "2.119.0",
     "@vercel/functions": "3.11.0"
   },

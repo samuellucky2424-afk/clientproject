@@ -1,124 +1,309 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f7faff">
-  <title>Dashboard Preview — 2winprankz</title>
-  <link rel="stylesheet" href="dashboard.css">
-</head>
-<body>
-  <header>
-    <a class="brand" href="/">2winprankz<span aria-hidden="true">✳</span></a>
-    <div class="header-right">
-      <a class="home" href="/">Home</a>
-      <button class="home" type="button" id="signOut">Sign out</button><span class="avatar" aria-label="Guest account">G</span>
-    </div>
-  </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7faff" />
+    <title>Dashboard Preview — 2winprankz</title>
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="/">2winprankz<span aria-hidden="true">✳</span></a>
+      <div class="header-right">
+        <button
+          class="home"
+          type="button"
+          id="openFeatureMenu"
+          aria-controls="featureMenu"
+          aria-expanded="false"
+        >
+          Menu
+        </button>
+        <a class="home" href="/">Home</a>
+        <button class="home" type="button" id="signOut">Sign out</button
+        ><span class="avatar" aria-label="Guest account">G</span>
+      </div>
+    </header>
 
-  <main>
-<p id="walletMessage" role="status"></p><button id="retryDeposit" type="button" hidden>Retry payment verification</button>
-    <section class="balance-card" aria-label="Wallet balance">
-      <div>
-        <span class="balance-label">Wallet balance</span>
-        <strong id="walletBalance">$0.00</strong>
-      </div>
-      <button class="top-up" id="topUp" type="button">Top-up</button>
-    </section>
-
-    <section class="intro" aria-labelledby="pageTitle">
-      <div>
-        <div class="eyebrow"><span class="live-dot" aria-hidden="true"></span> YOUR PRANK STUDIO</div>
-        <h1 id="pageTitle">Big reactions.<br><span>Just for fun.</span></h1>
-        <p>Explore fictional prank previews made for entertainment. Nothing here sends money or contacts anyone.</p>
-      </div>
-      <button class="motion" id="motion" type="button" aria-pressed="false">Ⅱ Pause reactions</button>
-    </section>
-
-    <section class="reaction-stage" aria-label="Fictional reaction preview">
-      <div class="stage-grid" aria-hidden="true"></div>
-      <div class="stage-label">
-        <strong>REACTION PREVIEW</strong>
-        <span>FICTIONAL · FOR ENTERTAINMENT</span>
-      </div>
-      <div class="stage-center" aria-hidden="true">
-        <span class="spark">✳</span>
-        <strong>Imagine the<br><em>reaction</em></strong>
-        <span class="sub">A LITTLE SURPRISE GOES A LONG WAY</span>
-      </div>
-      <div class="reactions" id="reactions" aria-hidden="true"></div>
-      <div class="stage-bottom">
-        <span>FICTIONAL REACTIONS</span>
-        <span>NO REAL TRANSFERS · NO MESSAGES SENT</span>
-      </div>
-    </section>
-
-    <div class="section-heading">
-      <h2>Choose a preview</h2>
-      <span>MADE FOR ENTERTAINMENT</span>
-    </div>
-    <section class="cards" aria-label="Prank previews">
-      <button class="prank-card" type="button" data-kind="video">
-        <span class="card-top">
-          <span class="letter">V<span aria-hidden="true">✳</span></span>
-          <span class="tag">FICTIONAL SCENARIO</span>
-        </span>
-        <span class="card-art" aria-hidden="true">
-          <span class="call-window">
-            <span class="call-dot"></span>Incoming surprise call
-            <span class="face">😲</span>
-            <span class="call-actions"><i>•••</i><i>●</i></span>
-          </span>
-          <span class="art-sticker">JUST FOR FUN</span>
-        </span>
-        <h3>Video prank</h3>
-        <p>Dream up a fictional surprise call and share a laugh. No calls are made.</p>
-        <span class="chips"><span>Surprise</span><span>For entertainment</span></span>
-        <span class="card-footer">Explore video preview <span aria-hidden="true">→</span></span>
+    <main>
+      <p id="walletMessage" role="status"></p>
+      <button id="retryDeposit" type="button" hidden>
+        Retry payment verification
       </button>
+      <section class="balance-card" aria-label="Wallet balance">
+        <div>
+          <span class="balance-label">Wallet balance</span>
+          <strong id="walletBalance">$0.00</strong>
+        </div>
+        <button class="top-up" id="topUp" type="button">Top-up</button>
+      </section>
 
-      <button class="prank-card crypto" type="button" data-kind="crypto">
-        <span class="card-top">
-          <span class="letter">C<span aria-hidden="true">✳</span></span>
-          <span class="tag">FICTIONAL PREVIEW</span>
-        </span>
-        <span class="card-art" aria-hidden="true">
-          <span class="coin one">₮</span>
-          <span class="coin two">₮</span>
-          <span class="reward">
-            <small>FICTIONAL PREVIEW</small>
-            <strong>0.00 <span>USDT</span></strong>
-            <span>NO CRYPTO SENT</span>
-          </span>
-          <span class="art-sticker">NOT A PAYMENT</span>
-        </span>
-        <h3>Crypto scenario</h3>
-        <p>Create a clearly labelled fictional transfer preview. No wallet is connected and no funds move.</p>
-        <span class="card-footer">Try now <span aria-hidden="true">→</span></span>
+      <section class="intro" aria-labelledby="pageTitle">
+        <div>
+          <div class="eyebrow">
+            <span class="live-dot" aria-hidden="true"></span> YOUR PRANK STUDIO
+          </div>
+          <h1 id="pageTitle">Big reactions.<br /><span>Just for fun.</span></h1>
+          <p>
+            Explore fictional prank previews made for entertainment. Nothing
+            here sends money or contacts anyone.
+          </p>
+        </div>
+        <button class="motion" id="motion" type="button" aria-pressed="false">
+          Ⅱ Pause reactions
+        </button>
+      </section>
+
+      <section class="reaction-stage" aria-label="Fictional reaction preview">
+        <div class="stage-grid" aria-hidden="true"></div>
+        <div class="stage-label">
+          <strong>REACTION PREVIEW</strong>
+          <span>FICTIONAL · FOR ENTERTAINMENT</span>
+        </div>
+        <div class="stage-center" aria-hidden="true">
+          <span class="spark">✳</span>
+          <strong>Imagine the<br /><em>reaction</em></strong>
+          <span class="sub">A LITTLE SURPRISE GOES A LONG WAY</span>
+        </div>
+        <div class="reactions" id="reactions" aria-hidden="true"></div>
+        <div class="stage-bottom">
+          <span>FICTIONAL REACTIONS</span>
+          <span>NO REAL TRANSFERS · NO MESSAGES SENT</span>
+        </div>
+      </section>
+
+      <div class="section-heading">
+        <h2>Explore features</h2>
+        <span>MADE FOR ENTERTAINMENT</span>
+      </div>
+      <p id="featureLoadMessage" role="status"></p>
+      <section class="cards" id="featureCards" aria-label="Available features">
+        <button
+          class="prank-card crypto"
+          type="button"
+          data-feature-slug="crypto"
+          data-kind="crypto"
+        >
+          <span class="card-top"
+            ><span class="letter"
+              >C<span aria-hidden="true">&#10035;</span></span
+            ><span class="tag">FICTIONAL PREVIEW</span></span
+          >
+          <span class="card-art" aria-hidden="true"
+            ><span class="coin one">&#8366;</span
+            ><span class="coin two">&#8366;</span
+            ><span class="reward"
+              ><small>FICTIONAL PREVIEW</small
+              ><strong>0.00 <span>USDT</span></strong
+              ><span>NO CRYPTO SENT</span></span
+            ><span class="art-sticker">NOT A PAYMENT</span></span
+          >
+          <h3>Crypto flash prank</h3>
+          <p>
+            Create a clearly labelled fictional crypto transfer preview. No
+            cryptocurrency moves.
+          </p>
+          <span class="card-footer"
+            >Try crypto preview <span aria-hidden="true">&#8594;</span></span
+          >
+        </button>
+        <button
+          class="prank-card"
+          type="button"
+          data-feature-slug="video"
+          data-kind="video"
+        >
+          <span class="card-top"
+            ><span class="letter"
+              >V<span aria-hidden="true">&#10035;</span></span
+            ><span class="tag">V2V CALL REQUEST</span></span
+          >
+          <span class="card-art" aria-hidden="true"
+            ><span class="call-window"
+              ><span class="call-dot"></span>Incoming surprise call<span
+                class="face"
+                >&#128562;</span
+              ><span class="call-actions"
+                ><i>&bull;&bull;&bull;</i><i>&#9679;</i></span
+              ></span
+            ><span class="art-sticker">JUST FOR FUN</span></span
+          >
+          <h3>V2V prank</h3>
+          <p>
+            Submit a video call prank request and track its progress with our
+            team.
+          </p>
+          <span class="chips"
+            ><span>Video calling</span><span>For entertainment</span></span
+          ><span class="card-footer"
+            >Request a V2V call <span aria-hidden="true">&#8594;</span></span
+          >
+        </button>
+      </section>
+
+      <section class="wallet-history" aria-labelledby="historyTitle">
+        <div class="section-heading">
+          <h2 id="historyTitle">Wallet activity</h2>
+          <button id="refreshHistory" class="motion" type="button">
+            Refresh
+          </button>
+        </div>
+        <p id="historyMessage" role="status"></p>
+        <div id="walletHistory"></div>
+      </section>
+      <section class="wallet-history">
+        <div class="section-heading">
+          <h2>Your V2V requests</h2>
+          <button id="newVideoRequest" class="motion">New request</button>
+        </div>
+        <div id="videoRequests" role="status"></div>
+      </section>
+      <section class="wallet-history">
+        <h2 id="referralsTitle">Referrals</h2>
+        <p>
+          Share your link with friends. Referral counts track registrations; no
+          reward is currently offered.
+        </p>
+        <input id="referralLink" aria-label="Your referral link" readonly />
+        <p id="referralCount" role="status"></p>
+      </section>
+    </main>
+
+    <dialog id="choice" aria-labelledby="choiceTitle">
+      <button class="close" type="button" aria-label="Close dialog">×</button>
+      <h2 id="choiceTitle">Preview</h2>
+      <p id="choiceText"></p>
+      <button class="dialog-done" type="button">Got it</button>
+    </dialog>
+
+    <dialog id="topUpDialog" aria-labelledby="topUpTitle">
+      <button class="close" type="button" aria-label="Close dialog">×</button>
+      <h2 id="topUpTitle">Fund your wallet</h2>
+      <p>
+        Pay securely through Flutterwave. Your wallet is credited after payment
+        verification.
+      </p>
+      <form id="topUpForm">
+        <label for="topUpAmount">Deposit amount (NGN)</label>
+        <input
+          id="topUpAmount"
+          type="number"
+          min="100"
+          max="1000000"
+          step="0.01"
+          placeholder="0.00"
+          required
+        />
+        <button class="dialog-done" type="submit">Review deposit</button>
+        <p id="depositMessage" role="status"></p>
+        <div id="depositQuote" hidden>
+          <p id="depositQuoteText"></p>
+          <button class="dialog-done" id="depositCheckout" type="button">
+            Pay with Flutterwave
+          </button>
+        </div>
+        <p class="hint">
+          <a
+            href="https://www.exchangerate-api.com"
+            target="_blank"
+            rel="noopener"
+            >Rates By Exchange Rate API</a
+          >
+        </p>
+      </form>
+    </dialog>
+
+    <dialog id="featureMenu" aria-labelledby="featureMenuTitle">
+      <div class="feature-menu-heading">
+        <h2 id="featureMenuTitle">Explore 2winprankz</h2>
+        <button
+          id="closeFeatureMenu"
+          type="button"
+          class="motion"
+          aria-label="Close menu"
+        >
+          Close
+        </button>
+      </div>
+      <p>Everything in your prank studio.</p>
+      <nav id="featureMenuLinks" aria-label="Website features"></nav>
+      <hr />
+      <nav aria-label="Account">
+        <button type="button" id="menuWallet">Top up wallet</button
+        ><a href="#historyTitle">Wallet activity</a
+        ><a href="#referralsTitle">Referrals</a>
+      </nav>
+      <p id="featureMenuMessage" role="status"></p>
+    </dialog>
+    <dialog id="featureDetails" aria-labelledby="featureDetailsTitle">
+      <button class="close" aria-label="Close service details" type="button">
+        &times;
       </button>
-    </section>
-
-    <section class="wallet-history" aria-labelledby="historyTitle"><div class="section-heading"><h2 id="historyTitle">Wallet activity</h2><button id="refreshHistory" class="motion" type="button">Refresh</button></div><p id="historyMessage" role="status"></p><div id="walletHistory"></div></section>
-  </main>
-
-  <dialog id="choice" aria-labelledby="choiceTitle">
-    <button class="close" type="button" aria-label="Close dialog">×</button>
-    <h2 id="choiceTitle">Preview</h2>
-    <p id="choiceText"></p>
-    <button class="dialog-done" type="button">Got it</button>
-  </dialog>
-
-  <dialog id="topUpDialog" aria-labelledby="topUpTitle">
-    <button class="close" type="button" aria-label="Close dialog">×</button>
-    <h2 id="topUpTitle">Fund your wallet</h2>
-    <p>Pay securely through Flutterwave. Your wallet is credited after payment verification.</p>
-    <form id="topUpForm">
-      <label for="topUpAmount">Deposit amount (NGN)</label>
-      <input id="topUpAmount" type="number" min="100" max="1000000" step="0.01" placeholder="0.00" required>
-      <button class="dialog-done" type="submit">Review deposit</button>
-    <p id="depositMessage" role="status"></p><div id="depositQuote" hidden><p id="depositQuoteText"></p><button class="dialog-done" id="depositCheckout" type="button">Pay with Flutterwave</button></div><p class="hint"><a href="https://www.exchangerate-api.com" target="_blank" rel="noopener">Rates By Exchange Rate API</a></p></form>
-  </dialog>
-
-  <script type="module" src="dashboard.js"></script>
-</body>
+      <h2 id="featureDetailsTitle"></h2>
+      <p id="featureDetailsText"></p>
+      <button class="dialog-done" type="button">Close</button>
+    </dialog>
+    <dialog id="videoDialog" aria-labelledby="videoTitle">
+      <button class="close" type="button" aria-label="Close request">
+        &times;
+      </button>
+      <h2 id="videoTitle">Request a V2V call prank</h2>
+      <p>
+        Submit your brief for admin review. Arrange the call with consenting
+        participants; no call starts automatically.
+      </p>
+      <p id="videoFee" role="status">Loading the current fee...</p>
+      <form id="videoForm">
+        <label
+          >Full name<input
+            name="fullName"
+            autocomplete="name"
+            minlength="2"
+            maxlength="100"
+            required /></label
+        ><label
+          >Email address<input
+            name="email"
+            type="email"
+            autocomplete="email"
+            maxlength="254"
+            required /></label
+        ><label
+          >WhatsApp number (with country code)<input
+            name="whatsapp"
+            type="tel"
+            autocomplete="tel"
+            placeholder="+2348012345678"
+            pattern="\+[1-9][0-9]{7,14}"
+            maxlength="24"
+            required /></label
+        ><label
+          >Request title<input
+            name="title"
+            minlength="3"
+            maxlength="100"
+            required /></label
+        ><label
+          >Call idea and preferred time<textarea
+            name="details"
+            minlength="10"
+            maxlength="2000"
+            rows="4"
+            required
+          ></textarea></label
+        ><label
+          ><input id="videoConsent" type="checkbox" required /> I will arrange
+          consent from call participants and agree to the fee shown above,
+          charged on submission.</label
+        ><button id="submitVideo" class="dialog-done" type="submit" disabled>
+          Submit request</button
+        ><button id="videoTopUp" class="motion" type="button">
+          Top up wallet
+        </button>
+        <p id="videoMessage" role="status"></p>
+      </form>
+    </dialog>
+    <script type="module" src="dashboard.js"></script>
+  </body>
 </html>

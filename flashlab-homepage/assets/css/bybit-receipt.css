@@ -1,0 +1,29 @@
+/* Reference-inspired mobile layout, explicitly labelled as a fictional demo. */
+.bybit-receipt{display:none}
+#receiptPanel[data-platform="bybit"]{background:#fff;padding:0;border:1px solid #e7e9ed;border-radius:12px}
+#receiptPanel[data-platform="bybit"]>.receipt{display:none}
+#receiptPanel[data-platform="bybit"] .bybit-receipt{display:block;max-width:554px;margin:0 auto;padding:20px 27px 16px;background:#fff;color:#17191b;font-family:Arial,"Segoe UI",sans-serif}
+.bybit-demo{padding:10px 8px;border:1px solid #edce88;border-radius:6px;background:#fff7e5;color:#825900;text-align:center;font-size:11px;line-height:1.5;font-weight:700;letter-spacing:.4px}
+.bybit-result{text-align:center;padding:24px 0 39px}
+.bybit-check{display:block;width:80px;height:80px;margin:0 auto 24px}
+.bybit-result h2{font-size:24px;font-weight:700;line-height:1.2;margin:0 0 12px;letter-spacing:0}
+.bybit-amount{font-size:38px;line-height:1.2;font-weight:700;letter-spacing:-.5px;overflow-wrap:anywhere}
+.bybit-info{margin:0;background:#f5f6f8;border-radius:10px;padding:17px 18px 4px}
+.bybit-info>div{display:grid;grid-template-columns:minmax(95px,.8fr) minmax(0,1.4fr);gap:16px;align-items:start;padding:14px 0;min-height:54px}
+.bybit-info dt{color:#868b92;font-size:16px;font-weight:400;line-height:1.5;margin:0}
+.bybit-info dd{margin:0;text-align:right;font-size:16px;line-height:1.5;font-weight:600;min-width:0;overflow-wrap:anywhere}
+.bybit-info .bybit-receiver-row{min-height:76px;padding-top:4px}
+.bybit-receiver-row strong{font-size:20px;color:#60666b;display:block;line-height:1.4}
+.bybit-receiver-row small{display:block;color:#777e85;font-size:13px;font-weight:400;margin-top:4px}
+.bybit-order{display:flex;justify-content:flex-end;gap:8px;align-items:center}
+#bybitOrder{font-size:12px;font-weight:400;line-height:1.5}
+#copyBybitOrder{border:0;background:none;color:#17191b;padding:2px;flex-shrink:0;cursor:pointer}
+#copyBybitOrder svg{width:19px;height:19px;display:block}
+.bybit-actions{display:grid;grid-template-columns:1.17fr 1fr;gap:27px;margin-top:46px}
+.bybit-actions button{min-height:55px;padding:12px 10px;border:1px solid #d9dce1;border-radius:10px;background:#fff;color:#151719;font-family:inherit;font-size:18px;font-weight:700;line-height:1.25;cursor:pointer}
+.bybit-actions .bybit-download{background:#f7a600;border-color:#f7a600;opacity:1;cursor:default;display:flex;align-items:center;justify-content:center;gap:7px}
+.bybit-download svg{width:18px;height:18px;flex-shrink:0}
+.bybit-footnote{font-size:11px;color:#777e85;line-height:1.6;text-align:center;margin:17px 0 0}
+#receiptPanel[data-platform="bybit"]>.receipt-extra{max-width:500px;margin:18px auto;padding:0 20px}
+@media(max-width:1100px) and (min-width:701px){#receiptPanel[data-platform="bybit"] .bybit-receipt{padding:16px}.bybit-actions{gap:12px}.bybit-actions button{font-size:14px}.bybit-info dt,.bybit-info dd{font-size:13px}.bybit-info>div{gap:8px;grid-template-columns:minmax(80px,.7fr) minmax(0,1.3fr)}}
+@media(max-width:400px){#receiptPanel[data-platform="bybit"] .bybit-receipt{padding:16px}.bybit-amount{font-size:32px}.bybit-actions{gap:12px;margin-top:30px}.bybit-actions button{font-size:14px}.bybit-info{padding:14px 12px 4px}.bybit-info dt,.bybit-info dd{font-size:13px}.bybit-receiver-row strong{font-size:16px}.bybit-info>div{gap:8px;grid-template-columns:minmax(82px,.75fr) minmax(0,1.25fr)}}

@@ -8,10 +8,11 @@ byId('authForm').onsubmit=async event=>{
  byId('submit').disabled=true;byId('message').textContent='Connecting…';
  try{
   const client=await authClient();const credentials={email:byId('email').value.trim(),password:byId('password').value};
-  const result=signup?await client.auth.signUp({...credentials,options:{emailRedirectTo:`${location.origin}/auth`,data:{display_name:byId('name').value.trim(),terms_accepted_at:new Date().toISOString()}}}):await client.auth.signInWithPassword(credentials);
+  const result=signup?await client.auth.signUp({...credentials,options:{emailRedirectTo:`${location.origin}/auth`,data:{display_name:byId('name').value.trim(),terms_accepted_at:new Date().toISOString(),referrer:new URLSearchParams(location.search).get('ref')||undefined}}}):await client.auth.signInWithPassword(credentials);
   if(result.error)throw result.error;
   byId('password').value='';
-  if(result.data.session)location.href='/dashboard';else byId('message').textContent='Check your email to confirm your account, then log in.';
+  if(result.data.session)location.href=result.data.user.app_metadata?.role==='admin'?'/admin':'/dashboard';else byId('message').textContent='Check your email to confirm your account, then log in.';
  }catch(error){byId('message').textContent=error.message;}finally{byId('submit').disabled=signup&&!byId('agreeTerms').checked;}
 };
-if(new URLSearchParams(location.search).get('mode')==='signup')setMode(true);
+setMode(new URLSearchParams(location.search).get('mode')==='signup');
+byId('authPanel').hidden=false;byId('authLoading').hidden=true;

@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Admin | 2winprankz</title>
+  </head>
+  <body>
+    <aside class="admin-sidebar">
+      <a class="brand" href="/admin">2winprankz <small>ADMIN CONSOLE</small></a
+      ><span class="nav-label">WORKSPACE</span>
+      <nav>
+        <a href="#overview">Overview</a
+        ><a href="#features">Features &amp; V2V fee</a
+        ><a href="#requests">V2V requests</a
+        ><a href="#users">Registered users</a
+        ><a href="#transactions">Transactions</a
+        ><a href="#referrals">Referrals</a>
+      </nav>
+      <a class="back" href="/dashboard">Back to user dashboard</a
+      ><small class="template-credit">Design adapted from CoreUI</small>
+    </aside>
+    <div class="admin-shell">
+      <header class="admin-header">
+        <button
+          id="menu"
+          class="btn btn-light"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+        >
+          Menu</button
+        ><span>Administration</span>
+        <div class="header-actions">
+          <button id="refresh" class="btn btn-light">Refresh data</button
+          ><span class="avatar">A</span
+          ><button id="signOut" class="btn btn-outline-secondary">
+            Sign out
+          </button>
+        </div>
+      </header>
+      <main>
+        <div class="page-heading">
+          <div>
+            <p class="breadcrumb-copy">Admin / Dashboard</p>
+            <h1>Dashboard</h1>
+            <p class="text-body-secondary">
+              Your users, service activity and requests in one place.
+            </p>
+          </div>
+          <span id="updated" class="text-body-secondary"></span>
+        </div>
+        <p id="message" role="status">Checking administrator access...</p>
+        <div id="adminContent" hidden>
+          <section
+            id="overview"
+            class="metrics"
+            aria-label="Platform totals"
+          ></section>
+          <section class="card mb-4">
+            <div class="card-body">
+              <div class="section-top">
+                <div>
+                  <h2>Revenue overview</h2>
+                  <p class="text-body-secondary">
+                    Net service fees ? last 14 days ? USD
+                  </p>
+                </div>
+                <span class="badge text-bg-primary">LIVE DATA</span>
+              </div>
+              <div id="chart" class="revenue-chart"></div>
+            </div>
+          </section>
+          <section id="features" class="card mb-4">
+            <div class="card-header">
+              <h2>Dashboard features &amp; V2V fee</h2>
+              <span
+                >Manage the user menu and dashboard cards. V2V fees are charged
+                in USD wallet credits on submission.</span
+              >
+            </div>
+            <div class="card-body">
+              <div id="featureList"></div>
+              <hr />
+              <h3 id="featureFormTitle" class="h6">Add a feature</h3>
+              <form id="featureForm" class="feature-form">
+                <input id="featureId" type="hidden" /><label
+                  >Feature name<input
+                    id="featureTitle"
+                    class="form-control"
+                    minlength="2"
+                    maxlength="80"
+                    required /></label
+                ><label
+                  >Description / service details<textarea
+                    id="featureDescription"
+                    class="form-control"
+                    maxlength="1500"
+                    rows="3"
+                    required
+                  ></textarea></label
+                ><label
+                  >When selected<select id="featureAction" class="form-select">
+                    <option value="details">Show service details</option>
+                    <option value="link">Open service page</option>
+                    <option value="crypto" disabled>Crypto prank</option>
+                    <option value="video" disabled>V2V request form</option>
+                  </select></label
+                ><label id="featureUrlField" hidden
+                  >Service link<input
+                    id="featureUrl"
+                    class="form-control"
+                    maxlength="500"
+                    placeholder="/service-page or https://..." /></label
+                ><label id="featureFeeField" hidden
+                  >V2V fee (USD)<input
+                    id="featureFee"
+                    class="form-control"
+                    type="number"
+                    min="0.01"
+                    max="1000000"
+                    step="0.01"
+                  /><small
+                    >Leave blank to pause new V2V requests until a fee is set.
+                    Existing requests keep their original fee.</small
+                  ></label
+                ><label
+                  >Display order<input
+                    id="featureOrder"
+                    class="form-control"
+                    type="number"
+                    min="0"
+                    max="9999"
+                    value="40"
+                    required /></label
+                ><label
+                  ><input id="featureEnabled" type="checkbox" checked /> Visible
+                  on the user dashboard and menu</label
+                >
+                <div class="d-flex gap-2">
+                  <button id="saveFeature" class="btn btn-primary">
+                    Save feature</button
+                  ><button
+                    id="resetFeature"
+                    class="btn btn-light"
+                    type="button"
+                  >
+                    Add another feature
+                  </button>
+                </div>
+                <p id="featureMessage" role="status"></p>
+              </form>
+            </div>
+          </section>
+          <section id="requests" class="card mb-4">
+            <div class="card-header">
+              <h2>V2V call requests</h2>
+              <span>Review briefs and update their progress</span>
+            </div>
+            <div id="requestList" class="card-body"></div>
+          </section>
+          <section id="users" class="card mb-4">
+            <div class="card-header">
+              <h2>Registered users</h2>
+              <span
+                >Balances in USD ? active means signed in within 30 days</span
+              >
+            </div>
+            <div class="table-responsive">
+              <table class="table align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Joined</th>
+                    <th>Balance</th>
+                    <th>Activity / account</th>
+                    <th>Referrals</th>
+                    <th>Manage</th>
+                  </tr>
+                </thead>
+                <tbody id="userList"></tbody>
+              </table>
+            </div>
+            <div class="card-footer pagination-controls">
+              <button id="prevUsers" class="btn btn-light">Previous</button
+              ><span id="userPage"></span
+              ><button id="nextUsers" class="btn btn-light">Next</button>
+            </div>
+          </section>
+          <section id="transactions" class="card mb-4">
+            <div class="card-header">
+              <h2>Transactions & deposits</h2>
+              <span>Fictional transfer service fees and wallet funding</span>
+            </div>
+            <div class="table-responsive">
+              <table class="table mb-0">
+                <thead>
+                  <tr>
+                    <th>Reference</th>
+                    <th>Type</th>
+                    <th>Value</th>
+                    <th>Fee / credit</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="transactionList"></tbody>
+              </table>
+            </div>
+          </section>
+          <section id="referrals" class="card mb-4">
+            <div class="card-header"><h2>Referrals</h2></div>
+            <div id="referralList" class="card-body"></div>
+          </section>
+          <div class="pagination-controls mb-4">
+            <button id="prevActivity" class="btn btn-light">
+              Previous activity</button
+            ><span id="activityPage"></span
+            ><button id="nextActivity" class="btn btn-light">
+              Next activity
+            </button>
+          </div>
+        </div>
+        <footer>
+          2winprankz administration <a href="https://coreui.io">CoreUI</a>
+        </footer>
+      </main>
+    </div>
+    <dialog id="manageUser" aria-labelledby="manageTitle">
+      <h2 id="manageTitle">Manage user</h2>
+      <p id="manageDetails"></p>
+      <form id="manageForm">
+        <div id="statusField">
+          <label class="form-label" for="accountState">Account status</label
+          ><select id="accountState" class="form-select">
+            <option value="active">Active - restore access</option>
+            <option value="suspended">
+              Suspended - restrict access until restored
+            </option>
+            <option value="blocked">Blocked - deny account access</option>
+          </select>
+        </div>
+        <div id="creditField" hidden>
+          <label class="form-label" for="creditAmount"
+            >Top-up amount (USD)</label
+          ><input
+            id="creditAmount"
+            type="number"
+            min="0.01"
+            max="1000000"
+            step="0.01"
+            class="form-control"
+          />
+          <p class="text-body-secondary">
+            This adds real service credits to the selected wallet. It is
+            recorded separately from paid deposits.
+          </p>
+        </div>
+        <label class="form-label mt-3" for="manageReason">Reason</label
+        ><textarea
+          id="manageReason"
+          minlength="5"
+          maxlength="500"
+          required
+          class="form-control"
+        ></textarea>
+        <p id="manageError" role="alert"></p>
+        <div class="d-flex gap-2 mt-3">
+          <button type="button" id="cancelManage" class="btn btn-light">
+            Cancel</button
+          ><button id="saveManage" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </dialog>
+    <script type="module" src="admin.js"></script>
+  </body>
+</html>

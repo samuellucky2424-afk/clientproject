@@ -6,7 +6,7 @@ import {cp,mkdir} from 'node:fs/promises';
 import {pageRoutes} from './server/routes.mjs';
 export default defineConfig(({mode})=>({
  appType:'mpa',
- build:{outDir:resolve('dist'),rollupOptions:{input:Object.fromEntries(['index','auth','dashboard','crypto','terms'].map(name=>[name,resolve(`flashlab-homepage/${name}.html`)]))}},
+ build:{outDir:resolve('dist'),rollupOptions:{input:Object.fromEntries(['index','auth','dashboard','crypto','terms','admin'].map(name=>[name,resolve(`flashlab-homepage/${name}.html`)]))}},
  plugins:[{name:'application-api',async closeBundle(){
   await cp(resolve('flashlab-homepage/assets/logos'),resolve('dist/assets/logos'),{recursive:true});
   await mkdir(resolve('dist/assets/images'),{recursive:true});

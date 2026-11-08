@@ -104,7 +104,8 @@ byId('asset').onchange = () => {
 
 let pendingQuote;
 let transferRequestKey=crypto.randomUUID();
-setupAccount().catch(error=>byId('transferMessage').textContent=error.message);
+const bybitDemo=import.meta.env.DEV&&new URLSearchParams(location.search).get('preview')==='bybit';
+if(!bybitDemo)setupAccount().catch(error=>byId('transferMessage').textContent=error.message);
 const api=apiJson;
 byId('cryptoForm').onsubmit = async event => {
  event.preventDefault();
@@ -116,6 +117,8 @@ byId('cryptoForm').onsubmit = async event => {
   for(const [label,value] of [['Platform',pendingQuote.platform],['Amount',`${pendingQuote.amount} ${pendingQuote.coin}`],['Network',pendingQuote.network],['Recipient address',pendingQuote.address],['Recipient email',pendingQuote.email],['Transfer value (USD)',`$${pendingQuote.usdValue.toFixed(2)}`],['Rate (CoinGecko)',`1 ${pendingQuote.coin} = $${pendingQuote.usdRate} USD`],['Rate updated',pendingQuote.priceTimestamp],['Service fee (1%)',`$${pendingQuote.fee.toFixed(2)} USD`]]) {
    const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=value;byId('confirmDetails').append(dt,dd);
   }
+  renderBybitReceipt(pendingQuote);
+  await updatePaymentOptions();
   byId('receiptPanel').hidden=false; byId('confirmError').textContent='';byId('transferMessage').textContent='';byId('confirmTransfer').showModal();
  } catch(error) {byId('transferMessage').textContent=error.message;} finally{button.disabled=false;}
 };
@@ -127,14 +130,16 @@ byId('sendTransfer').onclick=async()=>{
  try {
   const completed=await api('/api/transfers/confirm',{id:pendingQuote.id});
   byId('confirmTransfer').close();
+  sessionStorage.removeItem('pendingTransfer');
   renderCompleted(completed);
   byId('transferMessage').textContent=`Preview queued. Service fee charged. Balance: $${completed.balance.toFixed(2)} USD.`;
   transferRequestKey=crypto.randomUUID();
   void trackDelivery(completed.id);
   pendingQuote=null;
- }catch(error){byId('confirmError').textContent=error.message;}finally{byId('sendTransfer').disabled=false;byId('cancelTransfer').disabled=false;}
+ }catch(error){byId('confirmError').textContent=error.message;try{await updatePaymentOptions();}catch{}}finally{byId('sendTransfer').disabled=false;byId('cancelTransfer').disabled=false;}
 };
 function renderCompleted(completed) {
+  renderBybitReceipt(completed);
   activeDeliveryId=completed.id;
   byId('amountSummary').textContent=`${completed.amount} ${completed.coin}`;
   byId('receiptTotal').textContent=`${completed.amount} ${completed.coin}`;
@@ -183,4 +188,37 @@ async function trackDelivery(id){
   }catch{break;}
  }
  byId('transferMessage').textContent='Email is queued. Its delivery status is available in your account history.';
+}
+
+let transferPayment,transferPaymentKey=crypto.randomUUID();
+async function updatePaymentOptions(){const wallet=await api('/api/wallet');const insufficient=wallet.balance<pendingQuote.fee;byId('sendTransfer').hidden=insufficient;byId('payTransfer').hidden=!insufficient;byId('transferPaymentQuote').hidden=true;transferPayment=null;transferPaymentKey=crypto.randomUUID();byId('payTransfer').textContent=insufficient?`Pay fee ? wallet short by $${(pendingQuote.fee-wallet.balance).toFixed(2)}`:'Pay service fee';}
+byId('payTransfer').onclick=async()=>{byId('payTransfer').disabled=true;try{transferPayment=await api('/api/transfers/payment',{id:pendingQuote.id,requestKey:transferPaymentKey});byId('transferPaymentText').textContent=`Pay NGN ${transferPayment.ngnAmount.toFixed(2)} to add $${transferPayment.usdCredit.toFixed(2)} to your wallet for the service fee. Minimum payment is NGN 100; remaining credit stays in your wallet. After payment, return to review the latest transfer price and confirm.`;byId('transferPaymentQuote').hidden=false;byId('confirmError').textContent='';}catch(error){byId('confirmError').textContent=error.message;}finally{byId('payTransfer').disabled=false;}};
+byId('transferCheckout').onclick=async()=>{if(!transferPayment||!pendingQuote)return;byId('transferCheckout').disabled=true;try{sessionStorage.setItem('pendingTransfer',JSON.stringify(pendingQuote));const result=await api('/api/deposits/checkout',{id:transferPayment.id});location.assign(result.url);}catch(error){byId('confirmError').textContent=error.message;byId('transferCheckout').disabled=false;}};
+if(new URLSearchParams(location.search).get('resume')==='1'){
+ try{const saved=JSON.parse(sessionStorage.getItem('pendingTransfer'));if(saved){const asset=assets.find(a=>a.coin===saved.coin);if(asset)choose(asset);for(const button of document.querySelectorAll('#platforms .pair'))if(button.querySelector('b').textContent===saved.platform)button.click();byId('amount').value=saved.amount;byId('network').value=saved.network;byId('address').value=saved.address;byId('email').value=saved.email;update();byId('transferMessage').textContent='Your transfer details are restored. Review the latest price and confirm to use your wallet credits.';}}catch{byId('transferMessage').textContent='Could not restore transfer details. Please enter them again.';}
+}
+
+function renderBybitReceipt(transfer){
+ byId('receiptPanel').dataset.platform=logoNames[transfer.platform];
+ if(transfer.platform!=='Bybit')return;
+ const amount=new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:8,useGrouping:false}).format(Number(transfer.amount));
+ byId('bybitAmount').textContent=`${amount} ${transfer.coin}`;
+ byId('bybitTotal').textContent=`${amount} ${transfer.coin}`;
+ const [local,domain]=transfer.email.split('@');
+ byId('bybitReceiver').textContent=`${local.slice(0,2)}***@${domain.slice(0,2)}***`;
+ byId('bybitAddress').textContent=`${transfer.address.slice(0,5)}...${transfer.address.slice(-4)} (sample address)`;
+ byId('bybitDate').textContent=new Date(transfer.timestamp||transfer.priceTimestamp).toISOString().slice(0,19).replace('T',' ');
+ byId('bybitOrder').textContent=`DEMO-${transfer.id}`;
+ byId('bybitCopyMessage').textContent='Entertainment demo by 2winprankz. Not a Bybit payment receipt. App download is a visual placeholder.';
+}
+byId('copyBybitOrder').onclick=async()=>{try{await navigator.clipboard.writeText(byId('bybitOrder').textContent);byId('bybitCopyMessage').textContent='Demo order ID copied. Fictional preview - no funds transferred.';}catch{byId('bybitCopyMessage').textContent='Copy is unavailable. You can select the demo order ID above.';}};
+byId('bybitDetails').onclick=()=>{const details=document.querySelector('#receiptPanel .receipt-extra');details.open=true;details.scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});};
+
+if(bybitDemo){
+ const sample={id:'00000000-0000-4000-8000-000000000000',platform:'Bybit',coin:'USDT',amount:'10',email:'sample@example.com',address:'DEMO-RECIPIENT-ADDRESS',timestamp:new Date().toISOString()};
+ for(const button of document.querySelectorAll('#platforms .pair'))if(button.querySelector('b').textContent==='Bybit')button.click();
+ byId('amount').value='10';byId('email').value=sample.email;byId('address').value=sample.address;
+ update();renderBybitReceipt(sample);byId('receiptPanel').hidden=false;
+ byId('transferMessage').textContent='Design preview with sample data. No payment or email is sent.';
+ byId('receiptPanel').scrollIntoView({block:'start'});
 }
