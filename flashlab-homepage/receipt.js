@@ -9,7 +9,7 @@ const node = (tag, text) => {
 };
 function render(t) {
  dialog.replaceChildren();
- dialog.append(node('h2', 'Transaction receipt'), node('p', 'FICTIONAL PREVIEW — No cryptocurrency was transferred. This is a 2winprankz service receipt, not an exchange payment confirmation.'));
+ dialog.append(node('h2', 'Transaction receipt'), node('p', .'));
  const fields = document.createElement('dl');
  const status = {pending:'Not confirmed — no service fee charged',queued:'Email queued',sent:'Email accepted for delivery',failed:'Email rejected — service fee refunded',review:'Delivery requires review'};
  for (const [label, value] of [
@@ -28,7 +28,7 @@ export function showReceipt(transfer) {
  if (!dialog) {
   dialog = document.createElement('dialog');
   dialog.className = 'transaction-receipt';
-  dialog.setAttribute('aria-label', 'Fictional transaction receipt');
+  dialog.setAttribute('aria-label', 'Transaction receipt');
   document.body.append(dialog);
  }
  currentId = transfer.id;
