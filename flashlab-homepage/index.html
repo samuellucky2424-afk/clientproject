@@ -1,275 +1,171 @@
-<!DOCTYPE html>
-<html lang="en" class="">
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2winprankz — Homepage Preview</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.35.0/tabler-icons.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="assets/css/style.css?v=1785497418">
-<link rel="stylesheet" href="assets/css/sidebar.css?v=1785528306">
-<link rel="stylesheet" href="assets/css/receipt-template.css">
-<link rel="stylesheet" href="assets/css/home.css?v=1785497418">
-<link rel="stylesheet" href="assets/css/aurora.css?v=1785580755">
-<style>.get-started{display:inline-flex;align-items:center;justify-content:center;padding:10px 17px;background:#1769dd;color:white!important;border-radius:9px;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;margin-left:auto}.get-started:hover{background:#1255b5}.topbar .get-started{margin-right:14px}@media(max-width:900px){.topbar .get-started,.topbar-brand{display:none}.mobile-header{gap:12px}.mobile-header .get-started{padding:10px 13px;font-size:13px}}</style></head>
-<body class="">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="2winprankz — video call pranks and fictional crypto transfer previews, made for the laugh. Every preview is clearly labelled; no cryptocurrency ever moves.">
+<meta name="theme-color" content="#ffffff">
+<title>2winprankz — Big reactions. Imaginary chaos.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/landing.css">
+<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
 
-<div class="mobile-header">
-    <strong class="mobile-brand">2WINPRANKZ DIGITAL PLATFORM</strong><a class="get-started" href="/auth">Get Started</a>
+<!-- Hand-drawn doodle rail, shared by both edges of the page. -->
+<svg class="doodle-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>
+<pattern id="doodles" width="120" height="172" patternUnits="userSpaceOnUse">
+<g fill="none" stroke="#3d73bd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".45">
+<circle cx="30" cy="28" r="14"/><circle cx="25" cy="25" r="1.6" fill="#3d73bd" stroke="none"/><circle cx="35" cy="25" r="1.6" fill="#3d73bd" stroke="none"/><path d="M24 33c4 5 8 5 12 0"/>
+<path d="M88 15l3 9 9 3-9 3-3 9-3-9-9-3 9-3z"/>
+<path d="M19 78c0-9 7-16 16-16s16 7 16 16v22l-5-5-5 5-6-5-5 5-5-5-6 5z"/><circle cx="28" cy="77" r="1.7" fill="#3d73bd" stroke="none"/><circle cx="42" cy="77" r="1.7" fill="#3d73bd" stroke="none"/>
+<path d="M92 62c-10 0-15 7-15 14s6 12 12 12 10-5 10-10-4-8-8-8-6 3-6 6"/>
+<path d="M26 130h18M35 121v18"/>
+<path d="M88 119c5-7 13-2 13 3 0 6-8 11-13 15-5-4-13-9-13-15 0-5 8-10 13-3z"/>
+<path d="M22 158c6-8 15-8 21 0"/>
+<path d="M86 150h20l-4 12H82z"/>
+</g>
+</pattern>
+</defs></svg>
+<svg class="rail rail--left" aria-hidden="true" focusable="false"><rect width="100%" height="100%" fill="url(#doodles)"/></svg>
+<svg class="rail rail--right" aria-hidden="true" focusable="false"><rect width="100%" height="100%" fill="url(#doodles)"/></svg>
+
+<div class="page">
+
+<header class="site-header">
+<a class="brand" href="/">2winprankz<span aria-hidden="true">✳</span></a>
+<nav class="site-nav" aria-label="Main navigation">
+<a href="#pranks">The pranks</a>
+<a href="#how">How it works</a>
+<a href="#safety">Safety notice</a>
+</nav>
+<div class="header-actions">
+<a class="header-login" data-login-link href="/auth">Log in</a>
+<a class="btn btn--accent btn--sm" data-start href="/auth?mode=signup">Get Started</a>
 </div>
+</header>
 
-<div class="layout">
-<main class="main-content">
-<div class="topbar"><span class="topbar-brand">2WINPRANKZ DIGITAL PLATFORM</span><a class="get-started" href="/auth">Get Started</a>
-    
-    <button type="button" id="themeToggle" class="topbar-theme-btn" aria-label="Toggle dark mode">
-        <i class="ti ti-moon" id="themeIcon"></i>
-    </button>
+<main>
+
+<!-- HERO -->
+<section class="hero" aria-labelledby="heroTitle">
+<p class="eyebrow">✳ &nbsp; THE PRANK STUDIO &nbsp;·&nbsp; 100% FICTIONAL</p>
+<h1 id="heroTitle">Big reactions.<br><em>Imaginary chaos.</em></h1>
+<p class="hero-copy">Video-call surprises and fictional crypto flashes, built for the laugh and the reveal. Every preview stays clearly labelled — no cryptocurrency ever moves.</p>
+<div class="hero-actions">
+<a class="btn btn--accent btn--lg" data-start href="/auth?mode=signup">Get Started <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m-5-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+<a class="btn btn--ghost btn--lg" href="#pranks">See the two pranks</a>
 </div>
+<p class="hero-note"><span aria-hidden="true">🟡</span> New here? Sign up with an email, a display name and a password. You agree to the Safety Notice and Terms before your account is created.</p>
+<a class="scroll-cue" href="#reactions" aria-label="Scroll down to the reaction wall"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 8 7 7 7-7M5 14l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+</section>
 
-<div class="hero-card">
-    <div class="hero-overlay">
-        <span class="badge">⚡ Trusted Digital Services Platform</span>
-        <h1>All-In-One Digital Platform</h1>
-        <p>
-            Access premium social media accounts, digital tools, wallet funding,
-            consignment packages, receipt generation, and tracking tools from one click.
-        </p>
-        <div class="hero-buttons">
-                            <a href="/auth?mode=signup" class="btn-primary">Create Account</a>
-                        <a href="#" data-demo-link="true" class="btn-secondary">Explore Marketplace</a>
-        </div>
-        <div class="hero-stats">
-            <div>
-                <h3>10K+ Orders</h3>
-                <span>150+ Services · 24/7 Support</span>
-            </div>
-        </div>
-    </div>
+<!-- REACTION WALL -->
+<section class="reaction-stage" id="reactions" aria-label="Fictional reaction wall">
+<div class="stage-grid" aria-hidden="true"></div>
+<div class="stage-head">
+<span class="stage-tag">REACTION WALL <span aria-hidden="true">·</span> 2.5 A SECOND</span>
+<button class="motion" id="motion" type="button" aria-pressed="false">Ⅱ Pause reactions</button>
 </div>
-
-<div class="home-cards">
-        <a href="#" data-demo-link="true" class="home-card">
-        <div class="home-card-media">
-                        <img src="assets/images/home/home_1785855050_264.png" alt="Wallet Flashing">
-                                </div>
-        <div class="home-card-body">
-            <h3>Wallet Flashing</h3>
-                        <p>For educational/content creation purposes only</p>
-                        <span class="home-card-cta">Flash wallets <i class="ti ti-chevron-right"></i></span>
-        </div>
-    </a>
-        <a href="#" data-demo-link="true" class="home-card">
-        <div class="home-card-media">
-                        <img src="assets/images/home/home_1785622791_350.webp" alt="Consignment Videos">
-                                </div>
-        <div class="home-card-body">
-            <h3>Consignment Videos</h3>
-                        <p>Generate your own asset display videos featuring gold, luxury items, and more. Ready in 2-6 hours.</p>
-                        <span class="home-card-cta">Create Video <i class="ti ti-chevron-right"></i></span>
-        </div>
-    </a>
-        <a href="#" data-demo-link="true" class="home-card">
-        <div class="home-card-media">
-                        <img src="assets/images/home/home_1785249781_442.jpeg" alt="Marketplace">
-                                </div>
-        <div class="home-card-body">
-            <h3>Marketplace</h3>
-                        <p>Buy verified social accounts, emails, VPNs and more.</p>
-                        <span class="home-card-cta">Browse <i class="ti ti-chevron-right"></i></span>
-        </div>
-    </a>
-        <a href="#" data-demo-link="true" class="home-card">
-        <div class="home-card-media">
-                        <img src="assets/images/home/home_1791579254_440.png" alt="Supports">
-                                </div>
-        <div class="home-card-body">
-            <h3>Supports</h3>
-                        <p>Get a customer support websites for different platforms in under 60 seconds!</p>
-                        <span class="home-card-cta">Create now <i class="ti ti-chevron-right"></i></span>
-        </div>
-    </a>
-        <a href="#" data-demo-link="true" class="home-card">
-        <div class="home-card-media">
-                        <img src="assets/images/home/home_1785251855_885.jpeg" alt="eSIM">
-                                    <span class="home-card-badge">COMING SOON</span>
-                    </div>
-        <div class="home-card-body">
-            <h3>eSIM</h3>
-                        <p>Global data plans — scan a QR code and connect in minutes.</p>
-                        <span class="home-card-cta">Get Started <i class="ti ti-chevron-right"></i></span>
-        </div>
-    </a>
-        <a href="#" data-demo-link="true" class="home-card">
-        <div class="home-card-media">
-                        <img src="assets/images/home/home_1785246675_882.jpeg" alt="Websites">
-                                </div>
-        <div class="home-card-body">
-            <h3>Websites</h3>
-                        <p>Premium website templates ready to deploy.</p>
-                        <span class="home-card-cta">Explore <i class="ti ti-chevron-right"></i></span>
-        </div>
-    </a>
-        <a href="#" data-demo-link="true" class="home-card">
-        <div class="home-card-media">
-                        <img src="assets/images/home/home_1785855548_349.png" alt="TOOLS">
-                                </div>
-        <div class="home-card-body">
-            <h3>TOOLS</h3>
-                        <p>All types of Working tools</p>
-                        <span class="home-card-cta">Get started <i class="ti ti-chevron-right"></i></span>
-        </div>
-    </a>
-        <a href="#" data-demo-link="true" class="home-card">
-        <div class="home-card-media">
-                        <img src="assets/images/home/home_1785622411_361.jpeg" alt="Receipt Generator">
-                                    <span class="home-card-badge">FREE</span>
-                    </div>
-        <div class="home-card-body">
-            <h3>Receipt Generator</h3>
-                        <p>Generate Realistic Receipts</p>
-                        <span class="home-card-cta">Get Started <i class="ti ti-chevron-right"></i></span>
-        </div>
-    </a>
-    </div>
-
-<!-- WHY SECTION -->
-<div class="home-why">
-    <h2>Why 2winprankz?</h2>
-    <p class="home-why-sub">Built for speed, privacy, and reliability</p>
-    <div class="why-grid">
-        <div class="why-card">
-            <div class="why-icon"><i class="ti ti-shield-check"></i></div>
-            <h4>SSL Secured</h4>
-            <p>All traffic encrypted end-to-end.</p>
-        </div>
-        <div class="why-card">
-            <div class="why-icon"><i class="ti ti-bolt"></i></div>
-            <h4>Fast Delivery</h4>
-            <p>Orders processed quickly and reliably.</p>
-        </div>
-        <div class="why-card">
-            <div class="why-icon"><i class="ti ti-world"></i></div>
-            <h4>Global Access</h4>
-            <p>Use the platform from anywhere.</p>
-        </div>
-        <div class="why-card">
-            <div class="why-icon"><i class="ti ti-headset"></i></div>
-            <h4>24/7 Support</h4>
-            <p>Reach us anytime on WhatsApp or Telegram.</p>
-        </div>
-    </div>
+<div class="stage-center" aria-hidden="true">
+<span class="stage-scribble">imagine the</span>
+<strong>reaction</strong>
+<svg class="stage-swoosh" viewBox="0 0 260 18" fill="none" preserveAspectRatio="none"><path d="M3 12c48-9 96-9 142-4s76-1 112-6" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
 </div>
-
-<!-- STATS SECTION -->
-<div class="home-stats">
-    <div class="stat-box">
-        <div class="stat-num">60,000+</div>
-        <div class="stat-label">Active Users</div>
-    </div>
-    <div class="stat-box">
-        <div class="stat-num">120,000+</div>
-        <div class="stat-label">Orders Completed</div>
-    </div>
-    <div class="stat-box">
-        <div class="stat-num">50+</div>
-        <div class="stat-label">Services Offered</div>
-    </div>
-    <div class="stat-box">
-        <div class="stat-num">99.9%</div>
-        <div class="stat-label">Platform Uptime</div>
-    </div>
+<div class="reactions" id="reactionsLayer" aria-hidden="true"></div>
+<div class="stage-foot">
+<span>FICTIONAL REACTIONS</span>
+<span>NO REAL FUNDS · NO REAL TRANSFERS</span>
 </div>
+</section>
 
-<!-- CTA BANNER -->
-<div class="home-cta">
-    <span class="cta-pill"><i class="ti ti-bolt"></i> No credit card required</span>
-    <h2>Ready to get started?</h2>
-    <p>Create your free account in under 30 seconds.</p>
-    <a href="/auth?mode=signup" class="cta-btn">Create Free Account <i class="ti ti-arrow-right"></i></a>
+<!-- THE TWO PRANKS -->
+<section class="pranks" id="pranks">
+<div class="section-head reveal">
+<p class="eyebrow">PICK YOUR CHAOS</p>
+<h2>Two pranks. <em>One big reveal.</em></h2>
+<p class="section-sub">Press <b>V</b> or <b>C</b>. Both live inside your dashboard once you have an account.</p>
 </div>
+<div class="prank-grid">
+<a class="prank-card prank-card--v reveal" data-feature="v2v" href="/auth?mode=signup">
+<span class="prank-letter" aria-hidden="true">V</span>
+<span class="prank-kicker">V &nbsp;·&nbsp; VIDEO PRANK</span>
+<h3>Video Prank</h3>
+<p class="prank-fantasy">Realism. Deluding. 99% identical.</p>
+<p class="prank-desc">Request a surprise V2V call prank from your dashboard. Describe the scene, confirm consent, and pay the small request fee from your wallet. The reveal is the best part.</p>
+<ul class="prank-tags"><li>V2V request form</li><li>Wallet-funded</li><li>Consent first</li></ul>
+<span class="prank-cta">Open Video Prank <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m-5-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+</a>
+<a class="prank-card prank-card--c reveal" data-feature="crypto" href="/auth?mode=signup">
+<span class="prank-letter" aria-hidden="true">C</span>
+<span class="prank-kicker">C &nbsp;·&nbsp; CRYPTO / FLASHING PRANK</span>
+<h3>Crypto / Flashing Prank</h3>
+<p class="prank-fantasy">Prank offers. Rewards. Mind-blowing. Fun glory.</p>
+<p class="prank-desc">Build a fictional transfer preview, receipt and branded email across Binance, Coinbase, Trust Wallet and Bybit. Nine coins, real-time pricing, a 1% service fee.</p>
+<ul class="prank-tags"><li>4 platforms</li><li>9 coins</li><li>Receipt + email</li></ul>
+<span class="prank-cta">Open Crypto Studio <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m-5-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+</a>
+</div>
+</section>
 
-<div class="home-legal" style="position:relative; z-index:10; text-align:center; margin:28px 0 10px; font-size:14px;">
-    <a href="/terms" target="_blank" rel="noopener" style="color:#1d9bf0;">Terms &amp; Conditions</a>
-<a href="#" data-demo-link="true" target="_blank" rel="noopener" onclick="event.stopPropagation();" style="color:#1d9bf0;">Privacy Policy</a>
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+<div class="section-head reveal">
+<p class="eyebrow">GET STARTED</p>
+<h2>From sign-up to <em>the scream.</em></h2>
+<p class="section-sub">Four small steps. No crypto, no wallet connection, no real transfer.</p>
 </div>
+<ol class="steps">
+<li class="reveal"><span class="step-num">01</span><h3>Create your account</h3><p>Email, display name and password. Tick the Safety Notice and Terms box before signing up.</p></li>
+<li class="reveal"><span class="step-num">02</span><h3>Top up your wallet</h3><p>Add USD credit with NGN via Flutterwave. It covers the 1% preview fee or a V2V request fee.</p></li>
+<li class="reveal"><span class="step-num">03</span><h3>Pick V or C</h3><p>Open the V2V request form or the crypto studio, review the live price, then confirm.</p></li>
+<li class="reveal"><span class="step-num">04</span><h3>Share the laugh</h3><p>Every receipt and email stays visibly fictional. Reveal the joke — that's the whole point.</p></li>
+</ol>
+<div class="how-cta reveal">
+<a class="btn btn--accent btn--lg" data-start href="/auth?mode=signup">Get Started <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m-5-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+<span>Already signed in? This button takes you straight to setup.</span>
+</div>
+</section>
+
+<!-- SAFETY NOTICE -->
+<section class="safety" id="safety">
+<div class="safety-card reveal">
+<p class="safety-label">1. Safety Notice and Disclaimer</p>
+<h2><span aria-hidden="true">🟡</span> IMPORTANT SAFETY NOTICE</h2>
+<p class="safety-lead">PLEASE READ BEFORE USING THIS WEBSITE. 2winprankz is designed strictly for entertainment, humour, jokes and harmless pranking. By using it, you agree to the following:</p>
+<ul>
+<li>Use every prank responsibly and ethically — never to cause physical, emotional, psychological, financial or reputational harm.</li>
+<li>Obtain consent where required and respect privacy, dignity, personal boundaries and the rights of others.</li>
+<li>Never use a preview to defraud, impersonate, blackmail, threaten, harass or mislead anyone into losing money.</li>
+<li>Nothing on this platform moves cryptocurrency, credits a third-party wallet, or is proof of payment. All previews are clearly labelled as fictional.</li>
+<li>You are solely responsible for your actions, communications and their consequences. The operators do not authorise misuse.</li>
+</ul>
+<p class="safety-punch">A prank should be funny, not harmful.</p>
+<a class="safety-link" href="/terms">Read the full Safety Notice &amp; Terms of Use <span aria-hidden="true">→</span></a>
+</div>
+</section>
 
 </main>
+
+<footer class="site-footer">
+<div>
+<div class="footer-brand">2winprankz <span aria-hidden="true">✳</span></div>
+<p>Made for the laugh. Reveal the joke.</p>
+</div>
+<nav aria-label="Footer navigation">
+<a href="/dashboard">Dashboard</a>
+<a href="/crypto">Crypto studio</a>
+<a href="/auth?mode=signup">Sign up</a>
+<a href="/terms">Safety Notice &amp; Terms</a>
+</nav>
+<p class="footer-fine">Fictional scenarios · No real funds or transfers · Not affiliated with any exchange</p>
+</footer>
+
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-
-    if (themeToggle) {
-
-        themeToggle.addEventListener('click', function () {
-
-            const dark = document.body.classList.toggle('dark-mode');
-            document.documentElement.classList.toggle('dark-mode', dark);
-
-            if (themeIcon) {
-                themeIcon.classList.remove('ti-moon', 'ti-sun');
-                themeIcon.classList.add(dark ? 'ti-sun' : 'ti-moon');
-            }
-
-            
-
-        });
-
-    }
-
-    document.querySelectorAll('video').forEach(function (v) {
-        v.addEventListener('play', function () {
-            document.body.classList.add('video-playing');
-        });
-
-        v.addEventListener('pause', function () {
-            document.body.classList.remove('video-playing');
-        });
-
-        v.addEventListener('ended', function () {
-            document.body.classList.remove('video-playing');
-        });
-    });
-
-});
-</script>
-
-<div class="fab-container">
-  <div class="fab-hint" id="fabHint">Need Help?</div>
-
-  <div class="fab-menu" id="fabMenu">
-    <a href="#" data-demo-link="true" target="_blank" rel="noopener" class="fab-menu-item fab-telegram">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 2.9c-.3-.3-.8-.4-1.2-.2L2.4 10.6c-.5.2-.8.7-.7 1.2 0 .5.4.9.9 1l4.8 1.5 1.9 5.9c.1.4.5.7.9.8h.1c.4 0 .7-.2.9-.5l2.6-3.7 4.9 3.6c.2.2.5.2.7.2.2 0 .3 0 .5-.1.3-.2.6-.5.6-.9l2.1-16c.1-.4-.1-.8-.4-1.1zM8.6 13.6l9-6.9-7 7.9-.3 3.1-1.7-4.1zm1.9 5.4l1.1-3.6.9 2.7-2 .9zm7.7-1.3l-4-3 5.6-6.3-1.6 9.3z"/></svg>
-      Join our Channel
-    </a>
-  </div>
-
-  <button class="fab-button" id="fabButton" type="button" aria-label="Toggle help menu">
-    <svg class="fab-icon chat" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 5.9 2 10.7c0 2.6 1.4 4.9 3.6 6.5-.1.9-.5 2.5-1.6 4.1 0 0 2.4-.3 4.6-1.8 1 .3 2.1.4 3.4.4 5.5 0 10-3.9 10-8.7S17.5 2 12 2z"/></svg>
-    <svg class="fab-icon close" viewBox="0 0 24 24" fill="currentColor"><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3l6.3 6.3 6.3-6.3z"/></svg>
-  </button>
-</div>
-
-<script>
-(function () {
-    var fabButton = document.getElementById('fabButton');
-    var fabMenu   = document.getElementById('fabMenu');
-    var fabHint   = document.getElementById('fabHint');
-    if (!fabButton || !fabMenu) return;
-
-    fabButton.addEventListener('click', function () {
-        var isOpen = fabMenu.classList.toggle('open');
-        fabButton.classList.toggle('open', isOpen);
-        if (fabHint) fabHint.classList.toggle('hidden', isOpen);
-    });
-    if (fabHint) {
-        fabHint.addEventListener('click', function () { fabButton.click(); });
-    }
-})();
-</script>
-
-<div id="previewNotice" role="status" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#fff;color:#155ca4;padding:12px 22px;box-shadow:0 4px 30px #0002;border:1px solid #d5eafa;border-radius:12px;z-index:10000;display:none">Homepage preview — this section will be added next.</div><script>document.querySelectorAll('[data-demo-link]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();const n=document.getElementById('previewNotice');n.style.display='block';clearTimeout(window.noticeTimer);window.noticeTimer=setTimeout(()=>n.style.display='none',3000)}));</script><script type="module" src="home-session.js"></script></body>
+<script type="module" src="landing.js"></script>
+<script type="module" src="home-session.js"></script>
+</body>
 </html>
