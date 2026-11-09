@@ -2,7 +2,7 @@
 
 Prepared project: [2winprankz](https://vercel.com/lus-projects-b2662b64/2winprankz) under **lu's projects**. Project ID: `prj_d0HDQbfcQ4ZldcGRAhbvEMdDloJf`. No deployment has been published yet.
 
-The Vercel adapter in `api/[...path].mjs` runs the existing API without the persistent Node server. `vercel.json` configures the Vite build, clean URLs, bundled email logos, and a once-per-minute Pro cron at `/api/jobs/email`. Immediate email work is registered using `waitUntil`; the cron handles later retries. Existing Supabase transactions, leases, and idempotency protection are reused.
+The Vercel adapter in `api/index.mjs` runs the existing API without the persistent Node server. `vercel.json` configures the Vite build, clean URLs, bundled email logos, and a once-per-minute Pro cron at `/api/jobs/email`. Immediate email work is registered using `waitUntil`; the cron handles later retries. Existing Supabase transactions, leases, and idempotency protection are reused.
 
 Already configured in Vercel: Supabase URL, browser publishable key, and a generated private `CRON_SECRET` (production and preview). No private provider credentials were copied from other projects.
 
@@ -26,3 +26,6 @@ Deploy the repository root, with `npm run build` and output `dist`. Do not deplo
 After publishing, check `/api/config`, account signup/login, one sandbox Flutterwave checkout, verified credit, the 1% fee debit, email acceptance, and the cron's logs. Never test a real charge or send to a real recipient as part of an automated deployment check.
 
 Run `npm test` and `npm run build` before publishing. The local Node deployment described in `BACKEND_SETUP.md` remains available.
+
+
+All `/api/:path*` requests are explicitly rewritten to the single API entrypoint. The entrypoint restores the requested API path from the rewrite query before authentication and routing, preserving ordinary query parameters. This covers nested transfer, deposit, admin, webhook and job routes; relying on the bracketed filename alone did not route nested paths in this deployment.

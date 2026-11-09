@@ -4,11 +4,14 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "cleanUrls": true,
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/index?__api_path=:path*" }
+  ],
   "crons": [
     { "path": "/api/jobs/email", "schedule": "* * * * *" }
   ],
   "functions": {
-    "api/[...path].mjs": {
+    "api/index.mjs": {
       "maxDuration": 60,
       "includeFiles": "flashlab-homepage/assets/logos/**"
     }

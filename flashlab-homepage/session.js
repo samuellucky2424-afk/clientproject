@@ -1,4 +1,5 @@
 import {createClient} from '@supabase/supabase-js';
+import {responseJson} from './response-json.mjs';
 let clientPromise;
 let redirecting=false;
 function redirectToLogin(){
@@ -8,9 +9,9 @@ function redirectToLogin(){
 }
 export function authClient(){
  return clientPromise ||= fetch('/api/config').then(async response=>{
-  const config=await response.json();if(!config.configured)throw Error('Account service is not configured yet.');
+  const config=await responseJson(response);if(!config.configured)throw Error('Account service is not configured yet.');
   return createClient(config.supabaseUrl,config.supabaseKey);
- });
+ }).catch(error=>{clientPromise=undefined;throw error;});
 }
 export async function apiFetch(path,options={}){
  const client=await authClient();
@@ -22,7 +23,7 @@ export async function apiFetch(path,options={}){
 }
 export async function apiJson(path,body){
  const response=await apiFetch(path,body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
- const data=await response.json();if(!response.ok)throw Error(data.error||'Request failed');return data;
+ return responseJson(response,path.startsWith('/api/transfers')?'Transfer service':'Account service');
 }
 export async function setupAccount(){
  const client=await authClient();const {data:{session}}=await client.auth.getSession();
