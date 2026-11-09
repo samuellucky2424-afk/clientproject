@@ -1,12 +1,23 @@
 import {readFile} from 'node:fs/promises';
 import {platforms,escape} from './catalog.mjs';
 export async function buildEmail(env,t){
-     const [logo,color]=platforms[t.platform];
-     const svg=await readFile(new URL(`../flashlab-homepage/assets/logos/${logo}.svg`,import.meta.url));
-     const rows=[['Amount',`${t.amount} ${t.coin}`],['Network',t.network],['Wallet address',t.address],['Reference',t.id]].map(([k,v])=>`<tr><td style="padding:10px;color:#aaa">${k}</td><td style="padding:10px;color:white">${escape(v)}</td></tr>`).join('');
-     const html=`<div style="background:#212227;padding:25px;font-family:Arial;color:white;max-width:100%;margin:auto"><p style="border:1px solid ${color};padding:14px;color:${color}">.</p><div style="background:${color};padding:25px;text-align:center"><img src="cid:platform-logo" width="48" alt="${escape(t.platform)} logo"><h1 style="color:#16181c">${escape(t.platform)}</h1><div style="background:#212227;padding:25px"><h2>Deposit</h2><p>${escape(t.amount)} ${escape(t.coin)}</p><table style="width:70%;text-align:left">${rows}</table><p>cryptocurrency was transferred  & redited.</p></div></div><p>. ${escape(t.platform)} notification.</p></div>`;
-
-return {from:env.RESEND_FROM,to:[t.email],subject:`Fictional crypto preview ? ${t.amount} ${t.coin}`,html,attachments:[{filename:`${logo}.svg`,content:svg.toString('base64'),content_id:'platform-logo'}]};
+ const [logo,color]=platforms[t.platform];
+ // Inline PNG attachments work in mail clients that do not display SVG images.
+ const image=await readFile(new URL(`../flashlab-homepage/assets/logos/${logo}.png`,import.meta.url));
+ const amount=`${t.amount} ${t.coin}`;
+ const rows=[['Amount',amount],['Network',t.network],['Sample wallet address',t.address],['Reference',t.id]].map(([label,value])=>{
+  // Explicit break opportunities also work in clients that ignore overflow-wrap.
+  const wrapped=Array.from(String(value)).reduce((chunks,char,index)=>{
+   if(index%16===0)chunks.push('');
+   chunks[chunks.length-1]+=char;
+   return chunks;
+  },[]).map(escape).join('&#8203;');
+  return `<tr><td style="padding:10px 0 3px;color:#b9bec7;font-size:12px">${label}</td></tr><tr><td style="padding:0 0 10px;color:#ffffff;font-size:14px;word-break:break-all;overflow-wrap:anywhere;word-wrap:break-word">${wrapped}</td></tr>`;
+ }).join('');
+ const html=`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#212227;font-family:Arial,sans-serif;color:#ffffff"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;table-layout:fixed"><tr><td align="center" style="padding:12px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;max-width:560px;table-layout:fixed"><tr><td style="padding:14px;border:1px solid ${color};color:${color};font-size:13px;font-weight:bold">FICTIONAL PREVIEW - NOT A PAYMENT</td></tr><tr><td align="center" style="padding:20px 12px;background:${color}"><img src="cid:platform-logo" width="48" height="48" alt="${escape(t.platform)}" style="display:block;width:48px;height:48px;border:0"><h1 style="margin:12px 0 0;font-size:26px;color:#16181c">${escape(t.platform)}</h1></td></tr><tr><td style="padding:16px;background:#212227"><h2 style="font-size:21px;margin:0 0 12px">Fictional deposit preview</h2><p style="font-size:18px;word-break:break-word">${escape(amount)}</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;table-layout:fixed;text-align:left">${rows}</table><p style="font-size:14px;line-height:1.6">No cryptocurrency was transferred or credited.</p></td></tr><tr><td style="padding:16px 0;font-size:12px;line-height:1.6;color:#b9bec7">Sent by 2winprankz for entertainment. This is not an official ${escape(t.platform)} notification.</td></tr></table></td></tr></table></body></html>`;
+ return {from:env.RESEND_FROM,to:[t.email],subject:`Fictional crypto preview - ${amount}`,html,
+  text:`FICTIONAL PREVIEW - NOT A PAYMENT\n${t.platform} fictional deposit preview\nAmount: ${amount}\nNetwork: ${t.network}\nSample wallet address: ${t.address}\nReference: ${t.id}\nNo cryptocurrency was transferred or credited. Sent by 2winprankz for entertainment. This is not an official exchange notification.`,
+  attachments:[{filename:`${logo}.png`,content:image.toString('base64'),content_type:'image/png',content_id:'platform-logo'}]};
 }
 export async function processEmail(store,env,request=fetch){
  if(!env.RESEND_API_KEY)return false;
