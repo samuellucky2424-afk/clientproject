@@ -22,7 +22,7 @@ function render(t) {
  logo.width = 38; logo.height = 38;
  brand.append(logo, node('span', t.platform));
  brand.className = 'demo-receipt-brand';
- const source = node('span', '2WINPRANKZ / FICTIONAL DEMO');
+ const source = node('span', ' ');
  const close = node('button', '\u00d7');
  close.type = 'button';
  close.className = 'demo-receipt-close';
