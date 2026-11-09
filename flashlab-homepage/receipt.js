@@ -47,7 +47,7 @@ function render(t) {
  copy.className = 'demo-receipt-copy';
  const details = document.createElement('details');
  details.open = expanded;
- const summary = node('summary', 'View demo transaction');
+ const summary = node('summary', 'View transaction');
  const fields = document.createElement('dl');
  const status = {pending:'Not confirmed - no service fee charged',queued:'Email queued',sent:'Email accepted for delivery',failed:'Email rejected - service fee refunded',review:'Delivery requires review'};
  for (const [label, value] of [
