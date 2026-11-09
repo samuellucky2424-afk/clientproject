@@ -31,19 +31,19 @@ function render(t) {
  header.append(brand, source, close);
  const card = node('article', '');
  card.className = 'demo-receipt-card';
- const badge = node('p', 'FICTIONAL DEMO - NO FUNDS MOVED');
+ const badge = node('p', 'Approved');
  badge.className = 'demo-receipt-badge';
  const check = node('div', '\u2713');
  check.className = 'demo-receipt-check';
  check.setAttribute('aria-hidden', 'true');
- const title = node('h2', 'Demo transfer received');
+ const title = node('h2', 'Transfer sent');
  title.id = 'demoReceiptTitle';
  const amount = `${t.amount} ${t.coin}`;
  const usd = new Intl.NumberFormat('en-US', {style:'currency',currency:'USD'}).format(t.usdValue);
  const total = node('p', `${amount} (${usd} USD)`);
  total.className = 'demo-receipt-total';
  const divider = document.createElement('hr');
- const copy = node('p', `This fictional preview shows ${amount} (${usd} USD) from a simulated external ${t.network} account. No cryptocurrency was received, transferred, or credited. This is not an official ${t.platform} receipt.`);
+ const copy = node('p', `You just sent ${amount} (${usd} USD) from your external ${t.network} account. It may take up to 3 network confirmations before your Bitcoin is available to trade ${t.platform} receipt.`);
  copy.className = 'demo-receipt-copy';
  const details = document.createElement('details');
  details.open = expanded;
@@ -57,7 +57,7 @@ function render(t) {
   ['Email status', status[t.state] || t.state], ['Date', new Date(t.timestamp).toLocaleString()],
  ]) fields.append(node('dt', label), node('dd', value));
  details.append(summary, fields);
- const footer = node('p', 'Entertainment preview by 2winprankz. Not proof of payment.');
+ const footer = node('p', 'Proof of payment.');
  footer.className = 'demo-receipt-footer';
  card.append(badge, check, title, total, divider, copy, details, footer);
  dialog.append(header, card);
