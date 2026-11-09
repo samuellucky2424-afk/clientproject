@@ -15,7 +15,7 @@ Add these in [Vercel Environment Variables](https://vercel.com/lus-projects-b266
 - `FLW_WEBHOOK_SECRET`: random secret also set as Flutterwave's webhook secret hash.
 - `RESEND_API_KEY`: Resend sending key.
 - `RESEND_FROM`: sender address on your verified domain.
-- `APP_ORIGIN`: the final public site origin, without a trailing slash. Set this after confirming the deployment domain.
+- `APP_ORIGIN`: configured in `vercel.json` as `https://2winprankz.net`, without a trailing slash. Update it there if the public domain changes; the API checks browser origins against this value.
 
 The optional `COINGECKO_API_KEY` is a CoinGecko Demo API key. Vercel authentication does not supply Supabase, Flutterwave, or Resend private keys. Do not paste credentials into chat or commit them.
 
