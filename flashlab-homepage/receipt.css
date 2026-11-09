@@ -1,19 +1,19 @@
-.transaction-receipt{width:min(410px,calc(100vw - 24px));max-height:92vh;max-height:92dvh;overflow:auto;border:0;border-radius:4px;padding:0 10px 28px;background:linear-gradient(160deg,#0876ce,#0065be);color:#565b5e;font:16px/1.65 Arial,Helvetica,sans-serif;box-sizing:border-box;box-shadow:0 18px 70px #001d4d55}
+.transaction-receipt{width:min(410px,calc(100vw - 24px));max-height:92vh;max-height:92dvh;overflow:auto;border:0;border-radius:4px;padding:0 10px 28px;background:var(--receipt-bg,#0879ed);color:#565b5e;font:16px/1.65 Arial,Helvetica,sans-serif;box-sizing:border-box;box-shadow:0 18px 70px #001d4d55}
 .transaction-receipt *{box-sizing:border-box}
 .transaction-receipt::backdrop{background:rgb(10 24 42 / 65%)}
-.transaction-receipt .demo-receipt-header{position:relative;display:block;padding:24px 32px 22px;text-align:center;border:0;background:transparent;color:#fff}
+.transaction-receipt .demo-receipt-header{position:relative;display:block;padding:24px 32px 22px;text-align:center;border:0;background:transparent;color:var(--receipt-ink,#fff)}
 .demo-receipt-brand{font-size:35px;line-height:1.2;letter-spacing:-1.5px;font-weight:600;overflow-wrap:anywhere}
 .demo-receipt-header>span{display:block;font-size:9px;letter-spacing:1.6px;margin-top:10px;font-weight:700}
-.transaction-receipt .demo-receipt-close{position:absolute;right:0;top:8px;background:transparent;color:#fff;border:0;font:28px/1 Arial;cursor:pointer;width:36px;height:36px;padding:0;border-radius:4px}
+.transaction-receipt .demo-receipt-close{position:absolute;right:0;top:8px;background:transparent;color:var(--receipt-ink,#fff);border:0;font:28px/1 Arial;cursor:pointer;width:36px;height:36px;padding:0;border-radius:4px}
 .demo-receipt-card{background:#fff;border:1px solid #d4ece5;border-radius:3px;padding:20px 28px 24px;text-align:center;box-shadow:0 0 6px #b0edcd80}
 .demo-receipt-badge{margin:0 0 25px;padding:7px 5px;border:1px solid #b6deda;background:#eefaf8;color:#16696d;font-size:10px;line-height:1.5;font-weight:700;letter-spacing:.6px}
-.demo-receipt-check{display:grid;place-items:center;width:96px;height:96px;margin:0 auto 30px;border:3px solid #2294a5;border-radius:50%;color:#2294a5;font-size:58px;font-weight:400;line-height:1;box-shadow:0 0 10px #b3dacf77}
+.demo-receipt-check{display:grid;place-items:center;width:96px;height:96px;margin:0 auto 30px;border:3px solid var(--receipt-accent,#0879ed);border-radius:50%;color:var(--receipt-accent,#0879ed);font-size:58px;font-weight:400;line-height:1;box-shadow:0 0 10px #b3dacf77}
 .transaction-receipt h2{font-size:23px;line-height:1.3;font-weight:500;color:#3e4243;margin:0 0 4px;letter-spacing:-.5px}
 .demo-receipt-total{font-size:15px;color:#747a7a;margin:0;line-height:1.6;overflow-wrap:anywhere}
 .demo-receipt-card hr{height:1px;border:0;background:#e8eeea;margin:28px 0}
 .demo-receipt-copy{font-size:16px;line-height:1.85;color:#7a7e7b;margin:0 0 30px;overflow-wrap:anywhere}
 .demo-receipt-card details{text-align:left}
-.demo-receipt-card summary{display:block;list-style:none;cursor:pointer;background:#008bbc;border:1px solid #168eab;box-shadow:0 2px 5px #0002;padding:15px 22px;color:white;text-align:center;font-size:16px;line-height:1.5;border-radius:2px}
+.demo-receipt-card summary{display:block;list-style:none;cursor:pointer;background:var(--receipt-accent,#0879ed);border:1px solid var(--receipt-accent,#0879ed);box-shadow:0 2px 5px #0002;padding:15px 22px;color:var(--receipt-button-ink,#fff);text-align:center;font-size:16px;line-height:1.5;border-radius:2px}
 .demo-receipt-card summary::-webkit-details-marker{display:none}
 .demo-receipt-card dl{margin:20px 0 0;padding:0 4px;font-size:13px}
 .demo-receipt-card dt{font-weight:700;margin-top:12px;color:#555f65}
@@ -21,3 +21,7 @@
 .demo-receipt-footer{margin:22px 0 0;font-size:10px;line-height:1.6;color:#637c81}
 .transaction-receipt button:focus-visible,.demo-receipt-card summary:focus-visible{outline:3px solid #f0ba39;outline-offset:3px}
 @media(max-width:360px){.demo-receipt-card{padding:18px}.demo-receipt-brand{font-size:30px}.transaction-receipt h2{font-size:21px}.demo-receipt-copy{font-size:15px}}
+
+.demo-receipt-brand{display:flex;align-items:center;justify-content:center;gap:10px;font-size:30px;letter-spacing:-1px}
+.demo-receipt-brand img{width:38px;height:38px;flex:0 0 38px;object-fit:contain;border-radius:8px}
+.demo-receipt-brand span{min-width:0;overflow-wrap:anywhere}

@@ -1,23 +1,26 @@
 import {readFile} from 'node:fs/promises';
-import {platforms,escape} from './catalog.mjs';
+import {escape} from './catalog.mjs';
+import {receiptTheme} from '../flashlab-homepage/receipt-theme.mjs';
 export async function buildEmail(env,t){
- const [logo,color]=platforms[t.platform];
- // Inline PNG attachments work in mail clients that do not display SVG images.
- const image=await readFile(new URL(`../flashlab-homepage/assets/logos/${logo}.png`,import.meta.url));
+ const theme=receiptTheme(t.platform);
+ const image=await readFile(new URL(`../flashlab-homepage/assets/logos/${theme.logo}.png`,import.meta.url));
  const amount=`${t.amount} ${t.coin}`;
- const rows=[['Amount',amount],['Network',t.network],['Wallet address',t.address],['Reference',t.id]].map(([label,value])=>{
-  // Explicit break opportunities also work in clients that ignore overflow-wrap.
-  const wrapped=Array.from(String(value)).reduce((chunks,char,index)=>{
-   if(index%16===0)chunks.push('');
-   chunks[chunks.length-1]+=char;
-   return chunks;
-  },[]).map(escape).join('&#8203;');
-  return `<tr><td style="padding:10px 0 3px;color:#b9bec7;font-size:12px">${label}</td></tr><tr><td style="padding:0 0 10px;color:#ffffff;font-size:14px;word-break:break-all;overflow-wrap:anywhere;word-wrap:break-word">${wrapped}</td></tr>`;
- }).join('');
- const html=`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#212227;font-family:Arial,sans-serif;color:#ffffff"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;table-layout:fixed"><tr><td align="center" style="padding:12px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;max-width:560px;table-layout:fixed"><tr><td style="padding:14px;border:1px solid ${color};color:${color};font-size:13px;font-weight:bold">PAYMENT</td></tr><tr><td align="center" style="padding:20px 12px;background:${color}"><img src="cid:platform-logo" width="48" height="48" alt="${escape(t.platform)}" style="display:block;width:48px;height:48px;border:0"><h1 style="margin:12px 0 0;font-size:26px;color:#16181c">${escape(t.platform)}</h1></td></tr><tr><td style="padding:16px;background:#212227"><h2 style="font-size:21px;margin:0 0 12px"> </h2><p style="font-size:18px;word-break:break-word">${escape(amount)}</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;table-layout:fixed;text-align:left">${rows}</table><p style="font-size:14px;line-height:1.6"> cryptocurrency was transferred.</p></td></tr><tr><td style="padding:16px 0;font-size:12px;line-height:1.6;color:#b9bec7">  ${escape(t.platform)} notification.</td></tr></table></td></tr></table></body></html>`;
- return {from:env.RESEND_FROM,to:[t.email],subject:`YOU received a depost ${amount}`,html,
-  text:`DEPOSIT CORNFIM\n${t.platform} Deposit\nAmount: ${amount}\nNetwork: ${t.network}\nwallet address: ${t.address}\nReference: ${t.id}\n .`,
-  attachments:[{filename:`${logo}.png`,content:image.toString('base64'),content_type:'image/png',content_id:'platform-logo'}]};
+ const usd=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(Number(t.usd_cents)/100);
+ const wrap=value=>Array.from(String(value)).reduce((chunks,char,index)=>{
+  if(index%16===0)chunks.push('');
+  chunks[chunks.length-1]+=char;
+  return chunks;
+ },[]).map(escape).join('&#8203;');
+ const rows=[['Amount (fictional)',amount],['Network',t.network],['Sample wallet address',t.address],['Demo reference',t.id],['Service fee',`$${(Number(t.fee_cents)/100).toFixed(2)} USD (${t.fee_percent ?? 1}%)`]].map(([label,value])=>`<tr><td style="padding:10px 0 3px;color:#555f65;font-size:12px;font-weight:bold">${label}</td></tr><tr><td style="padding:0 0 10px;color:#737d83;font-size:13px;word-break:break-all;overflow-wrap:anywhere;word-wrap:break-word">${wrap(value)}</td></tr>`).join('');
+ let action='';
+ if(env.APP_ORIGIN){
+  const origin=new URL(env.APP_ORIGIN);
+  if(['https:','http:'].includes(origin.protocol)) action=`<a href="${escape(origin.origin+'/dashboard')}" style="display:block;padding:16px 12px;background:${theme.accent};color:${theme.buttonInk};text-decoration:none;font-size:16px;border-radius:2px">View demo transaction</a>`;
+ }
+ const html=`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#edf1f5;font-family:Arial,Helvetica,sans-serif"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;table-layout:fixed"><tr><td align="center" style="padding:12px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;max-width:410px;table-layout:fixed;background:${theme.background}"><tr><td align="center" style="padding:26px 20px 22px;color:${theme.ink}"><img src="cid:platform-logo" width="38" height="38" alt="${escape(t.platform)} logo" style="display:block;width:38px;height:38px;margin:0 auto 8px;border:0"><h1 style="margin:0;font-size:30px;font-weight:600;line-height:1.3">${escape(t.platform)}</h1><p style="font-size:9px;letter-spacing:1.5px;margin:10px 0 0">2WINPRANKZ / FICTIONAL DEMO</p></td></tr><tr><td style="padding:0 10px 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;table-layout:fixed;background:#ffffff;border:1px solid #d4ece5;border-radius:3px"><tr><td align="center" style="padding:20px 24px 24px"><p style="margin:0 0 26px;padding:8px 5px;border:1px solid #b6deda;background:#eefaf8;color:#16696d;font-size:10px;line-height:1.5;font-weight:bold">FICTIONAL DEMO - NO FUNDS MOVED</p><div style="width:90px;height:90px;line-height:90px;border:3px solid ${theme.accent};border-radius:50%;color:${theme.accent};font-size:55px;margin:0 auto 30px">&#10003;</div><h2 style="font-size:23px;line-height:1.3;font-weight:normal;color:#3e4243;margin:0 0 5px">Demo transfer received</h2><p style="font-size:15px;color:#747a7a;line-height:1.6;margin:0;word-break:break-word">${escape(amount)} (${escape(usd)} USD)</p><hr style="border:0;border-top:1px solid #e8eeea;margin:28px 0"><p style="font-size:16px;line-height:1.85;color:#7a7e7b;margin:0 0 30px;overflow-wrap:anywhere">This fictional preview shows ${escape(amount)} (${escape(usd)} USD) from a simulated external ${escape(t.network)} account. No cryptocurrency was received, transferred, or credited. This is not an official ${escape(t.platform)} receipt.</p>${action}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;table-layout:fixed;text-align:left;margin-top:20px">${rows}</table><p style="margin:22px 0 0;font-size:10px;line-height:1.6;color:#637c81">Entertainment preview by 2winprankz. Not proof of payment.</p></td></tr></table></td></tr></table></td></tr></table></body></html>`;
+ return {from:env.RESEND_FROM,to:[t.email],subject:`Fictional crypto preview - ${amount}`,html,
+  text:`FICTIONAL DEMO - NO FUNDS MOVED\n${t.platform} demo transfer receipt\nAmount (fictional): ${amount} (${usd} USD)\nNetwork: ${t.network}\nSample wallet address: ${t.address}\nDemo reference: ${t.id}\nNo cryptocurrency was transferred or credited. This is not an official ${t.platform} receipt. Entertainment preview by 2winprankz. Not proof of payment.`,
+  attachments:[{filename:`${theme.logo}.png`,content:image.toString('base64'),content_type:'image/png',content_id:'platform-logo'}]};
 }
 export async function processEmail(store,env,request=fetch){
  if(!env.RESEND_API_KEY)return false;
