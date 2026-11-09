@@ -16,6 +16,7 @@ test('payment, database and API integration',async t=>{
  await db.exec(await readFile('database/admin.sql','utf8'));
  await db.exec(await readFile('database/admin-controls.sql','utf8'));
  await db.exec(await readFile('database/features.sql','utf8'));
+ await db.exec(await readFile('supabase/migrations/20261109124729_transfer_receipt_fees.sql','utf8'));
  await db.exec(await readFile('database/admin-reporting-permissions.sql','utf8'));
  const u1=randomUUID(),u2=randomUUID();await db.query('insert into auth.users(id) values($1),($2)',[u1,u2]);
  const rpc=async(name,args={})=>(await db.query(`select public.${name}(${Object.keys(args).map((_,i)=>'$'+(i+1)).join(',')}) as result`,Object.values(args))).rows[0].result;
@@ -159,6 +160,28 @@ test('payment, database and API integration',async t=>{
    assert.equal((await rpc('prank_admin_users',{p_page:1})).length,2);
    await assert.rejects(db.query("update auth.users set email='changed@example.com'"));
    await db.exec('reset role');
+  });
+  await t.test('admin fee settings, quote snapshots and receipt ownership',async()=>{
+   await db.exec('delete from prank_rate_limits');
+   const feature=await store.one('prank_features',{slug:'crypto'});
+   const payload={id:feature.id,title:feature.title,description:feature.description,action:'crypto',enabled:true,sortOrder:10,feePercent:2.5};
+   assert.equal((await call('/api/admin/features/save',payload,'alice')).status,403);
+   for(const feePercent of [0,-1,101,1.001,'invalid'])assert.equal((await call('/api/admin/features/save',{...payload,feePercent},'bob')).status,400);
+   assert.equal((await call('/api/admin/features/save',payload,'bob')).status,200);
+   const input={requestKey:randomUUID(),platform:'Coinbase',coin:'BTC',amount:'.05',network:'Bitcoin',address:'sample',email:'receiver@example.com',feePercent:0.01};
+   const quoteResult=await call('/api/transfers/preview',input);assert.equal(quoteResult.status,200,JSON.stringify(quoteResult.data));
+   const quote=quoteResult.data;
+   assert.equal(quote.feePercent,2.5);assert.equal(quote.fee,5);
+   await call('/api/admin/features/save',{...payload,feePercent:3},'bob');
+   assert.equal((await call('/api/transfers/preview',input)).data.fee,5);
+   assert.equal((await call('/api/transfers/'+quote.id,undefined,'bob')).status,404);
+   assert.equal((await call('/api/admin/transfers/'+quote.id,undefined,'alice')).status,403);
+   const receipt=await call('/api/admin/transfers/'+quote.id,undefined,'bob');
+   assert.equal(receipt.status,200);assert.equal(receipt.data.feePercent,2.5);assert.equal(receipt.data.address,'sample');
+   const history=(await call('/api/history')).data;
+   assert.equal(history.transfers.find(t=>t.id===quote.id).fee,5);
+   assert.equal((await call('/api/wallet')).data.feePercent,3);
+   await call('/api/admin/features/save',{...payload,feePercent:1},'bob');
   });
   await t.test('wallet balances reconcile to the ledger',async()=>{const rows=(await db.query('select w.balance_cents,coalesce(sum(l.delta_cents),0)::bigint as total from prank_wallets w left join prank_ledger l on l.user_id=w.user_id group by w.user_id,w.balance_cents')).rows;for(const row of rows)assert.equal(Number(row.balance_cents),Number(row.total));});
  }finally{await new Promise(resolve=>server.close(resolve));await db.close();}

@@ -6,6 +6,7 @@ function fields() {
   $("featureUrlField").hidden = action !== "link";
   $("featureUrl").required = action === "link";
   $("featureFeeField").hidden = action !== "video";
+  $("featurePercentField").hidden = action !== "crypto";
 }
 function reset() {
   $("featureForm").reset();
@@ -30,7 +31,7 @@ export async function loadFeatures() {
     copy.textContent =
       f.action === "video"
         ? `V2V fee: ${f.fee_cents === null ? "Not set - requests paused" : "$" + (f.fee_cents / 100).toFixed(2)}`
-        : f.description;
+        : f.action === "crypto" ? `Transaction fee: ${f.fee_percent ?? 1}%` : f.description;
     edit.textContent = "Edit";
     edit.className = "btn btn-sm btn-outline-primary";
     edit.type = "button";
@@ -45,6 +46,7 @@ export async function loadFeatures() {
       $("featureUrl").value = f.url;
       $("featureFee").value =
         f.fee_cents === null ? "" : (f.fee_cents / 100).toFixed(2);
+      $("featurePercent").value = f.fee_percent ?? 1;
       $("featureOrder").value = f.sort_order;
       $("featureEnabled").checked = f.enabled;
       $("featureFormTitle").textContent = `Edit ${f.title}`;
@@ -69,6 +71,7 @@ $("featureForm").onsubmit = async (e) => {
       action: $("featureAction").value,
       url: $("featureUrl").value,
       fee: $("featureFee").value,
+      feePercent: Number($("featurePercent").value),
       sortOrder: Number($("featureOrder").value),
       enabled: $("featureEnabled").checked,
     });

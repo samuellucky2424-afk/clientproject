@@ -1,3 +1,4 @@
+import {showReceipt, updateReceipt} from './receipt.js';
 import {apiJson,setupAccount} from './session.js';
 const assets = [
   { coin: 'USDT', name: 'Tether', symbol: '₮', networks: ['Tron (TRC20)', 'Ethereum (ERC20)', 'BNB Smart Chain (BEP20)'] },
@@ -23,7 +24,6 @@ function update() {
   byId('addressSummary').textContent = byId('address').value || 'Not entered';
   byId('emailSummary').textContent = byId('email').value || 'Not entered';
   byId('networkSummary').textContent = byId('network').value;
-  byId('emailPreview').hidden = true;
   if(typeof transferRequestKey!=='undefined')transferRequestKey=crypto.randomUUID();
   byId('receiptPanel').hidden = true;
   byId('receiptStatus').textContent = 'Awaiting confirmation';
@@ -114,12 +114,12 @@ byId('cryptoForm').onsubmit = async event => {
  try {
   pendingQuote=await api('/api/transfers/preview',{requestKey:transferRequestKey,platform:byId('platformSummary').textContent,coin:selected.coin,amount:byId('amount').value,network:byId('network').value,address:byId('address').value,email:byId('email').value});
   byId('confirmDetails').replaceChildren();
-  for(const [label,value] of [['Platform',pendingQuote.platform],['Amount',`${pendingQuote.amount} ${pendingQuote.coin}`],['Network',pendingQuote.network],['Recipient address',pendingQuote.address],['Recipient email',pendingQuote.email],['Transfer value (USD)',`$${pendingQuote.usdValue.toFixed(2)}`],['Rate (CoinGecko)',`1 ${pendingQuote.coin} = $${pendingQuote.usdRate} USD`],['Rate updated',pendingQuote.priceTimestamp],['Service fee (1%)',`$${pendingQuote.fee.toFixed(2)} USD`]]) {
+  for(const [label,value] of [['Platform',pendingQuote.platform],['Amount',`${pendingQuote.amount} ${pendingQuote.coin}`],['Network',pendingQuote.network],['Recipient address',pendingQuote.address],['Recipient email',pendingQuote.email],['Transfer value (USD)',`$${pendingQuote.usdValue.toFixed(2)}`],['Rate (CoinGecko)',`1 ${pendingQuote.coin} = $${pendingQuote.usdRate} USD`],['Rate updated',pendingQuote.priceTimestamp],[`Service fee (${pendingQuote.feePercent}%)`,`$${pendingQuote.fee.toFixed(2)} USD`]]) {
    const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=value;byId('confirmDetails').append(dt,dd);
   }
   renderBybitReceipt(pendingQuote);
   await updatePaymentOptions();
-  byId('receiptPanel').hidden=false; byId('confirmError').textContent='';byId('transferMessage').textContent='';byId('confirmTransfer').showModal();
+  byId('receiptPanel').hidden=true; byId('confirmError').textContent='';byId('transferMessage').textContent='';byId('confirmTransfer').showModal();
  } catch(error) {byId('transferMessage').textContent=error.message;} finally{button.disabled=false;}
 };
 byId('cancelTransfer').onclick=()=>{byId('confirmTransfer').close();byId('receiptPanel').hidden=true;pendingQuote=null;};
@@ -139,40 +139,10 @@ byId('sendTransfer').onclick=async()=>{
  }catch(error){byId('confirmError').textContent=error.message;try{await updatePaymentOptions();}catch{}}finally{byId('sendTransfer').disabled=false;byId('cancelTransfer').disabled=false;}
 };
 function renderCompleted(completed) {
-  renderBybitReceipt(completed);
-  activeDeliveryId=completed.id;
-  byId('amountSummary').textContent=`${completed.amount} ${completed.coin}`;
-  byId('receiptTotal').textContent=`${completed.amount} ${completed.coin}`;
-  const now = new Date(completed.timestamp);
-  const timestamp = now.toISOString();
-  const reference = completed.id;
-  const platform = completed.platform;
-
-  byId('receiptStatus').textContent = completed.state==='sent'?'Preview email submitted':'Preview email queued';
-  byId('receiptId').textContent = reference;
-  byId('receiptDate').textContent = new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: '2-digit', year: 'numeric', timeZone: 'UTC' }).format(now);
-  byId('receiptTime').textContent = new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' }).format(now);
-
-  byId('mailTo').textContent = completed.email;
-  byId('mailPlatform').textContent = platform;
-  byId('mailService').textContent = platform;
-  byId('emailPreview').dataset.platform = logoNames[platform];
-  for (const id of ['mailSenderLogo', 'mailBrandLogo']) {
-    byId(id).src = `assets/logos/${logoNames[platform]}.svg`;
-    byId(id).alt = `${platform} logo`;
-  }
-  byId('mailDepositCopy').textContent = `This fictional ${platform} email shows a sample deposit of ${completed.amount} ${completed.coin} on ${completed.network}. No funds have been received or credited.`;
-  byId('mailAmount').textContent = `${completed.amount} ${completed.coin}`;
-  byId('mailChain').textContent = completed.network;
-  byId('mailAddress').textContent = completed.address;
-  byId('mailTime').textContent = timestamp.replace('T', ' ').replace(/\.\d{3}Z$/, ' UTC');
-  byId('mailRef').textContent = reference;
-  byId('emailPreview').hidden = false;
-  byId('emailPreview').scrollIntoView({
-    behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-    block: 'nearest',
-  });
-};
+ activeDeliveryId=completed.id;
+ byId('receiptPanel').hidden=true;
+ showReceipt(completed);
+}
 
 choose(selected);
 
@@ -182,6 +152,7 @@ async function trackDelivery(id){
   if(activeDeliveryId!==id)return;
   try{
    const result=await apiJson(`/api/transfers/${id}`);
+   updateReceipt(result);
    if(result.state==='sent'){byId('receiptStatus').textContent='Preview email submitted';byId('transferMessage').textContent='Email accepted for delivery.';return;}
    if(result.state==='failed'){byId('receiptStatus').textContent='Email rejected';byId('transferMessage').textContent='Email could not be sent. The service fee was refunded.';return;}
    if(result.state==='review'){byId('transferMessage').textContent='Email status requires review. The fee will not be charged again.';return;}

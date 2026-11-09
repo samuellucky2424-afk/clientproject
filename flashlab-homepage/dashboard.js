@@ -1,3 +1,4 @@
+import {openReceipt} from './receipt.js';
 import { setupFeatureMenu } from "./feature-menu.js";
 import { apiJson, setupAccount } from "./session.js";
 const seeds = [
@@ -338,6 +339,7 @@ async function loadHistory() {
         reference: d.reference,
       })),
       ...data.transfers.map((t) => ({
+        transferId: t.id,
         title: `${t.amount} ${t.coin} fictional preview`,
         detail: `Service fee: $${t.fee.toFixed(2)} ? ${t.state}`,
         reference: t.id,
@@ -353,6 +355,19 @@ async function loadHistory() {
       detail.textContent = entry.detail;
       reference.textContent = entry.reference;
       row.append(title, detail, reference);
+      if (entry.transferId) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "dialog-done";
+        button.textContent = "View receipt";
+        button.onclick = async () => {
+          button.disabled = true;
+          try { await openReceipt(entry.transferId); }
+          catch (error) { message.textContent = error.message; }
+          finally { button.disabled = false; }
+        };
+        row.append(button);
+      }
       list.append(row);
     }
     message.textContent = entries.length ? "" : "No wallet activity yet.";

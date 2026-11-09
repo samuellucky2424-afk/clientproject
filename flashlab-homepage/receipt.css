@@ -1,0 +1,7 @@
+.transaction-receipt{width:min(560px,calc(100vw - 32px));max-height:85vh;overflow:auto;border:1px solid #dbe6f3;border-radius:18px;padding:28px;color:#183b6b;background:#fff;font:14px/1.6 Arial,sans-serif;box-sizing:border-box}
+.transaction-receipt::backdrop{background:rgb(15 30 50 / 55%)}
+.transaction-receipt h2{font-size:23px;margin:0 0 18px}
+.transaction-receipt>p{padding:14px;background:#fff2c8;border:1px solid #edcf7c;border-radius:8px;color:#75530d}
+.transaction-receipt dt{font-weight:700;margin-top:14px}
+.transaction-receipt dd{margin:3px 0;overflow-wrap:anywhere}
+.transaction-receipt button{margin-top:20px;padding:12px 20px;background:#1769dd;color:white;border:0;border-radius:8px;cursor:pointer}

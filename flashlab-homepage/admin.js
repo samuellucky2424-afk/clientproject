@@ -1,3 +1,4 @@
+import {openReceipt} from './receipt.js';
 import { loadFeatures } from "./admin-features.js";
 import "@coreui/coreui/dist/css/coreui.min.css";
 import "./admin.css";
@@ -117,6 +118,15 @@ async function activity() {
       t.state,
     ]);
     tr.firstChild.className = "reference";
+    const details = el("button", "View receipt", "btn btn-sm btn-outline-primary");
+    details.type = "button";
+    details.onclick = async () => {
+      details.disabled = true;
+      try { await openReceipt(t.id, true); }
+      catch (error) { $("message").textContent = error.message; }
+      finally { details.disabled = false; }
+    };
+    tr.lastChild.append(document.createElement("br"), details);
     $("transactionList").append(tr);
   }
   for (const d of data.deposits) {

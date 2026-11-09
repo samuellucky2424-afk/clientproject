@@ -118,3 +118,5 @@ Set the Video calling fee in USD before accepting new requests; it starts unset 
 
 
 Apply `database/admin-reporting-permissions.sql` after the admin schema to grant the server role read access to the specific Auth user columns used by admin reports. No Auth write access is granted. Restart the preview server after updating `.env`.
+
+Apply `supabase/migrations/20261109124729_transfer_receipt_fees.sql` after `database/features.sql` before deploying receipt and fee controls. In Admin ? Features, edit Crypto prank to set the transaction fee from 0.01% to 100% (two decimal places). New quotes snapshot the percentage; existing quotes and receipts keep their original fee. Users can reopen their receipts from wallet history; admins can open receipts from the transaction list. All crypto receipts and emails remain fictional previews.

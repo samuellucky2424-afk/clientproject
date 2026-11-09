@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { createStore } from "./store.mjs";
 import { createPricing } from "./pricing.mjs";
 import { createFlutterwave, sameSecret, cents } from "./flutterwave.mjs";
-import { platforms, networks } from "./catalog.mjs";
+import { platforms, networks, calculateFee as priceFee } from "./catalog.mjs";
 import { buildEmail } from "./email.mjs";
 export { calculateFee } from "./catalog.mjs";
 const uuid = (v) =>
@@ -23,7 +23,7 @@ export function transferView(t) {
     email: t.email,
     usdValue: Number(t.usd_cents) / 100,
     fee: Number(t.fee_cents) / 100,
-    feePercent: 1,
+    feePercent: Number(t.fee_percent ?? 1),
     usdRate: Number(t.usd_rate),
     priceTimestamp: t.price_timestamp,
     expires: Date.parse(t.expires_at),
@@ -194,7 +194,11 @@ export function createApi(env, dependencies = {}) {
               : null;
           if (fee > 100000000)
             throw fail("Fee exceeds the USD 1,000,000 limit.");
+          const feePercent = existing?.slug === "crypto" ? Number(body.feePercent) : null;
+          if (existing?.slug === "crypto" && (!Number.isFinite(feePercent) || feePercent < 0.01 || feePercent > 100 || Math.abs(Math.round(feePercent * 100) - feePercent * 100) > 1e-8))
+            throw fail("Enter a fee between 0.01% and 100%, with at most two decimal places.");
           const values = {
+            ...(existing?.slug === "crypto" ? {fee_percent: feePercent} : {}),
             title: body.title.trim(),
             description: body.description.trim(),
             action,
@@ -218,6 +222,13 @@ export function createApi(env, dependencies = {}) {
                 slug: `feature-${randomUUID()}`,
               });
           return reply(200, feature);
+        }
+        if (req.method === "GET" && url.pathname.startsWith("/api/admin/transfers/")) {
+          const id = url.pathname.split("/").pop();
+          if (!uuid(id)) throw fail("Invalid transfer ID");
+          const transfer = await store.one("prank_transfers", {id});
+          if (!transfer) throw fail("Preview not found", 404);
+          return reply(200, transferView(transfer));
         }
         if (req.method === "GET" && url.pathname === "/api/admin/overview")
           return reply(200, await store.rpc("prank_admin_overview"));
@@ -357,7 +368,7 @@ export function createApi(env, dependencies = {}) {
           balance: Number((await store.wallet(user.id)).balance_cents) / 100,
           currency: "USD",
           depositCurrency: "NGN",
-          feePercent: 1,
+          feePercent: Number((await store.one("prank_features", {slug:"crypto"}))?.fee_percent ?? 1),
           email: user.email,
         });
       if (req.method === "GET" && url.pathname === "/api/history") {
@@ -578,7 +589,10 @@ export function createApi(env, dependencies = {}) {
           !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)
         )
           throw fail("Check the transfer details.");
-        const p = await pricing.crypto(body.coin, body.amount);
+        const feature = await store.one("prank_features", {slug:"crypto"});
+        const feePercent = Number(feature?.fee_percent ?? 1);
+        const price = await pricing.crypto(body.coin, body.amount, feePercent);
+        const p = {...price, ...priceFee(body.amount, price.usdRate, feePercent)};
         const t = await store.insert("prank_transfers", {
           user_id: user.id,
           request_key: body.requestKey,
@@ -590,6 +604,7 @@ export function createApi(env, dependencies = {}) {
           email: body.email,
           usd_cents: Math.round(p.usdValue * 100),
           fee_cents: Math.round(p.fee * 100),
+          fee_percent: feePercent,
           usd_rate: p.usdRate,
           price_timestamp: p.priceTimestamp,
           expires_at: new Date(Date.now() + 120000).toISOString(),

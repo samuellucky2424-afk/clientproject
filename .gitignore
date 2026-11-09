@@ -5,6 +5,7 @@
 node_modules/
 dist/
 .vercel/
+supabase/.temp/
 *.log
 Thumbs.db
 .DS_Store

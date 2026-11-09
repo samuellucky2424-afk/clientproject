@@ -136,8 +136,10 @@
                   ><input id="featureEnabled" type="checkbox" checked /> Visible
                   on the user dashboard and menu</label
                 >
+                  <div id="featurePercentField" hidden><label for="featurePercent">Crypto transaction fee (%)</label><input class="form-control" id="featurePercent" type="number" min="0.01" max="100" step="0.01" value="1"><small>Applies to new quotes. Existing quotes keep their original fee.</small></div>
                 <div class="d-flex gap-2">
-                  <button id="saveFeature" class="btn btn-primary">
+
+<button id="saveFeature" class="btn btn-primary">
                     Save feature</button
                   ><button
                     id="resetFeature"
