@@ -225,16 +225,16 @@ function render(t) {
  downloadStatus.setAttribute('role', 'status');
  download.onclick = async () => {
   download.disabled = true;
-  download.textContent = 'Preparing PNG...';
+  download.textContent = 'Preparing ...';
   downloadStatus.textContent = '';
   try {
    await downloadReceiptPng(t);
   } catch (error) {
-   console.error('Unable to download receipt PNG', error);
-   downloadStatus.textContent = 'PNG download failed. Please try again.';
+   console.error('Unable to download receipt', error);
+   downloadStatus.textContent = ' download failed. Please try again.';
   } finally {
    download.disabled = false;
-   download.textContent = 'Download PNG';
+   download.textContent = 'Save receipt';
   }
  };
  card.append(badge, check, title, total, divider, copy, details, download, downloadStatus, footer);
