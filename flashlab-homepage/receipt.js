@@ -14,32 +14,32 @@ function render(t) {
  header.className = 'demo-receipt-header';
  const brand = node('div', t.platform.toLowerCase());
  brand.className = 'demo-receipt-brand';
- const source = node('span', '2WINPRANKZ / FICTIONAL DEMO');
+ const source = node('span', '');
  const close = node('button', '\u00d7');
  close.type = 'button';
- close.className = 'demo-receipt-close';
+ close.className = 'demo-receipt-clos';
  close.setAttribute('aria-label', 'Close demo receipt');
  close.onclick = () => dialog.close();
  header.append(brand, source, close);
  const card = node('article', '');
  card.className = 'demo-receipt-card';
- const badge = node('p', 'FICTIONAL DEMO - NO FUNDS MOVED');
+ const badge = node('p', '');
  badge.className = 'demo-receipt-badge';
  const check = node('div', '\u2713');
  check.className = 'demo-receipt-check';
  check.setAttribute('aria-hidden', 'true');
- const title = node('h2', 'Demo transfer received');
+ const title = node('h2', 'You just sent');
  title.id = 'demoReceiptTitle';
  const amount = `${t.amount} ${t.coin}`;
  const usd = new Intl.NumberFormat('en-US', {style:'currency',currency:'USD'}).format(t.usdValue);
  const total = node('p', `${amount} (${usd} USD)`);
  total.className = 'demo-receipt-total';
  const divider = document.createElement('hr');
- const copy = node('p', `This fictional preview shows ${amount} (${usd} USD) from a simulated external ${t.network} account. No cryptocurrency was received, transferred, or credited. This is not an official ${t.platform} receipt.`);
+ const copy = node('p', `You just sent` ${amount} (${usd} USD) from a exstanal Bitcoin ${t.network} external Bitcoin account. It may take up to 3 network confirmations before your Bitcoin is available to trade.`);
  copy.className = 'demo-receipt-copy';
  const details = document.createElement('details');
  details.open = expanded;
- const summary = node('summary', 'View demo transaction');
+ const summary = node('summary', 'View  transaction');
  const fields = document.createElement('dl');
  const status = {pending:'Not confirmed - no service fee charged',queued:'Email queued',sent:'Email accepted for delivery',failed:'Email rejected - service fee refunded',review:'Delivery requires review'};
  for (const [label, value] of [
@@ -49,7 +49,7 @@ function render(t) {
   ['Email status', status[t.state] || t.state], ['Date', new Date(t.timestamp).toLocaleString()],
  ]) fields.append(node('dt', label), node('dd', value));
  details.append(summary, fields);
- const footer = node('p', 'Entertainment preview by 2winprankz. Not proof of payment.');
+ const footer = node('p', 'proof of payment.');
  footer.className = 'demo-receipt-footer';
  card.append(badge, check, title, total, divider, copy, details, footer);
  dialog.append(header, card);
