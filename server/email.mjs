@@ -5,7 +5,7 @@ export async function buildEmail(env,t){
  // Inline PNG attachments work in mail clients that do not display SVG images.
  const image=await readFile(new URL(`../flashlab-homepage/assets/logos/${logo}.png`,import.meta.url));
  const amount=`${t.amount} ${t.coin}`;
- const rows=[['Amount',amount],['Network',t.network],['Sample wallet address',t.address],['Reference',t.id]].map(([label,value])=>{
+ const rows=[['Amount',amount],['Network',t.network],['Wallet address',t.address],['Reference',t.id]].map(([label,value])=>{
   // Explicit break opportunities also work in clients that ignore overflow-wrap.
   const wrapped=Array.from(String(value)).reduce((chunks,char,index)=>{
    if(index%16===0)chunks.push('');
