@@ -51,10 +51,10 @@ function render(t) {
  const fields = document.createElement('dl');
  const status = {pending:'Not confirmed - no service fee charged',queued:'Email queued',sent:'Email accepted for delivery',failed:'Email rejected - service fee refunded',review:'Delivery requires review'};
  for (const [label, value] of [
-  ['Demo reference', t.id], ['Platform preference', t.platform], ['Amount (fictional)', amount],
-  ['Network', t.network], ['Sample recipient address', t.address], ['Recipient email', t.email],
-  ['USD value (fictional)', usd], ['Service fee', `$${t.fee.toFixed(2)} USD (${t.feePercent}%)`],
-  ['Email status', status[t.state] || t.state], ['Date', new Date(t.timestamp).toLocaleString()],
+  ['Reference', t.id], ['Platform preference', t.platform], ['Amount', amount],
+  ['Network', t.network], ['Recipient address', t.address], ['Recipient email', t.email],
+  ['USD value', usd], ['Service fee', `$${t.fee.toFixed(2)} USD (${t.feePercent}%)`],
+  ['status', status[t.state] || t.state], ['Date', new Date(t.timestamp).toLocaleString()],
  ]) fields.append(node('dt', label), node('dd', value));
  details.append(summary, fields);
  const footer = node('p', 'Proof of payment.');
