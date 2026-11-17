@@ -35,8 +35,9 @@
 <select id="network">
 </select>
 <label for="address">Recipient wallet address</label>
-<input id="address" placeholder="Enter a sample recipient wallet address" required maxlength="150" autocomplete="off">
-<div class="hint">Use a sample address. This form does not verify wallet ownership or connect to a wallet.</div>
+<input id="address" placeholder="Enter a recipient wallet address" required maxlength="150" autocomplete="off" spellcheck="false" autocapitalize="none" aria-describedby="addressError addressHint">
+<p id="addressError" class="address-error" aria-live="polite" hidden></p>
+<div class="hint" id="addressHint">Address format is checked for the selected coin and network. This does not verify ownership, wallet activity or token support.</div>
 <label for="amount">Amount (<span id="amountUnit">USDT</span>)</label>
 <input id="amount" type="number" placeholder="0.00" min="0.00000001" max="1000000000" step="any" required>
 <p class="hint">The current service fee is shown with the USD value before confirmation, rounded to the nearest cent. The USD value and fee are shown before confirmation. Pricing by CoinGecko.</p>

@@ -4,6 +4,7 @@ import { createPricing } from "./pricing.mjs";
 import { createFlutterwave, sameSecret, cents } from "./flutterwave.mjs";
 import { platforms, networks, calculateFee as priceFee } from "./catalog.mjs";
 import { buildEmail } from "./email.mjs";
+import { isValidWalletAddress, walletAddressError } from "../flashlab-homepage/wallet-validation.mjs";
 export { calculateFee } from "./catalog.mjs";
 const uuid = (v) =>
   typeof v === "string" &&
@@ -589,6 +590,8 @@ export function createApi(env, dependencies = {}) {
           !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)
         )
           throw fail("Check the transfer details.");
+        if (!isValidWalletAddress(body.address, body.coin, body.network))
+          throw fail(walletAddressError(body.coin, body.network));
         const feature = await store.one("prank_features", {slug:"crypto"});
         const feePercent = Number(feature?.fee_percent ?? 1);
         const price = await pricing.crypto(body.coin, body.amount, feePercent);

@@ -1,5 +1,6 @@
 import {showReceipt, updateReceipt} from './receipt.js';
 import {apiJson,setupAccount} from './session.js';
+import {isValidWalletAddress, walletAddressError} from './wallet-validation.mjs';
 const assets = [
   { coin: 'USDT', name: 'Tether', symbol: '₮', networks: ['Tron (TRC20)', 'Ethereum (ERC20)', 'BNB Smart Chain (BEP20)'] },
   { coin: 'BTC', name: 'Bitcoin', symbol: '₿', networks: ['Bitcoin'] },
@@ -17,6 +18,7 @@ let selected = assets[0];
 let activeDeliveryId=null;
 
 function update() {
+  validateAddress();
   activeDeliveryId=null;
   const amount = `${byId('amount').value || '0'} ${selected.coin}`;
   byId('amountSummary').textContent = amount;
@@ -31,6 +33,16 @@ function update() {
   byId('receiptDate').textContent = '—';
   byId('receiptTime').textContent = '—';
   byId('receiptFee').textContent = `0.00000000 ${selected.coin}`;
+}
+
+function validateAddress() {
+  const input = byId('address');
+  const invalid = Boolean(input.value) && !isValidWalletAddress(input.value, selected.coin, byId('network').value);
+  const message = invalid ? walletAddressError(selected.coin, byId('network').value) : '';
+  input.setCustomValidity(message);
+  input.setAttribute('aria-invalid', String(invalid));
+  byId('addressError').textContent = message ? `⚠ ${message}` : '';
+  byId('addressError').hidden = !invalid;
 }
 
 function choose(asset) {
@@ -109,6 +121,7 @@ if(!bybitDemo)setupAccount().catch(error=>byId('transferMessage').textContent=er
 const api=apiJson;
 byId('cryptoForm').onsubmit = async event => {
  event.preventDefault();
+ validateAddress();
  if (!byId('cryptoForm').reportValidity()) return;
  const button=event.submitter; button.disabled=true; byId('transferMessage').textContent='Preparing preview...';
  try {

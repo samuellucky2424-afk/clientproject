@@ -15,7 +15,9 @@
   "dependencies": {
     "@coreui/coreui": "5.9.1",
     "@supabase/supabase-js": "2.119.0",
-    "@vercel/functions": "3.11.0"
+    "@vercel/functions": "3.11.0",
+    "base-x": "^4.0.1",
+    "multicoin-address-validator": "^0.5.26"
   },
   "engines": {
     "node": ">=22.12"

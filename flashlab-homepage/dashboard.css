@@ -850,3 +850,7 @@ body:has(#featureMenu[open]) {
     animation: none;
   }
 }
+
+/* Recipient address validation */
+#address[aria-invalid='true'] { border-color: #b42318; outline-color: #fda29b; }
+.address-error { color: #b42318; font-size: 12px; line-height: 1.6; margin: 8px 0 0; }
