@@ -13,7 +13,7 @@ grant all on public.prank_features to service_role;
 insert into public.prank_features(slug,title,description,action,sort_order) values
  ('crypto','Crypto prank','Create a clearly labelled fictional crypto transfer preview.','crypto',10),
  ('new-phone','New phone','Contact the team for details about the new phone service.','details',20),
- ('video','Video calling','Request a V2V call with your name, email and WhatsApp number.','video',30);
+ ('video','Video calling','Request a V2V call with your name, email and Telegram number.','video',30);
 alter table public.prank_video_requests add column full_name text check(length(full_name) between 2 and 100),
  add column email text check(length(email)<=254), add column whatsapp text check(length(whatsapp) between 8 and 16),
  add column fee_cents bigint check(fee_cents between 1 and 100000000);
