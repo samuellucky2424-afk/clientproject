@@ -440,7 +440,7 @@ export function createApi(env, dependencies = {}) {
           body.expectedFeeCents < 1
         )
           throw fail(
-            "Enter your name, email, WhatsApp number with country code, and request details. Review the fee before submitting.",
+            "Enter your name, email, Telegram phone number with country code, and request details. Review the fee before submitting.",
           );
         return reply(
           200,

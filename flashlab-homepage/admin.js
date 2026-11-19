@@ -67,7 +67,7 @@ async function activity() {
       el("p", r.details),
       el(
         "p",
-        `${r.full_name || "Legacy request"} | Email: ${r.email || r.contact} | WhatsApp: ${r.whatsapp || r.contact} | Fee: ${r.fee_cents ? money(r.fee_cents / 100) : "Legacy request - no fee"}`,
+        `${r.full_name || "Legacy request"} | Email: ${r.email || r.contact} | Contact number: ${r.whatsapp || r.contact} | Fee: ${r.fee_cents ? money(r.fee_cents / 100) : "Legacy request - no fee"}`,
       ),
     );
     const form = el("form"),
