@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHmac, randomUUID } from "node:crypto";
 import { createStore } from "./store.mjs";
 import { createPricing } from "./pricing.mjs";
 import { createFlutterwave, sameSecret, cents } from "./flutterwave.mjs";
@@ -13,6 +13,8 @@ const uuid = (v) =>
   );
 const fail = (message, status = 400) =>
   Object.assign(Error(message), { status });
+const authRateKey = (secret, kind, value) =>
+  `auth:${kind}:${createHmac("sha256", secret).update(value).digest("hex")}`;
 export function transferView(t) {
   return {
     id: t.id,
@@ -98,6 +100,124 @@ export function createApi(env, dependencies = {}) {
         throw fail("Method not allowed", 405);
       if (req.headers.origin && req.headers.origin !== env.APP_ORIGIN)
         throw fail("Origin rejected", 403);
+      if (
+        req.method === "POST" &&
+        [
+          "/api/auth/password-reset/request",
+          "/api/auth/password-reset/verify",
+        ].includes(url.pathname)
+      ) {
+        const body = await readBody(req, 2048);
+        const email =
+          typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+        if (
+          email.length > 254 ||
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+        )
+          throw fail("Enter a valid email address.");
+        const ip = String(
+          req.headers["x-forwarded-for"] ||
+            req.socket?.remoteAddress ||
+            "unknown",
+        )
+          .split(",")[0]
+          .trim()
+          .slice(0, 100);
+        const verify = url.pathname.endsWith("/verify");
+        const checkLimit = async (kind, identity, limit, seconds) => {
+          if (
+            !(await store.rpc("prank_rate_limit", {
+              p_key: authRateKey(env.SUPABASE_SECRET_KEY, kind, identity),
+              p_limit: limit,
+              p_seconds: seconds,
+            }))
+          )
+            throw fail("Too many attempts. Please try again later.", 429);
+        };
+        if (verify) {
+          const token =
+            typeof body.token === "string" ? body.token.trim() : "";
+          if (!/^\d{6}$/.test(token))
+            throw fail("Enter the six-digit code from your email.");
+          await checkLimit("reset-verify-email", email, 5, 900);
+          await checkLimit("reset-verify-ip", ip, 20, 900);
+          let response;
+          try {
+            response = await request(
+              new URL("/auth/v1/verify", env.SUPABASE_URL),
+              {
+                method: "POST",
+                headers: {
+                  apikey: env.SUPABASE_PUBLISHABLE_KEY,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email, token, type: "recovery" }),
+                signal: AbortSignal.timeout(10000),
+              },
+            );
+          } catch (error) {
+            console.error(
+              "Password reset verification request failed:",
+              error.message,
+            );
+            throw fail("Password reset is temporarily unavailable.", 503);
+          }
+          if (response.status === 429)
+            throw fail("Too many attempts. Please try again later.", 429);
+          if (!response.ok) {
+            if (response.status >= 500)
+              throw fail("Password reset is temporarily unavailable.", 503);
+            throw fail("The code is invalid or expired. Request a new code.");
+          }
+          let result;
+          try {
+            result = await response.json();
+          } catch {
+            throw fail("Password reset is temporarily unavailable.", 503);
+          }
+          if (
+            typeof result.access_token !== "string" ||
+            typeof result.refresh_token !== "string"
+          )
+            throw fail("Password reset is temporarily unavailable.", 503);
+          return reply(200, {
+            access_token: result.access_token,
+            refresh_token: result.refresh_token,
+          });
+        }
+        await checkLimit("reset-request-email", email, 3, 3600);
+        await checkLimit("reset-request-ip", ip, 10, 900);
+        if (!env.APP_ORIGIN)
+          throw fail("Password reset is temporarily unavailable.", 503);
+        const recoverUrl = new URL("/auth/v1/recover", env.SUPABASE_URL);
+        recoverUrl.searchParams.set(
+          "redirect_to",
+          `${env.APP_ORIGIN}/auth?flow=password-reset`,
+        );
+        let response;
+        try {
+          response = await request(recoverUrl, {
+            method: "POST",
+            headers: {
+              apikey: env.SUPABASE_PUBLISHABLE_KEY,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email }),
+            signal: AbortSignal.timeout(10000),
+          });
+        } catch (error) {
+          console.error("Password reset email request failed:", error.message);
+          throw fail("Password reset is temporarily unavailable.", 503);
+        }
+        if (response.status === 429)
+          throw fail("Too many requests. Please try again later.", 429);
+        if (!response.ok)
+          throw fail("Password reset is temporarily unavailable.", 503);
+        return reply(200, {
+          message:
+            "If an account exists for that email, a reset code has been sent.",
+        });
+      }
       const token = /^Bearer (\S+)$/.exec(req.headers.authorization || "")?.[1];
       if (!token) throw fail("Please sign in.", 401);
       const user = await store.user(token);

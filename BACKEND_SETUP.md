@@ -28,7 +28,11 @@ Edit `.env` locally. Never put private keys in frontend JavaScript or `VITE_` va
 | `APP_ORIGIN` | Local: `http://127.0.0.1:5173`; production: public HTTPS origin without trailing slash |
 | `PORT` | Production Node port, default `3000` |
 
-Supabase Authentication URL Configuration must allow the app's `/auth` email redirect. Set the site URL, enable email/password signup and email confirmation, and configure production Auth SMTP. Auth confirmation emails are separate from app preview emails. Review inherited Morphly Auth hooks, CAPTCHA requirements, and email templates before enabling customer signup.
+Supabase Authentication URL Configuration must allow the app's `/auth` email redirect. Set the site URL, enable email/password signup and **email confirmation**, and configure production Auth SMTP. Keep email confirmation required: the app blocks unconfirmed users from logging in to protected features.
+
+The signup confirmation email should contain Supabase's `{{ .ConfirmationURL }}` and redirect back to `/auth?verified=1`. Password resets use Supabase's recovery email and OTP flow. In the **Reset Password** email template, include `{{ .Token }}` so users receive the six-digit code; set the Auth OTP length to 6 and use a short expiry (10 minutes is recommended). Keep the confirmation link (`{{ .ConfirmationURL }}`) as a fallback; it returns to `/auth?flow=password-reset` and lets the user set a password after verifying through Supabase. Add both full callback URLs (`https://YOUR_DOMAIN/auth?verified=1` and `https://YOUR_DOMAIN/auth?flow=password-reset`) to the project's Auth redirect URL allowlist. These Auth emails are separate from app preview emails. Review inherited Morphly Auth hooks, CAPTCHA requirements, and email templates before enabling customer signup.
+
+Password reset requests are limited server-side to 3 per email per hour and 10 per IP per 15 minutes. Code verification is limited to 5 attempts per email and 20 per IP per 15 minutes. The browser also applies a 60-second resend cooldown. Limits use the existing `prank_rate_limits` table and `prank_rate_limit` function; IP-based throttling also depends on the deployment providing a trustworthy `X-Forwarded-For` header. Supabase Auth's own rate limits remain in effect as an additional safeguard.
 
 Flutterwave webhook URL: `https://YOUR_DOMAIN/api/webhooks/flutterwave`. Set its secret hash to `FLW_WEBHOOK_SECRET` and enable webhook retries. This integration uses v3's `verif-hash`, then independently verifies the transaction. Do not mix v4 credentials/webhook formats. For local sandbox testing, use your own HTTPS tunnel and set `APP_ORIGIN` to its public origin.
 
@@ -69,11 +73,13 @@ Mismatched, overpaid, refunded, or disputed payments need operational reconcilia
 
 ## API
 
-Except `/api/config` and the signed webhook, routes require a Supabase bearer token. Browser roles cannot write financial tables or execute financial RPCs. Authenticated direct reads only return the owner's rows. Per-account limits: 30 POSTs and 120 GETs per minute. Add edge/IP limits for your deployment and periodically prune `prank_rate_limits` rows older than a day.
+Except `/api/config`, the signed webhook, and the password-reset endpoints, routes require a Supabase bearer token. Browser roles cannot write financial tables or execute financial RPCs. Authenticated direct reads only return the owner's rows. Per-account limits: 30 POSTs and 120 GETs per minute. Add edge/IP limits for your deployment and periodically prune `prank_rate_limits` rows older than a day.
 
 | Route | Purpose |
 | --- | --- |
 | `GET /api/config` | Public Supabase configuration only |
+| `POST /api/auth/password-reset/request` | `{email}`; sends a recovery OTP without revealing whether the account exists |
+| `POST /api/auth/password-reset/verify` | `{email, token}`; verifies a six-digit recovery OTP and returns a short-lived reset session |
 | `GET /api/wallet` | USD balance |
 | `GET /api/history` | Latest 50 deposits, transfers, and ledger entries each |
 | `POST /api/deposits/quote` | `{amount, requestKey}`; NGN amount and UUID request key |
