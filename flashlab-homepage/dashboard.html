@@ -150,9 +150,9 @@
         <p id="historyMessage" role="status"></p>
         <div id="walletHistory"></div>
       </section>
-      <section class="wallet-history">
+      <section class="wallet-history" aria-labelledby="ordersTitle">
         <div class="section-heading">
-          <h2>Your V2V requests</h2>
+          <h2 id="ordersTitle">Your V2V requests</h2>
           <button id="newVideoRequest" class="motion">New request</button>
         </div>
         <div id="videoRequests" role="status"></div>
@@ -229,6 +229,7 @@
       <hr />
       <nav aria-label="Account">
         <button type="button" id="menuWallet">Top up wallet</button
+        ><a href="#ordersTitle">Orders</a
         ><a href="#historyTitle">Wallet activity</a
         ><a href="#referralsTitle">Referrals</a>
       </nav>
