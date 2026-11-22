@@ -19,6 +19,7 @@ let activeDeliveryId=null;
 
 function update() {
   validateAddress();
+  updateFeeEstimate();
   activeDeliveryId=null;
   const amount = `${byId('amount').value || '0'} ${selected.coin}`;
   byId('amountSummary').textContent = amount;
@@ -37,6 +38,8 @@ function update() {
 
 function validateAddress() {
   const input = byId('address');
+  const examples = {Bitcoin:'bc1q…', Litecoin:'ltc1q…', Dogecoin:'D…', Solana:'So111…', 'XRP Ledger':'r…', 'Tron (TRC20)':'T…'};
+  input.placeholder = `Example format: ${examples[byId('network').value] || '0x… (40 hex digits)'}`;
   const invalid = Boolean(input.value) && !isValidWalletAddress(input.value, selected.coin, byId('network').value);
   const message = invalid ? walletAddressError(selected.coin, byId('network').value) : '';
   input.setCustomValidity(message);
@@ -119,6 +122,29 @@ let transferRequestKey=crypto.randomUUID();
 const bybitDemo=import.meta.env.DEV&&new URLSearchParams(location.search).get('preview')==='bybit';
 if(!bybitDemo)setupAccount().catch(error=>byId('transferMessage').textContent=error.message);
 const api=apiJson;
+let feeTimer;
+let feeRevision = 0;
+function updateFeeEstimate() {
+  const amount = byId('amount');
+  const estimate = byId('feeEstimate');
+  const revision = ++feeRevision;
+  clearTimeout(feeTimer);
+  if (!amount.value || !amount.validity.valid) {
+    estimate.textContent = 'Enter a valid amount to estimate the service fee. No cryptocurrency is sent.';
+    return;
+  }
+  const input = {coin:selected.coin, amount:amount.value};
+  estimate.textContent = 'Calculating service fee…';
+  feeTimer = setTimeout(async () => {
+    try {
+      const {usdValue, fee, feePercent} = await api('/api/transfers/estimate', input);
+      if (revision !== feeRevision) return;
+      estimate.textContent = `Estimated value: $${usdValue.toFixed(2)} USD. Service fee (${feePercent}%): $${fee.toFixed(2)} USD. Only the service fee is charged.`;
+    } catch (error) {
+      if (revision === feeRevision) estimate.textContent = `Fee estimate unavailable: ${error.message}`;
+    }
+  }, 350);
+}
 byId('cryptoForm').onsubmit = async event => {
  event.preventDefault();
  validateAddress();
@@ -130,6 +156,7 @@ byId('cryptoForm').onsubmit = async event => {
   for(const [label,value] of [['Platform',pendingQuote.platform],['Amount',`${pendingQuote.amount} ${pendingQuote.coin}`],['Network',pendingQuote.network],['Recipient address',pendingQuote.address],['Recipient email',pendingQuote.email],['Transfer value (USD)',`$${pendingQuote.usdValue.toFixed(2)}`],['Rate (CoinGecko)',`1 ${pendingQuote.coin} = $${pendingQuote.usdRate} USD`],['Rate updated',pendingQuote.priceTimestamp],[`Service fee (${pendingQuote.feePercent}%)`,`$${pendingQuote.fee.toFixed(2)} USD`]]) {
    const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=value;byId('confirmDetails').append(dt,dd);
   }
+  byId('sendTransfer').textContent = pendingQuote.email ? 'Confirm and send preview email' : 'Confirm without email';
   renderBybitReceipt(pendingQuote);
   await updatePaymentOptions();
   byId('receiptPanel').hidden=true; byId('confirmError').textContent='';byId('transferMessage').textContent='';byId('confirmTransfer').showModal();
@@ -145,9 +172,9 @@ byId('sendTransfer').onclick=async()=>{
   byId('confirmTransfer').close();
   sessionStorage.removeItem('pendingTransfer');
   renderCompleted(completed);
-  byId('transferMessage').textContent=`Preview queued. Service fee charged. Balance: $${completed.balance.toFixed(2)} USD.`;
+  byId('transferMessage').textContent=`${completed.email ? 'Preview email queued.' : 'Preview created without email.'} Service fee charged. Balance: $${completed.balance.toFixed(2)} USD.`;
   transferRequestKey=crypto.randomUUID();
-  void trackDelivery(completed.id);
+  if(completed.email)void trackDelivery(completed.id);
   pendingQuote=null;
  }catch(error){byId('confirmError').textContent=error.message;try{await updatePaymentOptions();}catch{}}finally{byId('sendTransfer').disabled=false;byId('cancelTransfer').disabled=false;}
 };
@@ -189,7 +216,7 @@ function renderBybitReceipt(transfer){
  byId('bybitAmount').textContent=`${amount} ${transfer.coin}`;
  byId('bybitTotal').textContent=`${amount} ${transfer.coin}`;
  const [local,domain]=transfer.email.split('@');
- byId('bybitReceiver').textContent=`${local.slice(0,2)}***@${domain.slice(0,2)}***`;
+ byId('bybitReceiver').textContent=domain ? `${local.slice(0,2)}***@${domain.slice(0,2)}***` : 'Not provided';
  byId('bybitAddress').textContent=`${transfer.address.slice(0,5)}...${transfer.address.slice(-4)} (sample address)`;
  byId('bybitDate').textContent=new Date(transfer.timestamp||transfer.priceTimestamp).toISOString().slice(0,19).replace('T',' ');
  byId('bybitOrder').textContent=`DEMO-${transfer.id}`;

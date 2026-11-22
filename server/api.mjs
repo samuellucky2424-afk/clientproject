@@ -546,9 +546,9 @@ export function createApi(env, dependencies = {}) {
           typeof body.fullName !== "string" ||
           body.fullName.trim().length < 2 ||
           body.fullName.length > 100 ||
-          typeof body.email !== "string" ||
+          (body.email != null && (typeof body.email !== "string" ||
           body.email.length > 254 ||
-          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email) ||
+          (body.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email.trim())))) ||
           !/^\+[1-9]\d{7,14}$/.test(whatsapp) ||
           typeof body.title !== "string" ||
           body.title.trim().length < 3 ||
@@ -560,7 +560,7 @@ export function createApi(env, dependencies = {}) {
           body.expectedFeeCents < 1
         )
           throw fail(
-            "Enter your name, email, Telegram phone number with country code, and request details. Review the fee before submitting.",
+            "Enter your name, Telegram phone number with country code, and request details. If provided, check your email address. Review the fee before submitting.",
           );
         return reply(
           200,
@@ -568,7 +568,7 @@ export function createApi(env, dependencies = {}) {
             p_user: user.id,
             p_key: body.requestKey,
             p_name: body.fullName.trim(),
-            p_email: body.email.trim(),
+            p_email: body.email?.trim() || user.email,
             p_whatsapp: whatsapp,
             p_title: body.title.trim(),
             p_details: body.details.trim(),
@@ -685,8 +685,20 @@ export function createApi(env, dependencies = {}) {
           await flw.verify(body.transactionId, user.id, body.reference),
         );
       }
+      if (url.pathname === "/api/transfers/estimate") {
+        if (!Object.hasOwn(networks, body.coin) ||
+            !["string", "number"].includes(typeof body.amount) ||
+            !Number.isFinite(Number(body.amount)) ||
+            Number(body.amount) <= 0 || Number(body.amount) > 1e9)
+          throw fail("Enter a valid amount.");
+        const feature = await store.one("prank_features", {slug:"crypto"});
+        const feePercent = Number(feature?.fee_percent ?? 1);
+        const price = await pricing.crypto(body.coin, body.amount, feePercent);
+        return reply(200, {...priceFee(body.amount, price.usdRate, feePercent), feePercent});
+      }
       if (url.pathname === "/api/transfers/preview") {
-        if (!env.RESEND_API_KEY || !env.RESEND_FROM)
+        const email = typeof body.email === "string" ? body.email.trim() : "";
+        if (email && (!env.RESEND_API_KEY || !env.RESEND_FROM))
           throw fail("Email delivery is not configured.", 503);
         if (!uuid(body.requestKey)) throw fail("Missing request key");
         const existing = await store.one("prank_transfers", {
@@ -705,9 +717,9 @@ export function createApi(env, dependencies = {}) {
           typeof body.address !== "string" ||
           !body.address.trim() ||
           body.address.length > 150 ||
-          typeof body.email !== "string" ||
-          body.email.length > 254 ||
-          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)
+          (body.email != null && typeof body.email !== "string") ||
+          email.length > 254 ||
+          (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
         )
           throw fail("Check the transfer details.");
         if (!isValidWalletAddress(body.address, body.coin, body.network))
@@ -724,7 +736,7 @@ export function createApi(env, dependencies = {}) {
           amount: String(body.amount),
           network: body.network,
           address: body.address.trim(),
-          email: body.email,
+          email,
           usd_cents: Math.round(p.usdValue * 100),
           fee_cents: Math.round(p.fee * 100),
           fee_percent: feePercent,
@@ -741,7 +753,7 @@ export function createApi(env, dependencies = {}) {
           user_id: user.id,
         });
         if (!t) throw fail("Preview not found", 404);
-        const payload = await buildEmail(env, t);
+        const payload = t.email ? await buildEmail(env, t) : null;
         const confirmed = await store.rpc("prank_confirm_transfer", {
           p_user: user.id,
           p_id: t.id,

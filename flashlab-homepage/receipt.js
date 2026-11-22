@@ -56,7 +56,7 @@ function drawText(context, text, x, y, maxWidth, lineHeight, align = 'left') {
  return y + lines.length * lineHeight;
 }
 function receiptFields(transfer, amount, usd) {
- const status = {pending:'Not confirmed - no service fee charged',queued:'Email queued',sent:'Email accepted for delivery',failed:'Email rejected - service fee refunded',review:'Delivery requires review'};
+ const status = {pending:'Not confirmed - no service fee charged',queued:'Email queued',sent:'Email accepted for delivery',failed:'Email rejected - service fee refunded',review:'Delivery requires review',completed:'Fictional preview created without email'};
  return [
   ['Reference', transfer.id], ['Platform preference', transfer.platform], ['Amount', amount],
   ['Network', transfer.network], ['Recipient address', transfer.address], ['Recipient email', transfer.email],

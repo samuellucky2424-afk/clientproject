@@ -17,6 +17,7 @@ test('payment, database and API integration',async t=>{
  await db.exec(await readFile('database/admin-controls.sql','utf8'));
  await db.exec(await readFile('database/features.sql','utf8'));
  await db.exec(await readFile('supabase/migrations/20261109124729_transfer_receipt_fees.sql','utf8'));
+ await db.exec(await readFile('supabase/migrations/20261122120000_optional_transfer_email.sql','utf8'));
  await db.exec(await readFile('database/admin-reporting-permissions.sql','utf8'));
  const u1=randomUUID(),u2=randomUUID();await db.query('insert into auth.users(id) values($1),($2)',[u1,u2]);
  const rpc=async(name,args={})=>(await db.query(`select public.${name}(${Object.keys(args).map((_,i)=>'$'+(i+1)).join(',')}) as result`,Object.values(args))).rows[0].result;
@@ -185,6 +186,20 @@ test('payment, database and API integration',async t=>{
    await call('/api/admin/features/save',{...payload,feePercent:1},'bob');
   });
   await t.test('wallet balances reconcile to the ledger',async()=>{const rows=(await db.query('select w.balance_cents,coalesce(sum(l.delta_cents),0)::bigint as total from prank_wallets w left join prank_ledger l on l.user_id=w.user_id group by w.user_id,w.balance_cents')).rows;for(const row of rows)assert.equal(Number(row.balance_cents),Number(row.total));});
+  await t.test('live estimate and confirmation without recipient email',async()=>{
+   const before=(await store.wallet(u1)).balance_cents;
+   const estimate=await call('/api/transfers/estimate',{coin:'BTC',amount:'0.001'});
+   assert.equal(estimate.status,200);
+   assert.equal((await store.wallet(u1)).balance_cents,before);
+   const quote=await call('/api/transfers/preview',{...input,amount:'0.001',email:undefined,requestKey:randomUUID()});
+   assert.equal(quote.status,200);
+   assert.equal(quote.data.fee,estimate.data.fee);
+   const confirm=await call('/api/transfers/confirm',{id:quote.data.id});
+   assert.equal(confirm.status,200);
+   assert.equal(confirm.data.state,'completed');
+   assert.equal(await store.one('prank_email_outbox',{transfer_id:quote.data.id}),null);
+   assert.equal((await call('/api/transfers/confirm',{id:quote.data.id})).data.balance,confirm.data.balance);
+  });
  }finally{await new Promise(resolve=>server.close(resolve));await db.close();}
 });
 

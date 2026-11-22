@@ -40,10 +40,10 @@
 <div class="hint" id="addressHint">Address format is checked for the selected coin and network. This does not verify ownership, wallet activity or token support.</div>
 <label for="amount">Amount (<span id="amountUnit">USDT</span>)</label>
 <input id="amount" type="number" placeholder="0.00" min="0.00000001" max="1000000000" step="any" required>
-<p class="hint">The current service fee is shown with the USD value before confirmation, rounded to the nearest cent. The USD value and fee are shown before confirmation. Pricing by CoinGecko.</p>
-<label for="email">Recipient email</label>
-<input id="email" type="email" placeholder="recipient@example.com" autocomplete="off" required maxlength="254">
-<div class="email-warning">Confirmation sent.</div>
+<p class="hint" id="feeEstimate" role="status">Enter an amount to estimate the service fee. No cryptocurrency is sent.</p>
+<label for="email">Recipient email (optional)</label>
+<input id="email" type="email" placeholder="recipient@example.com" autocomplete="off" maxlength="254">
+<div class="email-warning">Leave blank to skip the fictional preview email.</div>
 <p id="transferMessage" role="status"></p><button class="create" type="submit">Transfer</button>
 </form>
 </section>
