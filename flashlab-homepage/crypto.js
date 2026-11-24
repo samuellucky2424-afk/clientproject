@@ -36,11 +36,34 @@ function update() {
   byId('receiptFee').textContent = `0.00000000 ${selected.coin}`;
 }
 
+const ETH_ADDRESS_EXAMPLE = '0x5e97870f263700f46aa00d967821199b9bc5a120';
+const walletAddressExamples = {
+  'Tron (TRC20)': 'TJRabPrwbZy45sbavfcjinPJC18kjpRTv8',
+  'Ethereum (ERC20)': ETH_ADDRESS_EXAMPLE,
+  'BNB Smart Chain (BEP20)': ETH_ADDRESS_EXAMPLE,
+  Solana: 'So11111111111111111111111111111111111111112',
+  Bitcoin: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
+  Ethereum: ETH_ADDRESS_EXAMPLE,
+  'BNB Smart Chain': ETH_ADDRESS_EXAMPLE,
+  Base: ETH_ADDRESS_EXAMPLE,
+  Litecoin: 'ltc1q…',
+  Dogecoin: 'D…',
+  'XRP Ledger': 'r…',
+};
+const walletAddressHints = {
+  'Tron (TRC20)': 'TRC20 addresses start with T and are 34 characters long.',
+  'Ethereum (ERC20)': 'ERC20 addresses start with 0x and are 42 characters long.',
+  'BNB Smart Chain (BEP20)': 'BEP20 addresses start with 0x and are 42 characters long.',
+  Solana: 'Solana addresses use base58 characters and are 32 to 44 characters long.',
+};
+const defaultAddressHint = 'Address format is checked for the selected coin and network. This does not verify ownership, wallet activity or token support.';
+
 function validateAddress() {
   const input = byId('address');
-  const examples = {Bitcoin:'bc1q…', Litecoin:'ltc1q…', Dogecoin:'D…', Solana:'So111…', 'XRP Ledger':'r…', 'Tron (TRC20)':'T…'};
-  input.placeholder = `Example format: ${examples[byId('network').value] || '0x… (40 hex digits)'}`;
-  const invalid = Boolean(input.value) && !isValidWalletAddress(input.value, selected.coin, byId('network').value);
+  const network = byId('network').value;
+  input.placeholder = `Example format: ${walletAddressExamples[network] || '0x… (40 hex digits)'}`;
+  byId('addressHint').textContent = walletAddressHints[network] || defaultAddressHint;
+  const invalid = Boolean(input.value) && !isValidWalletAddress(input.value, selected.coin, network);
   const message = invalid ? walletAddressError(selected.coin, byId('network').value) : '';
   input.setCustomValidity(message);
   input.setAttribute('aria-invalid', String(invalid));
@@ -124,24 +147,44 @@ if(!bybitDemo)setupAccount().catch(error=>byId('transferMessage').textContent=er
 const api=apiJson;
 let feeTimer;
 let feeRevision = 0;
+const DEFAULT_FEE_PERCENT = 1;
+const coinAmountFormatter = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8});
+function formatCoinAmount(value, coin) {
+  return `${coinAmountFormatter.format(value)} ${coin}`;
+}
 function updateFeeEstimate() {
   const amount = byId('amount');
-  const estimate = byId('feeEstimate');
+  const rawAmount = Number(amount.value);
+  const coin = selected.coin;
   const revision = ++feeRevision;
   clearTimeout(feeTimer);
-  if (!amount.value || !amount.validity.valid) {
-    estimate.textContent = 'Enter a valid amount to estimate the service fee. No cryptocurrency is sent.';
+  const showAmounts = (send, fee, total) => {
+    byId('calcSend').textContent = send;
+    byId('calcFee').textContent = fee;
+    byId('calcTotal').textContent = total;
+  };
+  const renderCalculator = percent => {
+    const fee = rawAmount * percent / 100;
+    showAmounts(formatCoinAmount(rawAmount, coin), formatCoinAmount(fee, coin), formatCoinAmount(rawAmount + fee, coin));
+    byId('feeRate').textContent = `${percent}% service fee`;
+  };
+  if (!amount.value || !amount.validity.valid || !Number.isFinite(rawAmount) || rawAmount <= 0) {
+    showAmounts('—', '—', '—');
+    byId('feeRate').textContent = `${DEFAULT_FEE_PERCENT}% service fee`;
+    byId('calcNote').textContent = 'Enter an amount to see the fee in real time. No cryptocurrency is sent.';
     return;
   }
-  const input = {coin:selected.coin, amount:amount.value};
-  estimate.textContent = 'Calculating service fee…';
+  renderCalculator(DEFAULT_FEE_PERCENT);
+  byId('calcNote').textContent = 'Fetching live USD value…';
   feeTimer = setTimeout(async () => {
     try {
-      const {usdValue, fee, feePercent} = await api('/api/transfers/estimate', input);
+      const {usdValue, fee, feePercent, usdRate} = await api('/api/transfers/estimate', {coin, amount: amount.value});
       if (revision !== feeRevision) return;
-      estimate.textContent = `Estimated value: $${usdValue.toFixed(2)} USD. Service fee (${feePercent}%): $${fee.toFixed(2)} USD. Only the service fee is charged.`;
+      const percent = Number.isFinite(Number(feePercent)) ? Number(feePercent) : DEFAULT_FEE_PERCENT;
+      renderCalculator(percent);
+      byId('calcNote').textContent = `Live value: $${usdValue.toFixed(2)} · Fee: $${fee.toFixed(2)} · 1 ${coin} = $${usdRate.toFixed(2)}. No cryptocurrency is sent.`;
     } catch (error) {
-      if (revision === feeRevision) estimate.textContent = `Fee estimate unavailable: ${error.message}`;
+      if (revision === feeRevision) byId('calcNote').textContent = `Live rate unavailable: ${error.message} Coin fee above updates instantly at ${DEFAULT_FEE_PERCENT}%.`;
     }
   }, 350);
 }

@@ -854,3 +854,16 @@ body:has(#featureMenu[open]) {
 /* Recipient address validation */
 #address[aria-invalid='true'] { border-color: #b42318; outline-color: #fda29b; }
 .address-error { color: #b42318; font-size: 12px; line-height: 1.6; margin: 8px 0 0; }
+
+/* Live transfer fee calculator */
+.fee-calculator { margin-top: 10px; padding: 14px 16px; border: 1px solid #d8e6f8; border-radius: 12px; background: #f7fbff; }
+.fee-calculator-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.fee-calculator-title { color: #225c95; font-size: 12px; font-weight: 700; }
+.fee-calculator-rate { padding: 4px 8px; border-radius: 99px; background: #e4f0ff; color: #1769dd; font-size: 10px; font-weight: 700; white-space: nowrap; }
+.fee-calculator-rows { margin: 0; }
+.fee-calculator-rows > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px dashed #dce8f7; font-size: 12px; }
+.fee-calculator-rows dt { color: #738198; }
+.fee-calculator-rows dd { margin: 0; color: #17366c; font-weight: 700; text-align: right; overflow-wrap: anywhere; }
+.fee-calculator-total { border-bottom: 0 !important; }
+.fee-calculator-total dd { color: #1769dd; font-size: 14px; }
+.fee-calculator-note { margin: 8px 0 0; color: #8293aa; font-size: 11px; line-height: 1.6; }

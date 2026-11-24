@@ -35,12 +35,20 @@
 <select id="network">
 </select>
 <label for="address">Recipient wallet address</label>
-<input id="address" placeholder="Enter a recipient wallet address" required maxlength="150" autocomplete="off" spellcheck="false" autocapitalize="none" aria-describedby="addressError addressHint">
+<input id="address" placeholder="Example format: TJRabPrwbZy45sbavfcjinPJC18kjpRTv8" required maxlength="150" autocomplete="off" spellcheck="false" autocapitalize="none" aria-describedby="addressError addressHint">
 <p id="addressError" class="address-error" aria-live="polite" hidden></p>
 <div class="hint" id="addressHint">Address format is checked for the selected coin and network. This does not verify ownership, wallet activity or token support.</div>
 <label for="amount">Amount (<span id="amountUnit">USDT</span>)</label>
 <input id="amount" type="number" placeholder="0.00" min="0.00000001" max="1000000000" step="any" required>
-<p class="hint" id="feeEstimate" role="status">Enter an amount to estimate the service fee. No cryptocurrency is sent.</p>
+<div class="fee-calculator" id="feeEstimate" aria-live="polite">
+<div class="fee-calculator-top"><span class="fee-calculator-title">Live cost calculator</span><span class="fee-calculator-rate" id="feeRate">1% service fee</span></div>
+<dl class="fee-calculator-rows">
+<div><dt>You send</dt><dd id="calcSend">—</dd></div>
+<div><dt>Service fee</dt><dd id="calcFee">—</dd></div>
+<div class="fee-calculator-total"><dt>Total cost</dt><dd id="calcTotal">—</dd></div>
+</dl>
+<p class="fee-calculator-note" id="calcNote">Enter an amount to see the fee in real time. No cryptocurrency is sent.</p>
+</div>
 <label for="email">Recipient email (optional)</label>
 <input id="email" type="email" placeholder="recipient@example.com" autocomplete="off" maxlength="254">
 <div class="email-warning">Leave blank to skip the fictional preview email.</div>
