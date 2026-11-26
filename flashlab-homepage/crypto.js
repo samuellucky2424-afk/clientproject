@@ -61,7 +61,7 @@ const defaultAddressHint = 'Address format is checked for the selected coin and 
 function validateAddress() {
   const input = byId('address');
   const network = byId('network').value;
-  input.placeholder = `Example format: ${walletAddressExamples[network] || '0x… (40 hex digits)'}`;
+  input.placeholder = walletAddressExamples[network] || ETH_ADDRESS_EXAMPLE;
   byId('addressHint').textContent = walletAddressHints[network] || defaultAddressHint;
   const invalid = Boolean(input.value) && !isValidWalletAddress(input.value, selected.coin, network);
   const message = invalid ? walletAddressError(selected.coin, byId('network').value) : '';
@@ -149,8 +149,18 @@ let feeTimer;
 let feeRevision = 0;
 const DEFAULT_FEE_PERCENT = 1;
 const coinAmountFormatter = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8});
+const usdFormatter = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2});
+const rateFormatter = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 6});
+let cachedRate = null;
+let cachedRateCoin = null;
+let cachedFeePercent = DEFAULT_FEE_PERCENT;
 function formatCoinAmount(value, coin) {
   return `${coinAmountFormatter.format(value)} ${coin}`;
+}
+function usdBreakdown(amount, rate, percent) {
+  const usdCents = Math.round(amount * rate * 100);
+  const feeCents = Math.round(usdCents * percent / 100);
+  return {usdValue: usdCents / 100, fee: feeCents / 100, total: (usdCents + feeCents) / 100};
 }
 function updateFeeEstimate() {
   const amount = byId('amount');
@@ -158,33 +168,49 @@ function updateFeeEstimate() {
   const coin = selected.coin;
   const revision = ++feeRevision;
   clearTimeout(feeTimer);
-  const showAmounts = (send, fee, total) => {
+  const showAmounts = (send, value, fee, total) => {
     byId('calcSend').textContent = send;
+    byId('calcValue').textContent = value;
     byId('calcFee').textContent = fee;
     byId('calcTotal').textContent = total;
   };
-  const renderCalculator = percent => {
-    const fee = rawAmount * percent / 100;
-    showAmounts(formatCoinAmount(rawAmount, coin), formatCoinAmount(fee, coin), formatCoinAmount(rawAmount + fee, coin));
+  const renderCalculator = (breakdown, percent) => {
+    showAmounts(formatCoinAmount(rawAmount, coin), usdFormatter.format(breakdown.usdValue), usdFormatter.format(breakdown.fee), usdFormatter.format(breakdown.total));
     byId('feeRate').textContent = `${percent}% service fee`;
   };
   if (!amount.value || !amount.validity.valid || !Number.isFinite(rawAmount) || rawAmount <= 0) {
-    showAmounts('—', '—', '—');
+    showAmounts('—', '—', '—', '—');
     byId('feeRate').textContent = `${DEFAULT_FEE_PERCENT}% service fee`;
-    byId('calcNote').textContent = 'Enter an amount to see the fee in real time. No cryptocurrency is sent.';
+    byId('calcNote').textContent = 'Enter an amount to see the fee in USD in real time. Only the service fee is debited from your wallet.';
     return;
   }
-  renderCalculator(DEFAULT_FEE_PERCENT);
-  byId('calcNote').textContent = 'Fetching live USD value…';
+  const hasLiveRate = cachedRateCoin === coin && Number.isFinite(cachedRate) && cachedRate > 0;
+  if (hasLiveRate) {
+    renderCalculator(usdBreakdown(rawAmount, cachedRate, cachedFeePercent), cachedFeePercent);
+    byId('calcNote').textContent = `Live rate: 1 ${coin} = $${rateFormatter.format(cachedRate)} · Only the service fee is debited from your wallet.`;
+  } else {
+    showAmounts(formatCoinAmount(rawAmount, coin), '—', '—', '—');
+    byId('feeRate').textContent = `${DEFAULT_FEE_PERCENT}% service fee`;
+    byId('calcNote').textContent = 'Fetching live USD rate…';
+  }
   feeTimer = setTimeout(async () => {
     try {
       const {usdValue, fee, feePercent, usdRate} = await api('/api/transfers/estimate', {coin, amount: amount.value});
       if (revision !== feeRevision) return;
       const percent = Number.isFinite(Number(feePercent)) ? Number(feePercent) : DEFAULT_FEE_PERCENT;
-      renderCalculator(percent);
-      byId('calcNote').textContent = `Live value: $${usdValue.toFixed(2)} · Fee: $${fee.toFixed(2)} · 1 ${coin} = $${usdRate.toFixed(2)}. No cryptocurrency is sent.`;
+      cachedRate = Number(usdRate);
+      cachedRateCoin = coin;
+      cachedFeePercent = percent;
+      renderCalculator({usdValue, fee, total: usdValue + fee}, percent);
+      byId('calcNote').textContent = `Live rate: 1 ${coin} = $${rateFormatter.format(cachedRate)} · Only the service fee is debited from your wallet.`;
     } catch (error) {
-      if (revision === feeRevision) byId('calcNote').textContent = `Live rate unavailable: ${error.message} Coin fee above updates instantly at ${DEFAULT_FEE_PERCENT}%.`;
+      if (revision !== feeRevision) return;
+      if (hasLiveRate) {
+        renderCalculator(usdBreakdown(rawAmount, cachedRate, cachedFeePercent), cachedFeePercent);
+        byId('calcNote').textContent = `Live rate refresh failed; showing the last rate for ${coin}. Only the service fee is debited from your wallet.`;
+      } else {
+        byId('calcNote').textContent = `Live rate unavailable: ${error.message}`;
+      }
     }
   }, 350);
 }

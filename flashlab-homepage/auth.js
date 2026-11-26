@@ -8,51 +8,66 @@ let resetAuthorized=false;
 let resetEmail='';
 let cooldownUntil=0;
 let cooldownTimer;
+let pendingEmail='';
+let pendingPassword='';
+let pendingName='';
+let pendingReferrer='';
+let signupStartedAt=0;
 
 function setMode(next){
  mode=next;
  const isSignup=mode==='signup';
+ const isOtpLogin=mode==='otp-login';
+ const isOtpSignup=mode==='otp-signup';
+ const isOtp=isOtpLogin||isOtpSignup;
  const isResetRequest=mode==='reset-request';
  const isResetVerify=mode==='reset-verify';
  const isReset=isResetRequest||isResetVerify;
  const resetHasSession=isResetVerify&&resetAuthorized;
- byId('authTabs').hidden=isReset;
+ const showCode=(isResetVerify&&!resetHasSession)||isOtp;
+ byId('authTabs').hidden=isReset||isOtp;
  byId('agreementGroup').hidden=!isSignup;
  byId('agreeTerms').required=isSignup;
  byId('agreeTerms').checked=false;
  byId('nameGroup').hidden=!isSignup;
  byId('name').required=isSignup;
- byId('codeGroup').hidden=!isResetVerify||resetHasSession;
- byId('code').required=isResetVerify&&!resetHasSession;
+ byId('codeGroup').hidden=!showCode;
+ byId('code').required=showCode;
  byId('confirmPasswordGroup').hidden=!isResetVerify;
  byId('confirmPassword').required=isResetVerify;
- byId('passwordGroup').hidden=isResetRequest;
- byId('password').required=!isResetRequest;
+ byId('passwordGroup').hidden=isResetRequest||isOtp;
+ byId('password').required=!isResetRequest&&!isOtp;
  byId('password').minLength=isSignup||isResetVerify?8:1;
  byId('password').autocomplete=isSignup||isResetVerify?'new-password':'current-password';
  byId('passwordLabel').textContent=isResetVerify?'New password':'Password';
- byId('email').readOnly=isResetVerify;
+ byId('email').readOnly=isResetVerify||isOtp;
  for(const id of ['login','signup']){
-  const active=(id==='signup')===isSignup&&!isReset;
-  byId(id).hidden=isReset;
+  const active=(id==='signup')===isSignup&&!isReset&&!isOtp;
+  byId(id).hidden=isReset||isOtp;
   byId(id).classList.toggle('active',active);
   byId(id).setAttribute('aria-selected',active);
  }
  byId('forgotPassword').hidden=mode!=='login';
- byId('resendCode').hidden=!isResetVerify;
- byId('cancelReset').hidden=!isReset;
- byId('heading').textContent=isSignup?'Create your account':isResetRequest?'Reset your password':isResetVerify?'Choose a new password':'Welcome back';
+ byId('resendCode').hidden=!(isResetVerify||isOtp);
+ byId('cancelReset').hidden=!(isReset||isOtp);
+ byId('cancelReset').textContent=isOtp?'Back to login':'Back to log in';
+ byId('heading').textContent=isSignup?'Create your account':isOtpSignup?'Verify your email':isOtpLogin?'Verify to log in':isResetRequest?'Reset your password':isResetVerify?'Choose a new password':'Welcome back';
  byId('intro').textContent=isSignup
   ?'Get started with 2winprankz.'
-  :isResetRequest
-   ?'We will email you a code to reset your password.'
-   :isResetVerify
-    ?resetHasSession?'Set a new password for your account.':'Enter the code we emailed you and choose a new password.'
-    :'Log in to your 2winprankz account.';
- byId('submit').textContent=isSignup?'Create Account':isResetRequest?'Send reset code':isResetVerify?'Change password':'Log In';
+  :isOtpSignup
+   ?`Enter the 6-digit code sent to ${pendingEmail} to finish creating your account.`
+   :isOtpLogin
+    ?`Enter the 6-digit code sent to ${pendingEmail} to finish logging in.`
+    :isResetRequest
+     ?'We will email you a code to reset your password.'
+     :isResetVerify
+      ?resetHasSession?'Set a new password for your account.':'Enter the code we emailed you and choose a new password.'
+      :'Log in to your 2winprankz account.';
+ byId('submit').textContent=isOtp?'Verify code':isSignup?'Create Account':isResetRequest?'Send reset code':isResetVerify?'Change password':'Log In';
  byId('submit').disabled=busy||(isSignup&&!byId('agreeTerms').checked);
  byId('message').textContent='';
  if(isResetVerify)byId('email').value=resetEmail;
+ else if(isOtp)byId('email').value=pendingEmail;
  else if(isResetRequest)byId('email').readOnly=false;
 }
 
@@ -74,11 +89,39 @@ async function postAuth(path,body){
  return responseJson(response,'Password reset service');
 }
 
-byId('login').onclick=()=>{resetAuthorized=false;setMode('login');};
-byId('signup').onclick=()=>{resetAuthorized=false;setMode('signup');};
+byId('login').onclick=()=>{resetAuthorized=false;clearOtpState();setMode('login');};
+byId('signup').onclick=()=>{resetAuthorized=false;clearOtpState();setMode('signup');};
 byId('agreeTerms').onchange=()=>{byId('submit').disabled=busy||(mode==='signup'&&!byId('agreeTerms').checked);};
-byId('forgotPassword').onclick=()=>{resetAuthorized=false;resetEmail=byId('email').value.trim();setMode('reset-request');};
-byId('cancelReset').onclick=()=>{resetAuthorized=false;setMode('login');};
+byId('forgotPassword').onclick=()=>{resetAuthorized=false;clearOtpState();resetEmail=byId('email').value.trim();setMode('reset-request');};
+byId('cancelReset').onclick=()=>{
+ if(mode==='otp-login'||mode==='otp-signup'){
+  const email=pendingEmail;
+  void authClient().then(client=>client.auth.signOut({scope:'local'})).catch(()=>{});
+  clearOtpState();
+  setMode('login');
+  byId('email').value=email;
+  return;
+ }
+ resetAuthorized=false;
+ setMode('login');
+};
+
+function clearOtpState(){
+ pendingEmail='';
+ pendingPassword='';
+ pendingName='';
+ pendingReferrer='';
+ signupStartedAt=0;
+ clearInterval(cooldownTimer);
+ cooldownUntil=0;
+ byId('resendCode').textContent='Send another code';
+}
+
+function otpOptions(){
+ const options={shouldCreateUser:mode==='otp-signup'};
+ if(mode==='otp-signup')options.data={display_name:pendingName,terms_accepted_at:new Date().toISOString(),referrer:pendingReferrer};
+ return options;
+}
 
 byId('resendCode').onclick=async()=>{
  if(busy||Date.now()<cooldownUntil)return;
@@ -86,8 +129,15 @@ byId('resendCode').onclick=async()=>{
  busy=true;
  byId('resendCode').disabled=true;
  try{
-  await postAuth('/api/auth/password-reset/request',{email:resetEmail});
-  byId('message').textContent='If an account exists for that email, a new reset code has been sent.';
+  if(mode==='otp-login'||mode==='otp-signup'){
+   const client=await authClient();
+   const {error}=await client.auth.signInWithOtp({email:pendingEmail,options:otpOptions()});
+   if(error)throw error;
+   byId('message').textContent=`A new code has been sent to ${pendingEmail}.`;
+  }else{
+   await postAuth('/api/auth/password-reset/request',{email:resetEmail});
+   byId('message').textContent='If an account exists for that email, a new reset code has been sent.';
+  }
   startCooldown();
  }catch(error){
   byId('message').textContent=error.message;
@@ -112,6 +162,24 @@ byId('authForm').onsubmit=async event=>{
  try{
   const client=await authClient();
   const email=byId('email').value.trim().toLowerCase();
+  if(mode==='otp-login'||mode==='otp-signup'){
+   const {data,error}=await client.auth.verifyOtp({email:pendingEmail,token:byId('code').value.trim(),type:'email'});
+   if(error)throw Error('The code is invalid or expired. Send another code and try again.');
+   if(mode==='otp-signup'){
+    const createdAt=Date.parse(data.user?.created_at||'');
+    if(!Number.isFinite(createdAt)||createdAt<signupStartedAt-5000){
+     await client.auth.signOut({scope:'local'});
+     clearOtpState();
+     throw Error('An account already exists for this email. Please log in instead.');
+    }
+    const {error:passwordError}=await client.auth.updateUser({password:pendingPassword});
+    if(passwordError)throw passwordError;
+   }
+   clearOtpState();
+   byId('code').value='';
+   location.href=data.user?.app_metadata?.role==='admin'?'/admin':'/dashboard';
+   return;
+  }
   if(mode==='reset-request'){
    await postAuth('/api/auth/password-reset/request',{email});
    resetEmail=email;
@@ -146,31 +214,40 @@ byId('authForm').onsubmit=async event=>{
    return;
   }
 
-  const credentials={email,password:byId('password').value};
+  const password=byId('password').value;
   if(mode==='signup'){
-   const result=await client.auth.signUp({...credentials,options:{emailRedirectTo:`${location.origin}/auth?verified=1`,data:{display_name:byId('name').value.trim(),terms_accepted_at:new Date().toISOString(),referrer:new URLSearchParams(location.search).get('ref')||undefined}}});
-   if(result.error)throw result.error;
-   if(result.data.session&&!result.data.user?.email_confirmed_at)await client.auth.signOut({scope:'local'});
+   const referrer=new URLSearchParams(location.search).get('ref')||undefined;
+   const displayName=byId('name').value.trim();
+   signupStartedAt=Date.now();
+   const {error}=await client.auth.signInWithOtp({email,options:{shouldCreateUser:true,data:{display_name:displayName,terms_accepted_at:new Date().toISOString(),referrer}}});
+   if(error)throw error;
+   pendingEmail=email;
+   pendingPassword=password;
+   pendingName=displayName;
+   pendingReferrer=referrer;
    byId('password').value='';
-   byId('message').textContent='Check your email for a verification link. You must verify your address before logging in.';
+   setMode('otp-signup');
+   byId('message').textContent=`We sent a 6-digit code to ${email}. Enter it to finish creating your account.`;
+   startCooldown();
    return;
   }
 
-  const result=await client.auth.signInWithPassword(credentials);
+  const result=await client.auth.signInWithPassword({email,password});
   if(result.error)throw result.error;
-  if(!result.data.user?.email_confirmed_at){
-   await client.auth.signOut({scope:'local'});
-   byId('password').value='';
-   throw Error('Please verify your email address before logging in. Check your inbox for the verification link.');
-  }
+  await client.auth.signOut({scope:'local'});
+  const {error:otpError}=await client.auth.signInWithOtp({email,options:{shouldCreateUser:false}});
+  if(otpError)throw otpError;
+  pendingEmail=email;
   byId('password').value='';
-  location.href=result.data.user.app_metadata?.role==='admin'?'/admin':'/dashboard';
+  setMode('otp-login');
+  byId('message').textContent=`We sent a 6-digit code to ${email}. Enter it to finish logging in.`;
+  startCooldown();
  }catch(error){
   byId('message').textContent=error.message;
  }finally{
   busy=false;
   byId('submit').disabled=mode==='signup'&&!byId('agreeTerms').checked;
-  if(mode==='reset-verify'&&Date.now()<cooldownUntil)byId('resendCode').disabled=true;
+  if(['reset-verify','otp-login','otp-signup'].includes(mode)&&Date.now()<cooldownUntil)byId('resendCode').disabled=true;
  }
 };
 
