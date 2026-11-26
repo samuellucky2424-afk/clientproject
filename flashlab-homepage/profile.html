@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#f7faff" />
+<title>Profile Settings — 2winprankz</title>
+<link rel="stylesheet" href="dashboard.css" />
+<style>
+.profile-page{max-width:760px;margin:38px auto;padding:0 20px 70px}
+.profile-page .eyebrow{color:#1769dd;font-size:11px;letter-spacing:1.6px;font-weight:700;margin-bottom:12px}
+.profile-page h1{font-size:34px;margin:0 0 10px;color:#17366c}
+.profile-page .page-copy{color:#738198;font-size:14px;line-height:1.7;margin:0 0 24px}
+.profile-card{background:#fff;border:1px solid #dbe6f3;border-radius:18px;padding:26px;margin-top:18px;box-shadow:0 10px 30px #174d920a}
+.profile-card h2{font-size:19px;margin:0 0 8px;color:#17366c}
+.profile-card .card-copy{color:#8293aa;font-size:13px;line-height:1.7;margin:0 0 18px}
+.profile-card label{display:block;font-size:13px;font-weight:600;color:#183b6b;margin:16px 0 8px}
+.profile-card input{width:100%;padding:12px;font:inherit;font-size:14px;border:1px solid #cedcee;border-radius:10px;background:#fff;color:#17366c}
+.profile-card input:focus{outline:2px solid #b4d8ff}
+.profile-card input[readonly]{background:#f5f7fa;color:#51627b}
+.profile-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.profile-actions button{padding:12px 18px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer}
+.primary-button{border:0;background:#1769dd;color:#fff}
+.secondary-button{border:1px solid #cde0fc;background:#eaf3ff;color:#1769dd}
+.link-button{border:0;background:transparent;color:#1769dd;padding:6px 0!important;font-size:12px!important}
+.profile-card button:disabled{opacity:.6;cursor:not-allowed}
+.profile-message{font-size:13px;line-height:1.6;margin:12px 0 0;color:#1769dd}
+.profile-message.error{color:#b42318}
+.hint{font-size:11px;color:#8293aa;line-height:1.6;margin-top:8px}
+@media(max-width:500px){.profile-page{margin-top:24px}.profile-card{padding:20px}}
+</style>
+</head>
+<body>
+<header>
+<a class="brand" href="/">2winprankz<span aria-hidden="true">✳</span></a>
+<div class="header-right">
+<a class="home" href="/dashboard">Dashboard</a>
+<a class="home" href="/">Home</a>
+<a class="home" href="/profile">Profile</a>
+<button class="home" type="button" id="signOut">Sign out</button>
+<span class="avatar" id="avatar" aria-label="Account">G</span>
+</div>
+</header>
+<main class="profile-page">
+<p id="authLoading" role="status">Loading your profile...</p>
+<div id="profilePanel" hidden>
+<div class="eyebrow">ACCOUNT SETTINGS</div>
+<h1>Profile settings</h1>
+<p class="page-copy">Update your display name, or request an email OTP code to change your password.</p>
+<section class="profile-card" aria-labelledby="nameTitle">
+<h2 id="nameTitle">Display name</h2>
+<p class="card-copy">This name is shown on your account and profile avatar.</p>
+<form id="nameForm">
+<label for="displayName">Name</label>
+<input id="displayName" autocomplete="nickname" maxlength="80" placeholder="Your name" required />
+<div class="profile-actions"><button class="primary-button" id="saveName" type="submit">Save name</button></div>
+<p class="profile-message" id="nameMessage" role="status" aria-live="polite"></p>
+</form>
+</section>
+<section class="profile-card" aria-labelledby="passwordTitle">
+<h2 id="passwordTitle">Password</h2>
+<p class="card-copy">To change your password, request a 6-digit code. We will email it to your account address.</p>
+<div>
+<label for="email">Email address</label>
+<input id="email" type="email" readonly />
+<div class="profile-actions"><button class="secondary-button" id="requestOtp" type="button">Send OTP code</button></div>
+</div>
+<form id="passwordForm" hidden>
+<label for="otp">Verification code</label>
+<input id="otp" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="6-digit code" required />
+<button class="link-button" id="resendOtp" type="button" hidden>Send another code</button>
+<label for="newPassword">New password</label>
+<input id="newPassword" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required />
+<label for="confirmPassword">Confirm new password</label>
+<input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Repeat new password" required />
+<div class="profile-actions"><button class="primary-button" id="changePassword" type="submit">Change password</button></div>
+<p class="hint">The code is valid for a short time. Request a new one if it expires.</p>
+</form>
+<p class="profile-message" id="passwordMessage" role="status" aria-live="polite"></p>
+</section>
+</div>
+</main>
+<script type="module" src="profile.js"></script>
+</body>
+</html>
